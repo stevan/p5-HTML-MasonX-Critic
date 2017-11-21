@@ -7,7 +7,6 @@ our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use HTML::MasonX::Sloop;
-use HTML::MasonX::Inspector::Util qw[ tidy_code ];
 
 use App::Sloop -command;
 
@@ -36,7 +35,7 @@ sub execute {
     }
     else {
         warn  $i->get_object_code_checksum_for_path( $path ), "\n" if $opt->verbose;
-    	print tidy_code( $i->get_object_code_for_path( $path ) ), "\n";
+    	print $i->get_object_code_for_path( $path ), "\n";
     }
 }
 

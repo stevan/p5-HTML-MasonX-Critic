@@ -10,7 +10,6 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Inspector');
-    use_ok('HTML::MasonX::Inspector::Util', qw[ calculate_checksum ]);
 }
 
 my $MASON_FILE = '001-basic.html';

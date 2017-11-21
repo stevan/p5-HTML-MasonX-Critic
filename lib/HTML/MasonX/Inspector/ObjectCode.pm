@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Inspector::Util qw[ calculate_checksum ];
+use Digest::MD5 ();
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -54,8 +54,8 @@ sub clean_source {
 }
 
 sub checksum {
-    my ($self, $path, %opts) = @_;
-    return calculate_checksum( $self->source );
+    my ($self) = @_;
+    return Digest::MD5::md5_hex( $self->source );
 }
 
 1;

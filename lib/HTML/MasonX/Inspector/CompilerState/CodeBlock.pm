@@ -5,13 +5,12 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Inspector::Util;
-
 use HTML::MasonX::Inspector::CompilerState::CodeBlock::ModuleInclude;
 use HTML::MasonX::Inspector::CompilerState::CodeBlock::ModuleInclude::Conditional;
 use HTML::MasonX::Inspector::CompilerState::CodeBlock::Constant;
 use HTML::MasonX::Inspector::CompilerState::CodeBlock::Subroutine;
 
+use Digest::MD5                 ();
 use PPI                         ();
 use Perl::Critic::Utils::McCabe ();
 
@@ -72,7 +71,7 @@ sub lines  {
 sub checksum {
     my ($self) = @_;
 
-    $self->{_checksum} //= HTML::MasonX::Inspector::Util::calculate_checksum( $self->raw );
+    $self->{_checksum} //= Digest::MD5::md5_hex( $self->raw );
 }
 
 sub complexity_score {
