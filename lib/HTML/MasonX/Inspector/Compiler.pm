@@ -156,7 +156,7 @@ sub get_methods {
                         ), @{$methods->{$_}->{args}}
                 ],
                 body => HTML::MasonX::Inspector::Util::Perl->new(
-                    code => \($methods->{$_}->{body})
+                    source => \($methods->{$_}->{body})
                 ),
             ), keys %$methods
     }
@@ -185,7 +185,7 @@ sub get_defs {
                         ), @{$defs->{$_}->{args}}
                 ],
                 body => HTML::MasonX::Inspector::Util::Perl->new(
-                    code => \($defs->{$_}->{body})
+                    source => \($defs->{$_}->{body})
                 ),
             ), keys %$defs
     }
@@ -208,16 +208,16 @@ sub get_blocks {
     if ( $self->{_compiler}->{main_compile}->{body} ) {
         $blocks{main} = [
             HTML::MasonX::Inspector::Util::Perl->new(
-                code => \($self->{_compiler}->{main_compile}->{body})
+                source => \($self->{_compiler}->{main_compile}->{body})
             )
         ];
     }
 
-    $blocks{once}    = [ map HTML::MasonX::Inspector::Util::Perl->new(code => \$_), @{ $blocks->{once}    } ] if @{ $blocks->{once}    };
-    $blocks{init}    = [ map HTML::MasonX::Inspector::Util::Perl->new(code => \$_), @{ $blocks->{init}    } ] if @{ $blocks->{init}    };
-    $blocks{filter}  = [ map HTML::MasonX::Inspector::Util::Perl->new(code => \$_), @{ $blocks->{filter}  } ] if @{ $blocks->{filter}  };
-    $blocks{cleanup} = [ map HTML::MasonX::Inspector::Util::Perl->new(code => \$_), @{ $blocks->{cleanup} } ] if @{ $blocks->{cleanup} };
-    $blocks{shared}  = [ map HTML::MasonX::Inspector::Util::Perl->new(code => \$_), @{ $blocks->{shared}  } ] if @{ $blocks->{shared}  };
+    $blocks{once}    = [ map HTML::MasonX::Inspector::Util::Perl->new(source => \$_), @{ $blocks->{once}    } ] if @{ $blocks->{once}    };
+    $blocks{init}    = [ map HTML::MasonX::Inspector::Util::Perl->new(source => \$_), @{ $blocks->{init}    } ] if @{ $blocks->{init}    };
+    $blocks{filter}  = [ map HTML::MasonX::Inspector::Util::Perl->new(source => \$_), @{ $blocks->{filter}  } ] if @{ $blocks->{filter}  };
+    $blocks{cleanup} = [ map HTML::MasonX::Inspector::Util::Perl->new(source => \$_), @{ $blocks->{cleanup} } ] if @{ $blocks->{cleanup} };
+    $blocks{shared}  = [ map HTML::MasonX::Inspector::Util::Perl->new(source => \$_), @{ $blocks->{shared}  } ] if @{ $blocks->{shared}  };
 
     return %blocks;
 }
