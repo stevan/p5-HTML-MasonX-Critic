@@ -39,8 +39,9 @@ sub BUILD {
         if Scalar::Util::blessed( $path )
         && $path->isa('Path::Tiny');
 
-    my $compiler = $self->{inspector}->compiler;
-    my $source   = $self->{inspector}->resolve_path( $path );
+    my $interp   = $self->{inspector}->interpreter;
+    my $compiler = $interp->compiler;
+    my $source   = $interp->resolve_comp_path_to_source( $path );
 
     ## -----------------------------------
     ## WARNING!!!

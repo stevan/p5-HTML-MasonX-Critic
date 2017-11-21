@@ -34,13 +34,6 @@ subtest '... simple sloop test' => sub {
     );
     isa_ok($sloop, 'HTML::MasonX::Sloop::Inspector');
 
-    is($sloop->comp_root, $COMP_ROOT->stringify, '... the comp root is as we expected');
-    is_deeply(
-        [ $sloop->allow_globals ],
-        [ '$x' ],
-        '... got the expected globals in Mason'
-    );
-
     subtest '... testing the object code' => sub {
 
         my $obj_code;
@@ -49,26 +42,16 @@ subtest '... simple sloop test' => sub {
             undef, '... got object code without exception'
         );
 
-        my $obj_code_checksum;
-        is(
-            exception { $obj_code_checksum = $sloop->get_object_code_checksum_for_path( $MASON_FILE ) },
-            undef, '... got object code checksum without exception'
-        );
+        isa_ok($obj_code, 'HTML::MasonX::Sloop::Inspector::ObjectCode');
 
-        ok($obj_code, '... we got something back from the object code');
-        ok($obj_code_checksum, '... we got something back from the object code checksum');
-
-        is(calculate_checksum( $obj_code ), $obj_code_checksum, '... checksum is cool');
-
-        like( $obj_code, $_, '... the object code matches ' . $_ ) foreach (
+        my $src = $obj_code->source;
+        like( $src, $_, '... the object code matches ' . $_ ) foreach (
             qr/package HTML\:\:Mason\:\:Commands/,
             qr/use vars qw\(\s*\$m\s*\$x\s*\)\;/,
             qr/\$greeting\s*\|\|\=\s*\'World\'\;/,
             qr/\$m\-\>print\(\s*\'\<h1\>Hello \'\s*\)\;/,
             qr/\$m\-\>print\(\s*\$greeting\s*\)\;/,
         );
-
-        #warn $obj_code;
     };
 
 };

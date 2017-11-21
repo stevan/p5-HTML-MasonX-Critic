@@ -68,11 +68,6 @@ subtest '... simple sloop test' => sub {
     my $sloop = HTML::MasonX::Sloop::Inspector->new( comp_root => $COMP_ROOT );
     isa_ok($sloop, 'HTML::MasonX::Sloop::Inspector');
 
-    #use Data::Dumper;
-    #die Dumper $sloop->get_component_for_path( $MASON_FILE );
-
-    is($sloop->comp_root, $COMP_ROOT->stringify, '... the comp root is as we expected');
-
     my $state = $sloop->get_compiler_state_for_path( $MASON_FILE );
     isa_ok($state, 'HTML::MasonX::Sloop::Inspector::CompilerState');
 
