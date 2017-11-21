@@ -6,7 +6,7 @@ use warnings;
 use Test::More;
 
 BEGIN {
-    use_ok('HTML::MasonX::Sloop');
+    use_ok('HTML::MasonX::Inspector');
 }
 
 done_testing;

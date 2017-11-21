@@ -1,11 +1,11 @@
-package HTML::MasonX::Sloop::Inspector::ObjectCode;
+package HTML::MasonX::Inspector::ObjectCode;
 
 use strict;
 use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Sloop::Util qw[ calculate_checksum ];
+use HTML::MasonX::Inspector::Util qw[ calculate_checksum ];
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -31,7 +31,7 @@ sub BUILD {
 
 sub raw_source { ${ $_[0]->{_raw_obj_code} } }
 
-sub source {
+sub clean_source {
     my ($self) = @_;
 
     return $self->{_clean_obj_code}
@@ -66,7 +66,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Sloop::Inspector::ObjectCode - ...
+HTML::MasonX::Inspector::ObjectCode - ...
 
 =head1 DESCRIPTION
 

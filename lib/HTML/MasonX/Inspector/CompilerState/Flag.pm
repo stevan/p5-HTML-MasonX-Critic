@@ -1,4 +1,4 @@
-package HTML::MasonX::Sloop::Inspector::CompilerState::Flag;
+package HTML::MasonX::Inspector::CompilerState::Flag;
 
 use strict;
 use warnings;
@@ -39,7 +39,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Sloop::Inspector::CompilerState::Flag - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::CompilerState::Flag - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

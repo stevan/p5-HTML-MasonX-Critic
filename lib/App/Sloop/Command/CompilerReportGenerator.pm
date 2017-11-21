@@ -23,7 +23,7 @@ sub opt_spec {
         [ 'dir=s',   'the directory in which to look in', { required => 1 } ],
         [ 'dry-run', 'just print out the info', { default => 0 } ],
         [],
-        [ 'comp-root=s', 'HTML::Mason comp_root', { default => $App::HTML::MasonX::Sloop::CONFIG{'COMP_ROOT'} } ],
+        [ 'comp-root=s', 'HTML::Mason comp_root', { default => $App::HTML::MasonX::CONFIG{'COMP_ROOT'} } ],
         [],
         $class->SUPER::opt_spec,
     )

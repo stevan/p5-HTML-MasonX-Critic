@@ -1,4 +1,4 @@
-package HTML::MasonX::Sloop::Inspector;
+package HTML::MasonX::Inspector;
 
 use strict;
 use warnings;
@@ -11,8 +11,8 @@ use Scalar::Util ();
 
 use HTML::Mason::Interp;
 
-use HTML::MasonX::Sloop::Inspector::ObjectCode;
-use HTML::MasonX::Sloop::Inspector::CompilerState;
+use HTML::MasonX::Inspector::ObjectCode;
+use HTML::MasonX::Inspector::CompilerState;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -57,7 +57,7 @@ sub BUILD {
 
     # then set up the minimum needs to mock this run ...
     $interpreter->set_global(
-        $_ => HTML::MasonX::Sloop::Inspector::__EVIL__->new
+        $_ => HTML::MasonX::Inspector::__EVIL__->new
     ) foreach map s/^[$@%]//r, $interpreter->compiler->allow_globals; #/
 
     $self->{interpreter} = $interpreter;
@@ -72,7 +72,7 @@ sub interpreter { $_[0]->{interpreter} }
 sub get_object_code_for_path {
     my ($self, $path) = @_;
 
-    return HTML::MasonX::Sloop::Inspector::ObjectCode->new(
+    return HTML::MasonX::Inspector::ObjectCode->new(
         inspector => $self,
         path      => $path,
     );
@@ -81,7 +81,7 @@ sub get_object_code_for_path {
 sub get_compiler_state_for_path {
     my ($self, $path) = @_;
 
-    return HTML::MasonX::Sloop::Inspector::CompilerState->new(
+    return HTML::MasonX::Inspector::CompilerState->new(
         inspector => $self,
         path      => $path,
     );
@@ -103,7 +103,7 @@ sub _load_component_for_path {
 ## ------------------------------------------- ##
 
 package    # ignore this, internal use only
-  HTML::MasonX::Sloop::Inspector::__EVIL__ {
+  HTML::MasonX::Inspector::__EVIL__ {
     sub AUTOLOAD { return bless {}, __PACKAGE__ }
     sub DESTROY { () }
 }

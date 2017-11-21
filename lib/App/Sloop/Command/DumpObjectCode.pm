@@ -7,7 +7,7 @@ our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
 use HTML::MasonX::Sloop;
-use HTML::MasonX::Sloop::Util qw[ tidy_code ];
+use HTML::MasonX::Inspector::Util qw[ tidy_code ];
 
 use App::Sloop -command;
 
@@ -18,7 +18,7 @@ sub opt_spec {
     return (
     	[ 'checksum', 'just show the checksum of the code', { default => 0 } ],
         [],
-        [ 'comp-root=s', 'HTML::Mason comp_root', { default => $App::HTML::MasonX::Sloop::CONFIG{'COMP_ROOT'} } ],
+        [ 'comp-root=s', 'HTML::Mason comp_root', { default => $App::HTML::MasonX::CONFIG{'COMP_ROOT'} } ],
         [],
         $class->SUPER::opt_spec,
     )

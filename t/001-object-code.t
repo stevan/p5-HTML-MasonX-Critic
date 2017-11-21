@@ -9,8 +9,8 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok('HTML::MasonX::Sloop');
-    use_ok('HTML::MasonX::Sloop::Util', qw[ calculate_checksum ]);
+    use_ok('HTML::MasonX::Inspector');
+    use_ok('HTML::MasonX::Inspector::Util', qw[ calculate_checksum ]);
 }
 
 my $MASON_FILE = '001-basic.html';
@@ -28,11 +28,11 @@ $greeting ||= 'World';
 
 subtest '... simple sloop test' => sub {
 
-    my $sloop = HTML::MasonX::Sloop::Inspector->new(
+    my $sloop = HTML::MasonX::Inspector->new(
         comp_root     => $COMP_ROOT,
         allow_globals => [ '$x' ]
     );
-    isa_ok($sloop, 'HTML::MasonX::Sloop::Inspector');
+    isa_ok($sloop, 'HTML::MasonX::Inspector');
 
     subtest '... testing the object code' => sub {
 
@@ -42,9 +42,9 @@ subtest '... simple sloop test' => sub {
             undef, '... got object code without exception'
         );
 
-        isa_ok($obj_code, 'HTML::MasonX::Sloop::Inspector::ObjectCode');
+        isa_ok($obj_code, 'HTML::MasonX::Inspector::ObjectCode');
 
-        my $src = $obj_code->source;
+        my $src = $obj_code->clean_source;
         like( $src, $_, '... the object code matches ' . $_ ) foreach (
             qr/package HTML\:\:Mason\:\:Commands/,
             qr/use vars qw\(\s*\$m\s*\$x\s*\)\;/,

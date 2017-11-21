@@ -1,4 +1,4 @@
-package HTML::MasonX::Sloop::Util;
+package HTML::MasonX::Inspector::Util;
 
 use strict;
 use warnings;

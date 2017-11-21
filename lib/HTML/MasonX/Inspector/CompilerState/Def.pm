@@ -1,4 +1,4 @@
-package HTML::MasonX::Sloop::Inspector::CompilerState::Def;
+package HTML::MasonX::Inspector::CompilerState::Def;
 
 use strict;
 use warnings;
@@ -8,8 +8,8 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
-use HTML::MasonX::Sloop::Inspector::CompilerState::Arg;
-use HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock;
+use HTML::MasonX::Inspector::CompilerState::Arg;
+use HTML::MasonX::Inspector::CompilerState::CodeBlock;
 
 use UNIVERSAL::Object;
 
@@ -25,15 +25,15 @@ our %HAS; BEGIN {
 sub BUILD {
     my ($self, $params) = @_;
 
-    Carp::confess('The `body` must be an instance of `HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock`, not ('.$self->{body}.')')
+    Carp::confess('The `body` must be an instance of `HTML::MasonX::Inspector::CompilerState::CodeBlock`, not ('.$self->{body}.')')
         unless Scalar::Util::blessed( $self->{body} )
-            && $self->{body}->isa('HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock');
+            && $self->{body}->isa('HTML::MasonX::Inspector::CompilerState::CodeBlock');
 
-    Carp::confess('All `args` must be an instance of `HTML::MasonX::Sloop::Inspector::CompilerState::Arg`, not ('.$_.')')
+    Carp::confess('All `args` must be an instance of `HTML::MasonX::Inspector::CompilerState::Arg`, not ('.$_.')')
         unless scalar grep {
             Scalar::Util::blessed( $_ )
                 &&
-            $_->isa('HTML::MasonX::Sloop::Inspector::CompilerState::Arg')
+            $_->isa('HTML::MasonX::Inspector::CompilerState::Arg')
         } @{ $self->{args} };
 }
 
@@ -51,7 +51,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Sloop::Inspector::CompilerState::Def - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::CompilerState::Def - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

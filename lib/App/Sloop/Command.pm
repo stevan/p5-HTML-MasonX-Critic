@@ -13,8 +13,8 @@ use App::Cmd::Setup -command;
 sub opt_spec {
     my ($class) = @_;
     return (
-        [ 'verbose|v', 'display additional information', { default => $App::HTML::MasonX::Sloop::CONFIG{'VERBOSE'}                     } ],
-        [ 'debug|d',   'display debugging information',  { default => $App::HTML::MasonX::Sloop::CONFIG{'DEBUG'}, implies => 'verbose' } ],
+        [ 'verbose|v', 'display additional information', { default => $App::HTML::MasonX::CONFIG{'VERBOSE'}                     } ],
+        [ 'debug|d',   'display debugging information',  { default => $App::HTML::MasonX::CONFIG{'DEBUG'}, implies => 'verbose' } ],
     );
 }
 
