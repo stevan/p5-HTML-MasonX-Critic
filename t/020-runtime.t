@@ -17,12 +17,50 @@ my $COMP_ROOT  = Path::Tiny->tempdir;
 
 $COMP_ROOT->child( $MASON_FILE )->spew(q[
 <%args>
-$greeting => undef
+$foo => 10;
+$bar => undef;
+$baz => 'GORCH';
 </%args>
+
+<%flags>
+inherit=>'/some_handler'
+</%flags>
+
+<%attr>
+color => 'blue'
+fonts => [qw(arial geneva helvetica)]
+</%attr>
+
+<%method .label>
+    <%args>
+        $label
+        $value
+    </%args>
+    <div><% $label %> : <% $value %></div>
+</%method>
+
+<%def .banner>
+    <%args>
+        $title
+    </%args>
+    <h1><% $title %></h1>
+</%def>
+
+<%once>
+use Scalar::Util 'blessed';
+use List::Util   qw[ max uniq ];
+use File::Spec   ();
+</%once>
+
 <%init>
-$greeting ||= 'World';
+$bar //= $foo * $foo;
 </%init>
-<h1>Hello <% $greeting %></h1>
+
+<& .banner, title => 'Hello World' &>
+
+<& SELF:.label, label => 'FOO', value => $foo &>
+<& SELF:.label, label => 'BAR', value => $bar &>
+<& SELF:.label, label => 'BAZ', value => $baz &>
 ]);
 
 subtest '... simple sloop test' => sub {
@@ -41,6 +79,9 @@ subtest '... simple sloop test' => sub {
 
         my $comp = $runtime->component;
         isa_ok($comp, 'HTML::Mason::Component');
+
+        #use Data::Dumper;
+        #warn Dumper $comp;
     };
 
 };
