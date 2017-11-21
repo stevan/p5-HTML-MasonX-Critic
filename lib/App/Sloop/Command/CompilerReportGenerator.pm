@@ -8,7 +8,7 @@ our $AUTHORITY = 'cpan:STEVAN';
 
 use Git::Wrapper;
 
-use HTML::MasonX::Sloop;
+use HTML::MasonX::Inspector;
 
 use App::Sloop::MasonFileFinder;
 use App::Sloop::CompilerReportGenerator;
@@ -23,7 +23,7 @@ sub opt_spec {
         [ 'dir=s',   'the directory in which to look in', { required => 1 } ],
         [ 'dry-run', 'just print out the info', { default => 0 } ],
         [],
-        [ 'comp-root=s', 'HTML::Mason comp_root', { default => $App::HTML::MasonX::CONFIG{'COMP_ROOT'} } ],
+        [ 'comp-root=s', 'HTML::Mason comp_root', { default => $App::Sloop::CONFIG{'COMP_ROOT'} } ],
         [],
         $class->SUPER::opt_spec,
     )
@@ -38,7 +38,7 @@ sub execute {
     my ($sha)     = Git::Wrapper->new( $dir )->RUN('rev-parse', 'HEAD');
 
     my $reporter    = App::Sloop::CompilerReportGenerator->new( git_sha => $sha, comp_root => $comp_root );
-    my $inspector   = HTML::MasonX::Sloop->new( comp_root => $comp_root );
+    my $inspector   = HTML::MasonX::Inspector->new( comp_root => $comp_root );
     my $file_finder = App::Sloop::MasonFileFinder->new( root_dir => $dir );
 
     if ( -e $reporter->report_database_file ) {

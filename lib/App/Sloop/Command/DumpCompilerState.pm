@@ -8,7 +8,7 @@ our $AUTHORITY = 'cpan:STEVAN';
 
 use List::Util ();
 
-use HTML::MasonX::Sloop;
+use HTML::MasonX::Inspector;
 
 use App::Sloop -command;
 
@@ -32,7 +32,7 @@ sub execute {
     my $path      = $opt->path;
     my $comp_root = $opt->comp_root;
 
-    my $inspector      = HTML::MasonX::Sloop->new( comp_root => $comp_root );
+    my $inspector      = HTML::MasonX::Inspector->new( comp_root => $comp_root );
     my $compiler_state = $inspector->get_compiler_for_path( $path );
 
     binmode(STDOUT, ":utf8");

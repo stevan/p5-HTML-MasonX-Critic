@@ -6,7 +6,7 @@ use warnings;
 our $VERSION   = '0.01';
 our $AUTHORITY = 'cpan:STEVAN';
 
-use HTML::MasonX::Sloop;
+use HTML::MasonX::Inspector;
 
 use App::Sloop -command;
 
@@ -15,9 +15,7 @@ sub command_names { 'dump-object-code' }
 sub opt_spec {
     my ($class) = @_;
     return (
-    	[ 'checksum', 'just show the checksum of the code', { default => 0 } ],
-        [],
-        [ 'comp-root=s', 'HTML::Mason comp_root', { default => $App::HTML::MasonX::CONFIG{'COMP_ROOT'} } ],
+        [ 'comp-root=s', 'HTML::Mason comp_root', { default => $App::Sloop::CONFIG{'COMP_ROOT'} } ],
         [],
         $class->SUPER::opt_spec,
     )
@@ -28,15 +26,9 @@ sub execute {
 
     my ($path) = @$args;
 
-    my $i = HTML::MasonX::Sloop->new( comp_root => $opt->comp_root );
+    my $i = HTML::MasonX::Inspector->new( comp_root => $opt->comp_root );
 
-    if ( $opt->checksum ) {
-    	print $i->get_object_code_checksum_for_path( $path ), "\n";
-    }
-    else {
-        warn  $i->get_object_code_checksum_for_path( $path ), "\n" if $opt->verbose;
-    	print $i->get_object_code_for_path( $path ), "\n";
-    }
+    print $i->get_object_code_for_path( $path )->source, "\n";
 }
 
 1;
