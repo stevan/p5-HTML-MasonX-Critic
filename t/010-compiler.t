@@ -71,9 +71,11 @@ subtest '... simple sloop test' => sub {
     my $state = $sloop->get_compiler_for_path( $MASON_FILE );
     isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
 
+    my $comp = $state->get_main_component;
+
     subtest '... testing the args' => sub {
 
-        my @args = $state->get_args;
+        my @args = $comp->args;
         is(3, scalar @args, '... we have three args');
 
         my ($foo, $bar, $baz) = @args;
@@ -108,7 +110,7 @@ subtest '... simple sloop test' => sub {
 
     subtest '... testing the flags' => sub {
 
-        my @flags = $state->get_flags;
+        my @flags = $comp->flags;
         is(1, scalar @flags, '... we have one flag');
         isa_ok($flags[0], 'HTML::MasonX::Inspector::Compiler::Flag');
 
@@ -119,7 +121,7 @@ subtest '... simple sloop test' => sub {
 
     subtest '... testing the attrs' => sub {
 
-        my @attrs = $state->get_attrs;
+        my @attrs = $comp->attrs;
         is(2, scalar @attrs, '... we have two attrs');
 
         my ($color, $fonts) = @attrs;
@@ -145,7 +147,7 @@ subtest '... simple sloop test' => sub {
 
     subtest '... testing the methods' => sub {
 
-        my @methods = $state->get_methods;
+        my @methods = $comp->methods;
         is(1, scalar @methods, '... we have one method');
 
         my ($method) = @methods;
@@ -176,7 +178,7 @@ subtest '... simple sloop test' => sub {
 
     subtest '... testing the defs' => sub {
 
-        my @defs = $state->get_defs;
+        my @defs = $comp->defs;
         is(1, scalar @defs, '... we have one def');
 
         my ($def) = @defs;
