@@ -33,7 +33,7 @@ sub execute {
     my $comp_root = $opt->comp_root;
 
     my $inspector      = HTML::MasonX::Sloop->new( comp_root => $comp_root );
-    my $compiler_state = $inspector->get_compiler_state_for_path( $path );
+    my $compiler_state = $inspector->get_compiler_for_path( $path );
 
     binmode(STDOUT, ":utf8");
 

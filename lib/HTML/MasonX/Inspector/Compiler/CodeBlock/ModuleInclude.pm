@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::CompilerState::CodeBlock::ModuleInclude;
+package HTML::MasonX::Inspector::Compiler::CodeBlock::ModuleInclude;
 
 use strict;
 use warnings;
@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
-use HTML::MasonX::Inspector::CompilerState::CodeBlock::ModuleInclude::Import;
+use HTML::MasonX::Inspector::Compiler::CodeBlock::ModuleInclude::Import;
 
 use UNIVERSAL::Object;
 
@@ -81,7 +81,7 @@ sub imports {
 	my @args = $self->arguments;
 
 	$self->{_imports} = [
-		map HTML::MasonX::Inspector::CompilerState::CodeBlock::ModuleInclude::Import->new(
+		map HTML::MasonX::Inspector::Compiler::CodeBlock::ModuleInclude::Import->new(
 			token => $_
 		), $self->_flatten_import_list_from_PPI( @args )
 	] unless $self->{_imports};
@@ -144,7 +144,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::CompilerState::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::Compiler::CodeBlock - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

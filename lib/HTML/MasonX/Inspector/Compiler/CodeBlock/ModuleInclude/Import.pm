@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::CompilerState::CodeBlock::ModuleInclude::Import;
+package HTML::MasonX::Inspector::Compiler::CodeBlock::ModuleInclude::Import;
 
 use strict;
 use warnings;
@@ -29,7 +29,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::CompilerState::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::Compiler::CodeBlock - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

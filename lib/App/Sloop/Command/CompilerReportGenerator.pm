@@ -66,7 +66,7 @@ sub execute {
         my $path = $file->relative( $comp_root );
 
         my $checksum       = $inspector->get_object_code_checksum_for_path( $path );
-        my $compiler_state = $inspector->get_compiler_state_for_path( $path );
+        my $compiler_state = $inspector->get_compiler_for_path( $path );
 
         if ( $verbose ) {
             warn $indenter->('=='), "\n";

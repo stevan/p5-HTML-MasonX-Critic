@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::CompilerState::Attr;
+package HTML::MasonX::Inspector::Compiler::Flag;
 
 use strict;
 use warnings;
@@ -31,8 +31,6 @@ sub BUILD {
 sub key   { $_[0]->{key}   }
 sub value { $_[0]->{value} }
 
-sub evaluated_value { eval $_[0]->value }
-
 1;
 
 __END__
@@ -41,7 +39,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::CompilerState::Attr - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::Compiler::Flag - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

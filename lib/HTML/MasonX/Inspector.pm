@@ -12,7 +12,7 @@ use Scalar::Util ();
 use HTML::Mason::Interp;
 
 use HTML::MasonX::Inspector::ObjectCode;
-use HTML::MasonX::Inspector::CompilerState;
+use HTML::MasonX::Inspector::Compiler;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -76,10 +76,10 @@ sub get_object_code_for_path {
     );
 }
 
-sub get_compiler_state_for_path {
+sub get_compiler_for_path {
     my ($self, $path) = @_;
 
-    return HTML::MasonX::Inspector::CompilerState->new(
+    return HTML::MasonX::Inspector::Compiler->new(
         inspector => $self,
         path      => $path,
     );

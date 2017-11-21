@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::CompilerState::CodeBlock::Constant;
+package HTML::MasonX::Inspector::Compiler::CodeBlock::Constant;
 
 use strict;
 use warnings;
@@ -72,7 +72,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::CompilerState::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::Compiler::CodeBlock - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 
