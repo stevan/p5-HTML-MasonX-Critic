@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::PerlSource::UsedModule::Conditional;
+package HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional;
 
 use strict;
 use warnings;
@@ -10,12 +10,12 @@ use Scalar::Util    ();
 use List::Util      ();
 use Module::Runtime ();
 
-use HTML::MasonX::Inspector::PerlSource::UsedModule;
+use HTML::MasonX::Inspector::Util::Perl::UsedModule;
 
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Inspector::PerlSource::UsedModule') }
+our @ISA; BEGIN { @ISA = ('HTML::MasonX::Inspector::Util::Perl::UsedModule') }
 our %HAS; BEGIN {
     %HAS = (
-        %HTML::MasonX::Inspector::PerlSource::UsedModule::HAS,
+        %HTML::MasonX::Inspector::Util::Perl::UsedModule::HAS,
         # ... cache some data ...
         _module         => sub {},
         _module_version => sub {},
@@ -99,7 +99,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::PerlSource - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::Util::Perl - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

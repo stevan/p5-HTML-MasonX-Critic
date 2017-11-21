@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::PerlSource::UsedModule::ImportedToken;
+package HTML::MasonX::Inspector::Util::Perl::UsedModule::ImportedToken;
 
 use strict;
 use warnings;
@@ -29,7 +29,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::PerlSource - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::Util::Perl - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

@@ -19,7 +19,7 @@ use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
-        code                 => sub { die 'Some `code` is required' },
+        source               => sub { die 'Some `source` is required' },
         # ... internal fields
         _ppi                 => sub {},
         # CACHED DATA
@@ -41,18 +41,18 @@ our %HAS; BEGIN {
 sub BUILD {
     my ($self, $params) = @_;
 
-    $self->{_ppi} = PPI::Document->new( $self->{code}, readonly => 1 );
+    $self->{_ppi} = PPI::Document->new( $self->{source}, readonly => 1 );
 }
 
 ## Info ...
 
-sub raw  { ${ $_[0]->{code} } }
+sub raw  { ${ $_[0]->{source} } }
 sub size { length $_[0]->raw  }
 
 sub starting_line_number {
     my ($self) = @_;
 
-    my $code = ${ $_[0]->{code} };
+    my $code = ${ $_[0]->{source} };
 
     my ($line_number) = ($code =~ /^#line (\d*)/);
 
@@ -65,7 +65,7 @@ sub starting_line_number {
 sub lines  {
     my ($self) = @_;
 
-    $self->{_lines} //= scalar split /\n/ => ${ $self->{code} };
+    $self->{_lines} //= scalar split /\n/ => ${ $self->{source} };
 }
 
 sub checksum {

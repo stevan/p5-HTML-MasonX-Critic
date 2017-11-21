@@ -452,9 +452,9 @@ sub insert_new_block {
 	Carp::confess('You must specify a block')
 		unless defined $block;
 
-	Carp::confess('The block must be an instance of HTML::MasonX::Inspector::PerlSource')
+	Carp::confess('The block must be an instance of HTML::MasonX::Inspector::Util::Perl')
 		unless Scalar::Util::blessed($block)
-			&& $block->isa('HTML::MasonX::Inspector::PerlSource');
+			&& $block->isa('HTML::MasonX::Inspector::Util::Perl');
 
 	Carp::confess('Cannot insert new block without current file')
 		unless $self->{_current_file_id};

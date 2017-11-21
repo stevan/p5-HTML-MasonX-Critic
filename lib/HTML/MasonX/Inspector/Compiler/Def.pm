@@ -9,7 +9,7 @@ use Carp         ();
 use Scalar::Util ();
 
 use HTML::MasonX::Inspector::Compiler::Arg;
-use HTML::MasonX::Inspector::PerlSource;
+use HTML::MasonX::Inspector::Util::Perl;
 
 use UNIVERSAL::Object;
 
@@ -25,9 +25,9 @@ our %HAS; BEGIN {
 sub BUILD {
     my ($self, $params) = @_;
 
-    Carp::confess('The `body` must be an instance of `HTML::MasonX::Inspector::PerlSource`, not ('.$self->{body}.')')
+    Carp::confess('The `body` must be an instance of `HTML::MasonX::Inspector::Util::Perl`, not ('.$self->{body}.')')
         unless Scalar::Util::blessed( $self->{body} )
-            && $self->{body}->isa('HTML::MasonX::Inspector::PerlSource');
+            && $self->{body}->isa('HTML::MasonX::Inspector::Util::Perl');
 
     Carp::confess('All `args` must be an instance of `HTML::MasonX::Inspector::Compiler::Arg`, not ('.$_.')')
         unless scalar grep {
