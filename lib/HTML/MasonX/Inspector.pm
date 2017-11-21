@@ -13,6 +13,7 @@ use HTML::Mason::Interp;
 
 use HTML::MasonX::Inspector::ObjectCode;
 use HTML::MasonX::Inspector::Compiler;
+use HTML::MasonX::Inspector::Runtime;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -85,16 +86,16 @@ sub get_compiler_for_path {
     );
 }
 
-## internal stuff ...
-
-sub _load_component_for_path {
+sub get_runtime_for_path {
     my ($self, $path) = @_;
-    my $interp   = $self->interpreter;
-    my $source   = $self->_resolve_path( $path );
-    my $obj_code = $source->object_code( compiler => $interp->compiler );
-    my $comp     = $interp->eval_object_code( object_code => $obj_code );
-    return $comp;
+
+    return HTML::MasonX::Inspector::Runtime->new(
+        inspector => $self,
+        path      => $path,
+    );
 }
+
+## internal stuff ...
 
 ## ------------------------------------------- ##
 ## Ugly internal stuff
