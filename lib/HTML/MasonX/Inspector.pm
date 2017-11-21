@@ -19,22 +19,13 @@ our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
         # ... private
+        _mason_args  => sub {},
         _interpreter => sub {},
     )
 }
 
-sub BUILDARGS {
-    my $class = shift;
-    my $args  = $class->next::method( @_ );
-
-    Carp::confess( 'Cannot create a new Mason Interpreter unless you supply `comp_root` parameter' )
-        unless $args->{comp_root};
-
-    Carp::confess( 'The `comp_root` must be a valid directory' )
-        unless -e $args->{comp_root} && -d $args->{comp_root};
-
-    return $args;
-}
+# all args are mason args
+sub BUILDARGS { +{ _mason_args => [ @_[ 1 .. $#_ ] ] } }
 
 sub BUILD {
     my ($self, $params) = @_;
@@ -43,7 +34,14 @@ sub BUILD {
     # prepare the $params to pass to
     # Mason, and since we will alter it
     # we make a copy ...
-    my %mason_args = %$params;
+    my %mason_args = @{ $self->{_mason_args} };
+
+    # at least make sure they set up comp_root
+    Carp::confess( 'Cannot create a new Mason Interpreter unless you supply `comp_root` parameter' )
+        unless $mason_args{comp_root};
+
+    Carp::confess( 'The `comp_root` must be a valid directory' )
+        unless -e $mason_args{comp_root} && -d $mason_args{comp_root};
 
     # prep the comp_root before passing to Mason ...
     $mason_args{comp_root} = $mason_args{comp_root}->stringify
@@ -60,12 +58,12 @@ sub BUILD {
         $_ => HTML::MasonX::Inspector::__EVIL__->new
     ) foreach map s/^[$@%]//r, $interpreter->compiler->allow_globals; #/
 
-    $self->{interpreter} = $interpreter;
+    $self->{_interpreter} = $interpreter;
 }
 
 ## accessor ...
 
-sub interpreter { $_[0]->{interpreter} }
+sub interpreter { $_[0]->{_interpreter} }
 
 ## do things ...
 
