@@ -57,7 +57,7 @@ sub sanitized_source {
     # This is the comp_root and may be different
     # on different machines, so we should strip
     # it out now.
-    my $comp_root = $self->{inspector}->interpreter->comp_root;
+    my $comp_root = $self->{interpreter}->comp_root;
     $comp_root .= '/' unless $comp_root =~ /\/$/;
     $obj_code =~ s/\#line (\d+) \"$comp_root/\#line $1 \"/g;
 

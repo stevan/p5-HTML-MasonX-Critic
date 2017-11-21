@@ -37,7 +37,7 @@ sub BUILDARGS {
     }
     else {
         # all args are mason args
-        return +{ _mason_args => [ @_[ 1 .. $#_ ] ] };
+        return +{ _mason_args => [ @_ ] };
     }
 }
 
