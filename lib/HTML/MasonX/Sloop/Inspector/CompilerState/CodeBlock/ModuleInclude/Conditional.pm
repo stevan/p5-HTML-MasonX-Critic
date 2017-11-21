@@ -1,4 +1,4 @@
-package HTML::MasonX::Sloop::CompilerState::CodeBlock::ModuleInclude::Conditional;
+package HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock::ModuleInclude::Conditional;
 
 use strict;
 use warnings;
@@ -10,12 +10,12 @@ use Scalar::Util    ();
 use List::Util      ();
 use Module::Runtime ();
 
-use HTML::MasonX::Sloop::CompilerState::CodeBlock::ModuleInclude;
+use HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock::ModuleInclude;
 
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Sloop::CompilerState::CodeBlock::ModuleInclude') }
+our @ISA; BEGIN { @ISA = ('HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock::ModuleInclude') }
 our %HAS; BEGIN {
     %HAS = (
-        %HTML::MasonX::Sloop::CompilerState::CodeBlock::ModuleInclude::HAS,
+        %HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock::ModuleInclude::HAS,
         # ... cache some data ...
         _module         => sub {},
         _module_version => sub {},
@@ -99,7 +99,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Sloop::CompilerState::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

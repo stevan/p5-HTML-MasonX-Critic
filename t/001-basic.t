@@ -28,11 +28,11 @@ $greeting ||= 'World';
 
 subtest '... simple sloop test' => sub {
 
-    my $sloop = HTML::MasonX::Sloop->new(
+    my $sloop = HTML::MasonX::Sloop::Inspector->new(
         comp_root     => $COMP_ROOT,
         allow_globals => [ '$x' ]
     );
-    isa_ok($sloop, 'HTML::MasonX::Sloop');
+    isa_ok($sloop, 'HTML::MasonX::Sloop::Inspector');
 
     is($sloop->comp_root, $COMP_ROOT->stringify, '... the comp root is as we expected');
     is_deeply(

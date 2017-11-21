@@ -49,7 +49,7 @@ fonts => [qw(arial geneva helvetica)]
 <%once>
 use Scalar::Util 'blessed';
 use List::Util   qw[ max uniq ];
-use File::Spec   ()
+use File::Spec   ();
 </%once>
 
 <%init>
@@ -65,13 +65,16 @@ $bar //= $foo * $foo;
 
 subtest '... simple sloop test' => sub {
 
-    my $sloop = HTML::MasonX::Sloop->new( comp_root => $COMP_ROOT );
-    isa_ok($sloop, 'HTML::MasonX::Sloop');
+    my $sloop = HTML::MasonX::Sloop::Inspector->new( comp_root => $COMP_ROOT );
+    isa_ok($sloop, 'HTML::MasonX::Sloop::Inspector');
+
+    #use Data::Dumper;
+    #die Dumper $sloop->get_component_for_path( $MASON_FILE );
 
     is($sloop->comp_root, $COMP_ROOT->stringify, '... the comp root is as we expected');
 
     my $state = $sloop->get_compiler_state_for_path( $MASON_FILE );
-    isa_ok($state, 'HTML::MasonX::Sloop::CompilerState');
+    isa_ok($state, 'HTML::MasonX::Sloop::Inspector::CompilerState');
 
     subtest '... testing the args' => sub {
 
@@ -81,7 +84,7 @@ subtest '... simple sloop test' => sub {
         my ($foo, $bar, $baz) = @args;
 
         subtest '... check the $foo argument' => sub {
-            isa_ok($foo, 'HTML::MasonX::Sloop::CompilerState::Arg');
+            isa_ok($foo, 'HTML::MasonX::Sloop::Inspector::CompilerState::Arg');
             is($foo->sigil, '$', '... got the expected sigil');
             is($foo->symbol, 'foo', '... got the expected symbol');
             is($foo->name, '$foo', '... got the expected name');
@@ -90,7 +93,7 @@ subtest '... simple sloop test' => sub {
         };
 
         subtest '... check the $bar argument' => sub {
-            isa_ok($bar, 'HTML::MasonX::Sloop::CompilerState::Arg');
+            isa_ok($bar, 'HTML::MasonX::Sloop::Inspector::CompilerState::Arg');
             is($bar->sigil, '$', '... got the expected sigil');
             is($bar->symbol, 'bar', '... got the expected symbol');
             is($bar->name, '$bar', '... got the expected name');
@@ -99,7 +102,7 @@ subtest '... simple sloop test' => sub {
         };
 
         subtest '... check the $baz argument' => sub {
-            isa_ok($baz, 'HTML::MasonX::Sloop::CompilerState::Arg');
+            isa_ok($baz, 'HTML::MasonX::Sloop::Inspector::CompilerState::Arg');
             is($baz->sigil, '$', '... got the expected sigil');
             is($baz->symbol, 'baz', '... got the expected symbol');
             is($baz->name, '$baz', '... got the expected name');
@@ -112,7 +115,7 @@ subtest '... simple sloop test' => sub {
 
         my @flags = $state->get_flags;
         is(1, scalar @flags, '... we have one flag');
-        isa_ok($flags[0], 'HTML::MasonX::Sloop::CompilerState::Flag');
+        isa_ok($flags[0], 'HTML::MasonX::Sloop::Inspector::CompilerState::Flag');
 
         is($flags[0]->key, 'inherit', '... there is only one flag key available');
         is($flags[0]->value, '/some_handler', '... got the expected value');
@@ -127,13 +130,13 @@ subtest '... simple sloop test' => sub {
         my ($color, $fonts) = @attrs;
 
         subtest '... check the color attribute' => sub {
-            isa_ok($color, 'HTML::MasonX::Sloop::CompilerState::Attr');
+            isa_ok($color, 'HTML::MasonX::Sloop::Inspector::CompilerState::Attr');
             is($color->key, 'color', '... got the expected key');
             is($color->value, 'blue', '... got the expected value');
         };
 
         subtest '... check the fonts attribute' => sub {
-            isa_ok($fonts, 'HTML::MasonX::Sloop::CompilerState::Attr');
+            isa_ok($fonts, 'HTML::MasonX::Sloop::Inspector::CompilerState::Attr');
             is($fonts->key, 'fonts', '... got the expected key');
             is($fonts->value, '[qw(arial geneva helvetica)]', '... got the expected value');
             is_deeply(
@@ -157,7 +160,7 @@ subtest '... simple sloop test' => sub {
         my ($label, $value) = $method->get_args;
 
         subtest '... check the $label argument' => sub {
-            isa_ok($label, 'HTML::MasonX::Sloop::CompilerState::Arg');
+            isa_ok($label, 'HTML::MasonX::Sloop::Inspector::CompilerState::Arg');
             is($label->sigil, '$', '... got the expected sigil');
             is($label->symbol, 'label', '... got the expected symbol');
             is($label->name, '$label', '... got the expected name');
@@ -166,7 +169,7 @@ subtest '... simple sloop test' => sub {
         };
 
         subtest '... check the $value argument' => sub {
-            isa_ok($value, 'HTML::MasonX::Sloop::CompilerState::Arg');
+            isa_ok($value, 'HTML::MasonX::Sloop::Inspector::CompilerState::Arg');
             is($value->sigil, '$', '... got the expected sigil');
             is($value->symbol, 'value', '... got the expected symbol');
             is($value->name, '$value', '... got the expected name');
@@ -188,7 +191,7 @@ subtest '... simple sloop test' => sub {
         my ($title) = $def->get_args;
 
         subtest '... check the $title argument' => sub {
-            isa_ok($title, 'HTML::MasonX::Sloop::CompilerState::Arg');
+            isa_ok($title, 'HTML::MasonX::Sloop::Inspector::CompilerState::Arg');
             is($title->sigil, '$', '... got the expected sigil');
             is($title->symbol, 'title', '... got the expected symbol');
             is($title->name, '$title', '... got the expected name');

@@ -1,4 +1,4 @@
-package HTML::MasonX::Sloop::CompilerState::CodeBlock::Subroutine;
+package HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock::Subroutine;
 
 use strict;
 use warnings;
@@ -40,7 +40,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Sloop::CompilerState::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

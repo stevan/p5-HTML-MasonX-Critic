@@ -1,4 +1,4 @@
-package HTML::MasonX::Sloop::CompilerState;
+package HTML::MasonX::Sloop::Inspector::CompilerState;
 
 use strict;
 use warnings;
@@ -9,14 +9,14 @@ use Clone        ();
 use PPI          ();
 use Perl::Critic ();
 
-use HTML::MasonX::Sloop::CompilerState::Arg;
-use HTML::MasonX::Sloop::CompilerState::Flag;
-use HTML::MasonX::Sloop::CompilerState::Attr;
-use HTML::MasonX::Sloop::CompilerState::Method;
-use HTML::MasonX::Sloop::CompilerState::Def;
+use HTML::MasonX::Sloop::Inspector::CompilerState::Arg;
+use HTML::MasonX::Sloop::Inspector::CompilerState::Flag;
+use HTML::MasonX::Sloop::Inspector::CompilerState::Attr;
+use HTML::MasonX::Sloop::Inspector::CompilerState::Method;
+use HTML::MasonX::Sloop::Inspector::CompilerState::Def;
 
-use HTML::MasonX::Sloop::CompilerState::CodeBlock;
-use HTML::MasonX::Sloop::CompilerState::PerlCriticViolation;
+use HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock;
+use HTML::MasonX::Sloop::Inspector::CompilerState::PerlCriticViolation;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -90,7 +90,7 @@ sub get_args {
 
     if ( defined $args && @$args ) {
         return map
-            HTML::MasonX::Sloop::CompilerState::Arg->new(
+            HTML::MasonX::Sloop::Inspector::CompilerState::Arg->new(
                 sigil           => $_->{type},
                 symbol          => $_->{name},
                 default_value   => $_->{default},
@@ -110,7 +110,7 @@ sub get_flags {
 
     if ( defined $flags && keys %$flags ) {
         return map
-            HTML::MasonX::Sloop::CompilerState::Flag->new(
+            HTML::MasonX::Sloop::Inspector::CompilerState::Flag->new(
                 key   => $_,
                 value => $flags->{ $_ },
             ), sort keys %$flags
@@ -126,7 +126,7 @@ sub get_attrs {
 
     if ( defined $attr && keys %$attr ) {
         return map
-            HTML::MasonX::Sloop::CompilerState::Attr->new(
+            HTML::MasonX::Sloop::Inspector::CompilerState::Attr->new(
                 key   => $_,
                 value => $attr->{ $_ },
             ), sort keys %$attr
@@ -142,11 +142,11 @@ sub get_methods {
 
     if ( defined $methods && keys %$methods ) {
         return map
-            HTML::MasonX::Sloop::CompilerState::Method->new(
+            HTML::MasonX::Sloop::Inspector::CompilerState::Method->new(
                 name => $_,
                 args => [
                     map
-                        HTML::MasonX::Sloop::CompilerState::Arg->new(
+                        HTML::MasonX::Sloop::Inspector::CompilerState::Arg->new(
                             sigil           => $_->{type},
                             symbol          => $_->{name},
                             default_value   => $_->{default},
@@ -154,7 +154,7 @@ sub get_methods {
                             line_number     => $_->{line},
                         ), @{$methods->{$_}->{args}}
                 ],
-                body => HTML::MasonX::Sloop::CompilerState::CodeBlock->new(
+                body => HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock->new(
                     code => \($methods->{$_}->{body})
                 ),
             ), keys %$methods
@@ -171,11 +171,11 @@ sub get_defs {
 
     if ( defined $defs && keys %$defs ) {
         return map
-            HTML::MasonX::Sloop::CompilerState::Def->new(
+            HTML::MasonX::Sloop::Inspector::CompilerState::Def->new(
                 name => $_,
                 args => [
                     map
-                        HTML::MasonX::Sloop::CompilerState::Arg->new(
+                        HTML::MasonX::Sloop::Inspector::CompilerState::Arg->new(
                             sigil           => $_->{type},
                             symbol          => $_->{name},
                             default_value   => $_->{default},
@@ -183,7 +183,7 @@ sub get_defs {
                             line_number     => $_->{line},
                         ), @{$defs->{$_}->{args}}
                 ],
-                body => HTML::MasonX::Sloop::CompilerState::CodeBlock->new(
+                body => HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock->new(
                     code => \($defs->{$_}->{body})
                 ),
             ), keys %$defs
@@ -206,17 +206,17 @@ sub get_blocks {
     # templates in it.
     if ( $self->{_compiler}->{main_compile}->{body} ) {
         $blocks{main} = [
-            HTML::MasonX::Sloop::CompilerState::CodeBlock->new(
+            HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock->new(
                 code => \($self->{_compiler}->{main_compile}->{body})
             )
         ];
     }
 
-    $blocks{once}    = [ map HTML::MasonX::Sloop::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{once}    } ] if @{ $blocks->{once}    };
-    $blocks{init}    = [ map HTML::MasonX::Sloop::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{init}    } ] if @{ $blocks->{init}    };
-    $blocks{filter}  = [ map HTML::MasonX::Sloop::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{filter}  } ] if @{ $blocks->{filter}  };
-    $blocks{cleanup} = [ map HTML::MasonX::Sloop::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{cleanup} } ] if @{ $blocks->{cleanup} };
-    $blocks{shared}  = [ map HTML::MasonX::Sloop::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{shared}  } ] if @{ $blocks->{shared}  };
+    $blocks{once}    = [ map HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{once}    } ] if @{ $blocks->{once}    };
+    $blocks{init}    = [ map HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{init}    } ] if @{ $blocks->{init}    };
+    $blocks{filter}  = [ map HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{filter}  } ] if @{ $blocks->{filter}  };
+    $blocks{cleanup} = [ map HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{cleanup} } ] if @{ $blocks->{cleanup} };
+    $blocks{shared}  = [ map HTML::MasonX::Sloop::Inspector::CompilerState::CodeBlock->new(code => \$_), @{ $blocks->{shared}  } ] if @{ $blocks->{shared}  };
 
     return %blocks;
 }
@@ -256,7 +256,7 @@ sub get_violations {
     #warn $obj_code;
 
     my @original   = $critic->critique( \$obj_code );
-    my @violations = map HTML::MasonX::Sloop::CompilerState::PerlCriticViolation->new(
+    my @violations = map HTML::MasonX::Sloop::Inspector::CompilerState::PerlCriticViolation->new(
         violation => $_
     ), @original;
 
@@ -271,7 +271,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Sloop::CompilerState - HTML::Mason::Compiler sea cucumber
+HTML::MasonX::Sloop::Inspector::CompilerState - HTML::Mason::Compiler sea cucumber
 
 =head1 DESCRIPTION
 
