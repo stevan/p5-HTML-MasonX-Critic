@@ -1,14 +1,14 @@
-package HTML::MasonX::Inspector::Perl::CodeBlock;
+package HTML::MasonX::Inspector::PerlSource;
 
 use strict;
 use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Inspector::Perl::ModuleInclude;
-use HTML::MasonX::Inspector::Perl::ModuleInclude::Conditional;
-use HTML::MasonX::Inspector::Perl::Constant;
-use HTML::MasonX::Inspector::Perl::Subroutine;
+use HTML::MasonX::Inspector::PerlSource::UsedModule;
+use HTML::MasonX::Inspector::PerlSource::UsedModule::Conditional;
+use HTML::MasonX::Inspector::PerlSource::Constant;
+use HTML::MasonX::Inspector::PerlSource::Subroutine;
 
 use Digest::MD5                 ();
 use PPI                         ();
@@ -154,7 +154,7 @@ sub subroutines {
 
         $self->{_subroutines} = [
             map {
-                HTML::MasonX::Inspector::Perl::Subroutine->new( ppi => $_ )
+                HTML::MasonX::Inspector::PerlSource::Subroutine->new( ppi => $_ )
             } @{ $subs || [] }
         ];
     }
@@ -177,7 +177,7 @@ sub constants {
 
         $self->{_constants} = [
             map {
-                HTML::MasonX::Inspector::Perl::Constant->new( ppi => $_ )
+                HTML::MasonX::Inspector::PerlSource::Constant->new( ppi => $_ )
             } grep {
                 # for this we only want the constants
                 $_->module eq 'constant'
@@ -206,8 +206,8 @@ sub includes {
             map {
                 #warn "IN MAP: ", Dumper $_;
                 $_->module eq 'if'
-                    ? HTML::MasonX::Inspector::Perl::ModuleInclude::Conditional->new( ppi => $_ )
-                    : HTML::MasonX::Inspector::Perl::ModuleInclude->new( ppi => $_ )
+                    ? HTML::MasonX::Inspector::PerlSource::UsedModule::Conditional->new( ppi => $_ )
+                    : HTML::MasonX::Inspector::PerlSource::UsedModule->new( ppi => $_ )
             } grep {
                 # Skip constants, they are another thing entirely ...
                 $_->module ne 'constant'
@@ -225,7 +225,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::Perl::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::PerlSource - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Perl::CriticViolation;
+package HTML::MasonX::Inspector::PerlSource::CriticViolation;
 
 use strict;
 use warnings;
@@ -34,7 +34,7 @@ sub description   { $_[0]->{violation}->description         }
 
 sub policy {
     # get the short name ...
-    $_[0]->{violation}->policy =~ s/^Perl\:\:Critic\:\:Policy\:\://r
+    $_[0]->{violation}->policy =~ s/^Perl\:\:Critic\:\:Policy\:\://r #/
 }
 
 1;
@@ -45,7 +45,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::Perl::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::PerlSource - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

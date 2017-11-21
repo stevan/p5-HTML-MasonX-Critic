@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Perl::Subroutine;
+package HTML::MasonX::Inspector::PerlSource::Subroutine;
 
 use strict;
 use warnings;
@@ -40,7 +40,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::Perl::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::PerlSource - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 
