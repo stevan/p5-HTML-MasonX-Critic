@@ -9,8 +9,8 @@ use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
-        inspector => sub { die 'An `inspector` is required' },
-        path      => sub { die 'A `path` is required' },
+        interpreter => sub { die 'An `interpreter` is required' },
+        path        => sub { die 'A `path` is required' },
         # ... private fields
         _obj_code  => sub {},
         _sanitized => sub {},
@@ -20,8 +20,15 @@ our %HAS; BEGIN {
 sub BUILD {
     my ($self, $params) = @_;
 
-    my $interp   = $self->{inspector}->interpreter;
-    my $source   = $interp->resolve_comp_path_to_source( $self->{path} );
+    my $path = $self->{path};
+
+    # prep this before passing to Mason ...
+    $path = $path->stringify
+        if Scalar::Util::blessed( $path )
+        && $path->isa('Path::Tiny');
+
+    my $interp   = $self->{interpreter};
+    my $source   = $interp->resolve_comp_path_to_source( $path );
     my $obj_code = $source->object_code( compiler => $interp->compiler );
 
     $self->{_obj_code} = $obj_code;

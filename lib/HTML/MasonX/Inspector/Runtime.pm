@@ -9,8 +9,8 @@ use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
-        inspector => sub { die 'An `inspector` is required' },
-        path      => sub { die 'A `path` is required' },
+        interpreter => sub { die 'An `interpreter` is required' },
+        path        => sub { die 'A `path` is required' },
         # ... private fields
         _component => sub {},
     )
@@ -19,8 +19,20 @@ our %HAS; BEGIN {
 sub BUILD {
     my ($self, $params) = @_;
 
-    my $path      = $self->{path} =~ /^\// ? $self->{path} : '/'.$self->{path};
-    my $interp    = $self->{inspector}->interpreter;
+    my $path = $self->{path};
+
+    # prep this before passing to Mason ...
+    $path = $path->stringify
+        if Scalar::Util::blessed( $path )
+        && $path->isa('Path::Tiny');
+
+    # and for whatever reason, load()
+    # wants something that looks like
+    # an absolute path, so we add a /
+    # if needed ...
+    $path = '/' . $path unless $path =~ /^\//;
+
+    my $interp    = $self->{interpreter};
     my $component = $interp->load( $path );
 
     #use Data::Dumper;

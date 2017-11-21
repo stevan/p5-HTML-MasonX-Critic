@@ -22,8 +22,8 @@ use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
-        inspector => sub { die 'An `inspector` is required' },
-        path      => sub { die 'A `path` is required' },
+        interpreter => sub { die 'An `interpreter` is required' },
+        path        => sub { die 'A `path` is required' },
         # ...
         _compiler => sub {},
     )
@@ -39,7 +39,7 @@ sub BUILD {
         if Scalar::Util::blessed( $path )
         && $path->isa('Path::Tiny');
 
-    my $interp   = $self->{inspector}->interpreter;
+    my $interp   = $self->{interpreter};
     my $compiler = $interp->compiler;
     my $source   = $interp->resolve_comp_path_to_source( $path );
 

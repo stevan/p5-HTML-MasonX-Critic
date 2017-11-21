@@ -87,8 +87,8 @@ sub get_object_code_for_path {
     my ($self, $path) = @_;
 
     return HTML::MasonX::Inspector::ObjectCode->new(
-        inspector => $self,
-        path      => $path,
+        interpreter => $self->interpreter,
+        path        => $path,
     );
 }
 
@@ -96,8 +96,8 @@ sub get_compiler_for_path {
     my ($self, $path) = @_;
 
     return HTML::MasonX::Inspector::Compiler->new(
-        inspector => $self,
-        path      => $path,
+        interpreter => $self->interpreter,
+        path        => $path,
     );
 }
 
@@ -105,8 +105,8 @@ sub get_runtime_for_path {
     my ($self, $path) = @_;
 
     return HTML::MasonX::Inspector::Runtime->new(
-        inspector => $self,
-        path      => $path,
+        interpreter => $self->interpreter,
+        path        => $path,
     );
 }
 
