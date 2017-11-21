@@ -5,9 +5,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Clone        ();
-use PPI          ();
-use Perl::Critic ();
+use Clone ();
 
 use HTML::MasonX::Inspector::Compiler::Arg;
 use HTML::MasonX::Inspector::Compiler::Flag;
@@ -16,7 +14,6 @@ use HTML::MasonX::Inspector::Compiler::Method;
 use HTML::MasonX::Inspector::Compiler::Def;
 
 use HTML::MasonX::Inspector::Util::Perl;
-use HTML::MasonX::Inspector::Util::Perl::CriticViolation;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -220,48 +217,6 @@ sub get_blocks {
     $blocks{shared}  = [ map HTML::MasonX::Inspector::Util::Perl->new(source => \$_), @{ $blocks->{shared}  } ] if @{ $blocks->{shared}  };
 
     return %blocks;
-}
-
-sub get_violations {
-    my ($self) = @_;
-
-    my $critic = Perl::Critic->new(
-        -profile  => Path::Tiny::path( $App::HTML::MasonX::CONFIG{'DATA_ROOT'} )
-                        ->child('compiler-report')
-                        ->child('perlcriticrc')
-                        ->stringify
-    );
-
-    my $compiler = $self->{_compiler};
-    my $obj_code = join '', (
-        "\n## ========================================\n\n",
-        "use strict;\n",
-        "use warnings;\n",
-        "\n## ----------------------------------------\n\n",
-        ('our ('. (join ', ' => map { $_ } $compiler->allow_globals) . ');' . "\n"),
-        "\n## ----------------------------------------\n\n",
-        (join "\n" => map {
-            '#line '.$_->{line_number}.' "'.$_->{file}.'"'."\n".'my '.$_->{name}.';'
-        } $self->get_args), "\n",
-        "\n## ----------------------------------------\n\n",
-        $compiler->_blocks( 'once' ),
-        "\n## ----------------------------------------\n\n",
-        $compiler->_blocks( 'init' ),
-        "\n## ----------------------------------------\n\n",
-        $compiler->{current_compile}{body},
-        "\n## ----------------------------------------\n\n",
-        $compiler->_blocks( 'cleanup' ),
-        "\n## ========================================\n\n",
-    );
-
-    #warn $obj_code;
-
-    my @original   = $critic->critique( \$obj_code );
-    my @violations = map HTML::MasonX::Inspector::Util::Perl::CriticViolation->new(
-        violation => $_
-    ), @original;
-
-    return @violations;
 }
 
 1;
