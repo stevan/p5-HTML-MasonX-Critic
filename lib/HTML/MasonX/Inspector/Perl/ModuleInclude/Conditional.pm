@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Compiler::CodeBlock::ModuleInclude::Conditional;
+package HTML::MasonX::Inspector::Perl::ModuleInclude::Conditional;
 
 use strict;
 use warnings;
@@ -10,12 +10,12 @@ use Scalar::Util    ();
 use List::Util      ();
 use Module::Runtime ();
 
-use HTML::MasonX::Inspector::Compiler::CodeBlock::ModuleInclude;
+use HTML::MasonX::Inspector::Perl::ModuleInclude;
 
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Inspector::Compiler::CodeBlock::ModuleInclude') }
+our @ISA; BEGIN { @ISA = ('HTML::MasonX::Inspector::Perl::ModuleInclude') }
 our %HAS; BEGIN {
     %HAS = (
-        %HTML::MasonX::Inspector::Compiler::CodeBlock::ModuleInclude::HAS,
+        %HTML::MasonX::Inspector::Perl::ModuleInclude::HAS,
         # ... cache some data ...
         _module         => sub {},
         _module_version => sub {},
@@ -99,7 +99,7 @@ __END__
 
 =head1 NAME
 
-HTML::MasonX::Inspector::Compiler::CodeBlock - HTML::Mason::Compiler sea cucumber guts
+HTML::MasonX::Inspector::Perl::CodeBlock - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

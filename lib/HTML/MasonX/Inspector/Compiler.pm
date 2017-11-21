@@ -15,8 +15,8 @@ use HTML::MasonX::Inspector::Compiler::Attr;
 use HTML::MasonX::Inspector::Compiler::Method;
 use HTML::MasonX::Inspector::Compiler::Def;
 
-use HTML::MasonX::Inspector::Compiler::CodeBlock;
-use HTML::MasonX::Inspector::Compiler::PerlCriticViolation;
+use HTML::MasonX::Inspector::Perl::CodeBlock;
+use HTML::MasonX::Inspector::Perl::CriticViolation;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -155,7 +155,7 @@ sub get_methods {
                             line_number     => $_->{line},
                         ), @{$methods->{$_}->{args}}
                 ],
-                body => HTML::MasonX::Inspector::Compiler::CodeBlock->new(
+                body => HTML::MasonX::Inspector::Perl::CodeBlock->new(
                     code => \($methods->{$_}->{body})
                 ),
             ), keys %$methods
@@ -184,7 +184,7 @@ sub get_defs {
                             line_number     => $_->{line},
                         ), @{$defs->{$_}->{args}}
                 ],
-                body => HTML::MasonX::Inspector::Compiler::CodeBlock->new(
+                body => HTML::MasonX::Inspector::Perl::CodeBlock->new(
                     code => \($defs->{$_}->{body})
                 ),
             ), keys %$defs
@@ -207,17 +207,17 @@ sub get_blocks {
     # templates in it.
     if ( $self->{_compiler}->{main_compile}->{body} ) {
         $blocks{main} = [
-            HTML::MasonX::Inspector::Compiler::CodeBlock->new(
+            HTML::MasonX::Inspector::Perl::CodeBlock->new(
                 code => \($self->{_compiler}->{main_compile}->{body})
             )
         ];
     }
 
-    $blocks{once}    = [ map HTML::MasonX::Inspector::Compiler::CodeBlock->new(code => \$_), @{ $blocks->{once}    } ] if @{ $blocks->{once}    };
-    $blocks{init}    = [ map HTML::MasonX::Inspector::Compiler::CodeBlock->new(code => \$_), @{ $blocks->{init}    } ] if @{ $blocks->{init}    };
-    $blocks{filter}  = [ map HTML::MasonX::Inspector::Compiler::CodeBlock->new(code => \$_), @{ $blocks->{filter}  } ] if @{ $blocks->{filter}  };
-    $blocks{cleanup} = [ map HTML::MasonX::Inspector::Compiler::CodeBlock->new(code => \$_), @{ $blocks->{cleanup} } ] if @{ $blocks->{cleanup} };
-    $blocks{shared}  = [ map HTML::MasonX::Inspector::Compiler::CodeBlock->new(code => \$_), @{ $blocks->{shared}  } ] if @{ $blocks->{shared}  };
+    $blocks{once}    = [ map HTML::MasonX::Inspector::Perl::CodeBlock->new(code => \$_), @{ $blocks->{once}    } ] if @{ $blocks->{once}    };
+    $blocks{init}    = [ map HTML::MasonX::Inspector::Perl::CodeBlock->new(code => \$_), @{ $blocks->{init}    } ] if @{ $blocks->{init}    };
+    $blocks{filter}  = [ map HTML::MasonX::Inspector::Perl::CodeBlock->new(code => \$_), @{ $blocks->{filter}  } ] if @{ $blocks->{filter}  };
+    $blocks{cleanup} = [ map HTML::MasonX::Inspector::Perl::CodeBlock->new(code => \$_), @{ $blocks->{cleanup} } ] if @{ $blocks->{cleanup} };
+    $blocks{shared}  = [ map HTML::MasonX::Inspector::Perl::CodeBlock->new(code => \$_), @{ $blocks->{shared}  } ] if @{ $blocks->{shared}  };
 
     return %blocks;
 }
@@ -257,7 +257,7 @@ sub get_violations {
     #warn $obj_code;
 
     my @original   = $critic->critique( \$obj_code );
-    my @violations = map HTML::MasonX::Inspector::Compiler::PerlCriticViolation->new(
+    my @violations = map HTML::MasonX::Inspector::Perl::CriticViolation->new(
         violation => $_
     ), @original;
 
