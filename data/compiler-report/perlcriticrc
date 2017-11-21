@@ -1,0 +1,194 @@
+
+# -------------------------------------------------------------------
+# Base level stuff ...
+# -------------------------------------------------------------------
+
+severity  = 1
+only      = 1
+force     = 0
+
+# -------------------------------------------------------------------
+# The Booking B.Critical policies
+# -------------------------------------------------------------------
+
+# [BCritical::EngGuide::ProhibitDynamicCall]
+# [BCritical::EngGuide::ProhibitExport]
+# [BCritical::EngGuide::ProhibitPrintStderr]
+# [BCritical::EngGuide::ProhibitSmartMatch]
+# [BCritical::EngGuide::ProhibitUnlessNot]
+# [BCritical::EngGuide::ProhibitWantarray]
+# [BCritical::EngGuide::SuggestPositiveName]
+#
+# [BCritical::TrapsAndZaps::EvalWithoutOrDo]
+
+# -------------------------------------------------------------------
+# Some sensible PerlCritic core policies
+# -------------------------------------------------------------------
+
+[BuiltinFunctions::ProhibitUniversalCan]
+[BuiltinFunctions::ProhibitUniversalIsa]
+[BuiltinFunctions::RequireGlobFunction]
+[BuiltinFunctions::RequireSimpleSortBlock]
+[BuiltinFunctions::ProhibitVoidMap]
+[BuiltinFunctions::ProhibitComplexMappings]
+max_statements = 1
+[BuiltinFunctions::ProhibitVoidGrep]
+[BuiltinFunctions::ProhibitBooleanGrep]
+[BuiltinFunctions::ProhibitUselessTopic]
+[BuiltinFunctions::ProhibitLvalueSubstr]
+[BuiltinFunctions::ProhibitSleepViaSelect]
+[BuiltinFunctions::ProhibitStringyEval]
+[BuiltinFunctions::ProhibitStringySplit]
+severity = 3
+# expression-based "map"/"grep" are faster
+[-BuiltinFunctions::RequireBlockGrep]
+[-BuiltinFunctions::RequireBlockMap]
+
+[ClassHierarchies::ProhibitExplicitISA]
+[ClassHierarchies::ProhibitAutoloading]
+[ClassHierarchies::ProhibitOneArgBless]
+
+[CodeLayout::ProhibitQuotedWordLists]
+#[CodeLayout::RequireConsistentNewlines]
+#[CodeLayout::ProhibitHardTabs]
+#[CodeLayout::ProhibitTrailingWhitespace]
+#[CodeLayout::RequireTrailingCommas]
+
+[ControlStructures::ProhibitMutatingListFunctions]
+[ControlStructures::ProhibitUnreachableCode]
+[ControlStructures::ProhibitYadaOperator]
+[ControlStructures::ProhibitDeepNests]
+max_nests = 4
+[ControlStructures::ProhibitCascadingIfElse]
+max_elsif = 2
+[ControlStructures::ProhibitCStyleForLoops]
+[ControlStructures::ProhibitLabelsWithSpecialBlockNames]
+[ControlStructures::ProhibitMutatingListFunctions]
+[ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions]
+[ControlStructures::ProhibitUntilBlocks]
+
+#[Documentation::RequirePackageMatchesPodName]
+
+[InputOutput::ProhibitTwoArgOpen]
+[InputOutput::ProhibitOneArgSelect]
+[InputOutput::ProhibitReadlineInForLoop]
+[InputOutput::ProhibitJoinedReadline]
+[-InputOutput::RequireCheckedClose]
+[InputOutput::RequireCheckedOpen]
+[InputOutput::RequireCheckedSyscalls]
+functions = :builtins
+exclude_functions = print close sleep say
+[InputOutput::ProhibitJoinedReadline]
+[InputOutput::ProhibitBacktickOperators]
+[InputOutput::ProhibitBarewordFileHandles]
+[InputOutput::RequireBriefOpen]
+[InputOutput::RequireEncodingWithUTF8Layer]
+
+[Miscellanea::ProhibitFormats]
+[Miscellanea::ProhibitTies]
+
+[Modules::ProhibitAutomaticExportation]
+[Modules::ProhibitConditionalUseStatements]
+[Modules::ProhibitMultiplePackages]
+[Modules::RequireFilenameMatchesPackage]
+[Modules::RequireBarewordIncludes]
+[Modules::ProhibitEvilModules]
+modules = Class::ISA {Found use of Class::ISA. This module is deprecated by the Perl 5 Porters.} Pod::Plainer {Found use of Pod::Plainer. This module is deprecated by the Perl 5 Porters.} Shell {Found use of Shell. This module is deprecated by the Perl 5 Porters.} Switch {Found use of Switch. This module is deprecated by the Perl 5 Porters.} Readonly {Found use of Readonly. Please use constant.pm or Const::Fast.} base {Found use of base. Please use parent instead.} File::Slurp {Found use of File::Slurp. Please use Path::Tiny instead.} common::sense {Found use of common::sense. Please use strict and warnings instead.} Class::Load {Found use of Class::Load. Please use Module::Runtime instead.} Any::Moose {Found use of Any::Moose. Please use Moo instead.} Error {Found use of Error.pm. Please use Throwable.pm instead.} Getopt::Std {Found use of Getopt::Std. Please use Getopt::Long instead.} HTML::Template {Found use of HTML::Template. Please use Template::Toolkit.} IO::Socket::INET6 {Found use of IO::Socket::INET6. Please use IO::Socket::IP.} JSON {Found use of JSON. Please use JSON::MaybeXS or Cpanel::JSON::XS.} JSON::Any {Found use of JSON::Any. Please use JSON::MaybeXS.} List::MoreUtils {Found use of List::MoreUtils. Please use List::Util or List::UtilsBy.} Mouse {Found use of Mouse. Please use Moo.} Net::IRC {Found use of Net::IRC. Please use POE::Component::IRC, Net::Async::IRC, or Mojo::IRC.} XML::Simple {Found use of XML::Simple. Please use XML::LibXML, XML::TreeBuilder, XML::Twig, or Mojo::DOM.} Sub::Infix {Found use of Sub::Infix. Please do not use it.}
+#[Modules::RequireFilenameMatchesPackage]
+
+[NamingConventions::ProhibitAmbiguousNames]
+
+[Objects::ProhibitIndirectSyntax]
+
+[RegularExpressions::ProhibitCaptureWithoutTest]
+[RegularExpressions::ProhibitComplexRegexes]
+[RegularExpressions::ProhibitFixedStringMatches]
+[RegularExpressions::ProhibitSingleCharAlternation]
+[RegularExpressions::ProhibitUnusualDelimiters]
+[RegularExpressions::ProhibitUselessTopic]
+[RegularExpressions::RequireBracesForMultiline]
+
+#[RegularExpressions::ProhibitEscapedMetacharacters]
+#[RegularExpressions::RequireLineBoundaryMatching]
+#[RegularExpressions::ProhibitUnusedCapture]
+#[RegularExpressions::RequireDotMatchAnything]
+
+[Subroutines::ProhibitAmpersandSigils]
+[Subroutines::ProhibitBuiltinHomonyms]
+[Subroutines::ProhibitExcessComplexity]
+[Subroutines::ProhibitManyArgs]
+max_arguments = 5
+[Subroutines::ProhibitReturnSort]
+[Subroutines::ProhibitNestedSubs]
+[Subroutines::ProtectPrivateSubs]
+[Subroutines::ProhibitUnusedPrivateSubroutines]
+private_name_regex = _(?!build)\w+
+[Subroutines::RequireArgUnpacking]
+# The number of statements to allow without unpacking.
+short_subroutine_statements = 2
+# Should unpacking from array slices and elements be allowed?
+allow_subscripts = 0
+
+[TestingAndDebugging::ProhibitNoStrict]
+allow = refs
+[TestingAndDebugging::ProhibitNoWarnings]
+allow_with_category_restriction = 1
+[TestingAndDebugging::ProhibitProlongedStrictureOverride]
+
+[TestingAndDebugging::RequireUseStrict]
+severity           = 5
+equivalent_modules = Dancer Dancer2 Moo Moose Moo::Role Moose::Role strictures common::sense
+[TestingAndDebugging::RequireUseWarnings]
+severity           = 5
+equivalent_modules = Dancer Dancer2 Moo Moose Moo::Role Moose::Role strictures
+
+[ValuesAndExpressions::ProhibitCommaSeparatedStatements]
+allow_last_statement_to_be_comma_separated_in_map_and_grep = 0
+[ValuesAndExpressions::ProhibitComplexVersion]
+# Make "use version; our $VERSION = qv('1.2.3');" a violation of this policy.
+forbid_use_version = 1
+[ValuesAndExpressions::ProhibitEscapedCharacters]
+# [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
+# # If the string contains ' characters, allow "" to quote it.
+# allow_if_string_contains_single_quote = 1
+[ValuesAndExpressions::ProhibitLeadingZeros]
+# builtins that deal with Unix permissions, e.g. chmod, don't get flagged.
+strict = 0
+[ValuesAndExpressions::ProhibitMagicNumbers]
+allow_to_the_right_of_a_fat_comma = 1
+constant_creator_subroutines = constant
+[ValuesAndExpressions::ProhibitMismatchedOperators]
+[ValuesAndExpressions::ProhibitMixedBooleanOperators]
+[ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters]
+[ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator]
+[ValuesAndExpressions::ProhibitLongChainsOfMethodCalls]
+[ValuesAndExpressions::RequireConstantVersion]
+[ValuesAndExpressions::RequireInterpolationOfMetachars]
+[ValuesAndExpressions::RequireNumberSeparators]
+[ValuesAndExpressions::RequireQuotedHeredocTerminator]
+[ValuesAndExpressions::RequireUpperCaseHeredocTerminator]
+
+
+[Variables::ProhibitAugmentedAssignmentInDeclaration]
+[Variables::ProhibitLocalVars]
+[Variables::ProhibitMatchVars]
+[Variables::ProhibitConditionalDeclarations]
+[Variables::ProhibitPerl4PackageNames]
+[Variables::ProhibitReusedNames]
+[Variables::ProhibitUnusedVariables]
+[Variables::RequireLexicalLoopIterators]
+[Variables::ProtectPrivateVars]
+[Variables::RequireInitializationForLocalVars]
+[Variables::RequireLocalizedPunctuationVars]
+[Variables::ProhibitPunctuationVars]
+# Values that are always included: $1, $2, $3, $4, $5, $6, $7, $8, $9, $], $_, @_, _.
+# These are just too common to exclude
+allow = $@ $! $/ $0 $|
+# Not a fan, but might be good for beginners
+# Write `local $foo = $bar;' instead of just `local $foo;'.
+[Variables::RequireInitializationForLocalVars]
+[Variables::RequireLexicalLoopIterators]
+[Variables::RequireLocalizedPunctuationVars]
+[Variables::RequireNegativeIndices]
+
+# -------------------------------------------------------------------

@@ -1,0 +1,46 @@
+#!perl -w
+
+# PODNAME: bin/sloop
+# ABSTRACT: HTML::Mason demolition kit
+
+use strict;
+use warnings;
+use FindBin;
+
+use lib "$FindBin::Bin/../lib";
+
+use App::Sloop;
+
+App::Sloop->new({ show_version_cmd => 1 })->run;
+
+1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+bin/sloop - HTML::Mason demolition kit
+
+=head1 VERSION
+
+version 0.01
+
+=head1 DESCRIPTION
+
+The script entry point for the L<App::Sloop> application, see the individual
+L<App::Sloop::Command> classes for more information.
+
+=head1 AUTHOR
+
+Stevan Little <stevan@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2016 by Stevan Little.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
