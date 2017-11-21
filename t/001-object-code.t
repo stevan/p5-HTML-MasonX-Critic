@@ -35,15 +35,10 @@ subtest '... simple sloop test' => sub {
 
     subtest '... testing the object code' => sub {
 
-        my $obj_code;
-        is(
-            exception { $obj_code = $sloop->get_object_code_for_path( $MASON_FILE ) },
-            undef, '... got object code without exception'
-        );
-
+        my $obj_code = $sloop->get_object_code_for_path( $MASON_FILE );
         isa_ok($obj_code, 'HTML::MasonX::Inspector::ObjectCode');
 
-        my $src = $obj_code->clean_source;
+        my $src = $obj_code->sanitized_source;
         like( $src, $_, '... the object code matches ' . $_ ) foreach (
             qr/package HTML\:\:Mason\:\:Commands/,
             qr/use vars qw\(\s*\$m\s*\$x\s*\)\;/,
