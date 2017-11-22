@@ -128,7 +128,7 @@ subtest '... simple sloop test' => sub {
 
         my ($color, $fonts) = @attrs{qw[ color fonts ]};
 
-        is($color, 'blue', '... got the expected value for color attribute');
+        is($color, '\'blue\'', '... got the expected value for color attribute');
         is($fonts, '[qw(arial geneva helvetica)]', '... got the expected value for fonts attribute');
     };
 

@@ -124,7 +124,7 @@ sub _build_component {
 
     # clean the flags
     if ( exists $compile{flags} ) {
-        $compile{flags}->{ $_ } = _clean_value( $compile{flags}->{ $_ } )
+        $compile{flags}->{ $_ } = _unquote_value(_clean_value( $compile{flags}->{ $_ } ))
             foreach keys %{ $compile{flags} };
     }
 
@@ -181,7 +181,7 @@ sub _build_arg_object {
     return HTML::MasonX::Inspector::Compiler::Component::Arg->new(
         sigil           => $arg->{type},
         symbol          => $arg->{name},
-        default_value   => $arg->{default},
+        default_value   => _clean_value( $arg->{default} ),
         type_constraint => $arg->{type_constraint},
         line_number     => $arg->{line},
     );
@@ -194,9 +194,18 @@ sub _build_perl_object {
 
 sub _clean_value {
     my ($val) = @_;
+    # return undef as we got it ...
+    return $val unless defined $val;
     $val =~ s/^\s*//;  # remove leading spaces ...
     $val =~ s/\;$//;   # remove trailing semicolon ...
     $val =~ s/\s*$//;  # remove trailing spaces ...
+    $val;
+}
+
+sub _unquote_value {
+    my ($val) = @_;
+    # return undef as we got it ...
+    return $val unless defined $val;
     $val =~ s/^['"]//; # remove leading quotes ...
     $val =~ s/['"]$//; # remove trailing quotes ...
     $val;
