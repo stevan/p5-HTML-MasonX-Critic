@@ -56,6 +56,8 @@ use File::Spec   ();
 $bar //= $foo * $foo;
 </%init>
 
+<h1><& attr:color &></h1>
+
 <& .banner, title => 'Hello World' &>
 
 <& SELF:.label, label => 'FOO', value => $foo &>
