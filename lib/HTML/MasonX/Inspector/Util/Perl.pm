@@ -142,8 +142,9 @@ sub might_redirect_user {
 
 
 ## TODO:
-# Detect SELF:, PARENT: and REQUEST: calls
-# as well, they are slightly different
+# Detect `SELF:`, `PARENT:` and `REQUEST:`
+# calls as well, they are slightly different
+# and also catch the `attr:` calls too.
 sub might_call_components {
     my ($self) = @_;
 
