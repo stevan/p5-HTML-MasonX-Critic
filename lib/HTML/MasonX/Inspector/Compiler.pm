@@ -68,15 +68,24 @@ sub BUILD {
     ## we return from this BUILD. I weep.
     ## -----------------------------------
     $self->{_compiler} = Clone::clone( $compiler );
-
-    #use Data::Dumper;
-    #die Dumper $self->{_compiler};
 }
 
-## access stuff ...
+## access stuff within the frozen compiler ...
 
+sub comp_path            {    $_[0]->{_compiler}->{comp_path}            }
 sub comp_root            {    $_[0]->{_compiler}->{comp_root}            }
+sub comp_class           {    $_[0]->{_compiler}->{comp_class}           }
+sub subcomp_class        {    $_[0]->{_compiler}->{subcomp_class}        }
+sub in_package           {    $_[0]->{_compiler}->{in_package}           }
+
 sub object_id            {    $_[0]->{_compiler}->object_id              }
+
+sub use_strict           {    $_[0]->{_compiler}->{use_strict}           }
+sub use_warnings         {    $_[0]->{_compiler}->{use_warnings}         }
+
+sub preamble             {    $_[0]->{_compiler}->{preamble}             }
+sub postamble            {    $_[0]->{_compiler}->{postamble}            }
+
 sub allow_globals        {    $_[0]->{_compiler}->allow_globals          }
 sub default_escape_flags { @{ $_[0]->{_compiler}->default_escape_flags } }
 
