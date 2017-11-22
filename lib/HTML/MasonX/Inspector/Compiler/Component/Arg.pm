@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Compiler::Arg;
+package HTML::MasonX::Inspector::Compiler::Component::Arg;
 
 use strict;
 use warnings;

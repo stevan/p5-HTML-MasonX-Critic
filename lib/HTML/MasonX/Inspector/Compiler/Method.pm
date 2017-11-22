@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
-use HTML::MasonX::Inspector::Compiler::Arg;
+use HTML::MasonX::Inspector::Compiler::Component::Arg;
 use HTML::MasonX::Inspector::Util::Perl;
 
 use UNIVERSAL::Object;
@@ -29,19 +29,17 @@ sub BUILD {
         unless Scalar::Util::blessed( $self->{body} )
             && $self->{body}->isa('HTML::MasonX::Inspector::Util::Perl');
 
-    Carp::confess('All `args` must be an instance of `HTML::MasonX::Inspector::Compiler::Arg`, not ('.$_.')')
+    Carp::confess('All `args` must be an instance of `HTML::MasonX::Inspector::Compiler::Component::Arg`, not ('.$_.')')
         unless scalar grep {
             Scalar::Util::blessed( $_ )
                 &&
-            $_->isa('HTML::MasonX::Inspector::Compiler::Arg')
+            $_->isa('HTML::MasonX::Inspector::Compiler::Component::Arg')
         } @{ $self->{args} };
 }
 
 sub name { $_[0]->{name} }
 sub args { $_[0]->{args} }
 sub body { $_[0]->{body} }
-
-sub get_args { @{ $_[0]->{args} } }
 
 1;
 

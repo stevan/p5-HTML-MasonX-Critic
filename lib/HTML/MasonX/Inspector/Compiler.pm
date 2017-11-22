@@ -8,6 +8,12 @@ our $VERSION = '0.01';
 use Clone ();
 
 use HTML::MasonX::Inspector::Compiler::Component;
+use HTML::MasonX::Inspector::Compiler::Component::Arg;
+
+use HTML::MasonX::Inspector::Compiler::Method;
+use HTML::MasonX::Inspector::Compiler::SubComponent;
+
+use HTML::MasonX::Inspector::Util::Perl;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -77,8 +83,111 @@ sub default_escape_flags { @{ $_[0]->{_compiler}->default_escape_flags } }
 
 sub get_main_component {
     my ($self) = @_;
-    my $comp = $self->{_compiler}->{main_compile};
-    return HTML::MasonX::Inspector::Compiler::Component->new( %$comp );
+
+    # steal all the data from Mason ...
+    my %compile = %{ $self->{_compiler}->{main_compile} };
+
+    # normalize some of this, Mason internal
+    # naming conventions are not always consistent
+    $compile{attributes}     = delete $compile{attr}   if exists $compile{attr};
+    $compile{sub_components} = delete $compile{def}    if exists $compile{def};
+    $compile{methods}        = delete $compile{method} if exists $compile{method};
+
+    ## Transform some stuff ...
+
+    # inflate the args ...
+    $compile{args} = [ map _build_arg_object( $_ ), @{ $compile{args} } ] if exists $compile{args};
+
+    # clean the flags
+    if ( exists $compile{flags} ) {
+        $compile{flags}->{ $_ } = _clean_value( $compile{flags}->{ $_ } )
+            foreach keys %{ $compile{flags} };
+    }
+
+    # clean the attrs ...
+    if ( exists $compile{attributes} ) {
+        $compile{attributes}->{ $_ } = _clean_value( $compile{attributes}->{ $_ } )
+            foreach keys %{ $compile{attributes} };
+    }
+
+    # inflate the methods ...
+    $compile{methods} = {
+        map {;
+            $_,
+            _build_method_object( $_, $compile{methods}->{ $_ } )
+        } keys %{ $compile{methods} }
+    } if exists $compile{methods};
+
+    # inflate the sub_components ...
+    $compile{sub_components} = {
+        map {;
+            $_,
+            _build_sub_component_object( $_, $compile{sub_components}->{ $_ } )
+        } keys %{ $compile{sub_components} }
+    } if exists $compile{sub_components};
+
+    # NOTE:
+    # it is important to note that the main block
+    # is basically a combination of any <%perl>
+    # blocks as well as any HTML with embedded
+    # templates in it.
+    $compile{body} = _build_perl_object( $compile{body} ) if exists $compile{body};
+
+    $compile{blocks} = {
+        once    => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{once}    || [] } ],
+        init    => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{init}    || [] } ],
+        filter  => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{filter}  || [] } ],
+        cleanup => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{cleanup} || [] } ],
+        shared  => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{shared}  || [] } ],
+    } if exists $compile{blocks};
+
+    return HTML::MasonX::Inspector::Compiler::Component->new( %compile );
+}
+
+## ...
+
+sub _build_arg_object {
+    my ($arg) = @_;
+    return HTML::MasonX::Inspector::Compiler::Component::Arg->new(
+        sigil           => $arg->{type},
+        symbol          => $arg->{name},
+        default_value   => $arg->{default},
+        type_constraint => $arg->{type_constraint},
+        line_number     => $arg->{line},
+    );
+}
+
+sub _build_perl_object {
+    my ($body) = @_;
+    return HTML::MasonX::Inspector::Util::Perl->new( source => \$body )
+}
+
+sub _build_method_object {
+    my ($name, $method) = @_;
+    return HTML::MasonX::Inspector::Compiler::Method->new(
+        name => $name,
+        args => [ map _build_arg_object( $_ ), @{ $method->{args} } ],
+        body => _build_perl_object( $method->{body} ),
+    );
+}
+
+sub _build_sub_component_object {
+    my ($name, $subcomp) = @_;
+    return HTML::MasonX::Inspector::Compiler::SubComponent->new(
+        name => $name,
+        args => [ map _build_arg_object( $_ ), @{ $subcomp->{args} } ],
+        body => _build_perl_object( $subcomp->{body} ),
+    );
+}
+
+sub _clean_value {
+    my ($val) = @_;
+    $val =~ s/^\s*//;  # remove leading spaces ...
+    $val =~ s/\;$//;   # remove trailing semicolon ...
+    $val =~ s/\s*$//;  # remove trailing spaces ...
+    $val =~ s/^['"]//; # remove leading quotes ...
+    $val =~ s/['"]$//; # remove trailing quotes ...
+    $val;
 }
 
 1;
