@@ -22,7 +22,8 @@ our %HAS; BEGIN {
         interpreter => sub { die 'An `interpreter` is required' },
         path        => sub { die 'A `path` is required' },
         # ...
-        _compiler => sub {},
+        _compiler  => sub {},
+        _main_comp => sub {},
     )
 }
 
@@ -84,8 +85,21 @@ sub default_escape_flags { @{ $_[0]->{_compiler}->default_escape_flags } }
 sub get_main_component {
     my ($self) = @_;
 
+    #use Data::Dumper;
+    #warn Dumper $self->{_compiler};
+
+    Carp::confess('Not a valid main component, expected in_main to be true')
+        unless exists $self->{_compiler}->{main_compile}->{in_main}
+            && $self->{_compiler}->{main_compile}->{in_main};
+
     # steal all the data from Mason ...
-    my %compile = %{ $self->{_compiler}->{main_compile} };
+    $self->{_main_comp} //= _build_component( %{ $self->{_compiler}->{main_compile} } );
+}
+
+## ...
+
+sub _build_component {
+    my %compile = @_;
 
     # normalize some of this, Mason internal
     # naming conventions are not always consistent
@@ -143,8 +157,6 @@ sub get_main_component {
 
     return HTML::MasonX::Inspector::Compiler::Component->new( %compile );
 }
-
-## ...
 
 sub _build_arg_object {
     my ($arg) = @_;
