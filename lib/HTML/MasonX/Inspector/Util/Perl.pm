@@ -84,6 +84,13 @@ sub complexity_score {
 
 ## Various Mason "Things" we want to catch
 
+### TODO:
+# Generalise this stuff below with a mason_method_calls grouping
+# that would basically collect calls to the mason allowed_globals
+# ($m, etc.)
+# This would allow us to track certain kinds of usages of mason
+# features.
+
 sub does_mason_postproc {
     my ($self) = @_;
 
