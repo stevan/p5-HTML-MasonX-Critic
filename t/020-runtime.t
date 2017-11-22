@@ -23,7 +23,7 @@ $baz => 'GORCH';
 </%args>
 
 <%flags>
-inherit=>'/some_handler'
+inherit => '/some_handler'
 </%flags>
 
 <%attr>
@@ -55,6 +55,8 @@ use File::Spec   ();
 <%init>
 $bar //= $foo * $foo;
 </%init>
+
+<h1><& attr:color &></h1>
 
 <& .banner, title => 'Hello World' &>
 
