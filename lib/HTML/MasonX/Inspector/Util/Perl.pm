@@ -19,22 +19,23 @@ use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
-        source               => sub { die 'Some `source` is required' },
+        source                 => sub { die 'Some `source` is required' },
         # ... internal fields
-        _ppi                 => sub {},
+        _ppi                   => sub {},
         # CACHED DATA
         # ... bools
-        _does_postproc       => sub {},
-        _might_abort_request => sub {},
-        _might_redirect_user => sub {},
+        _does_postproc         => sub {},
+        _might_abort_request   => sub {},
+        _might_redirect_user   => sub {},
+        _might_call_components => sub {},
         # ... scalar
-        _checksum            => sub {},
-        _complexity          => sub {},
+        _checksum              => sub {},
+        _complexity            => sub {},
         # ... collections
-        _lines               => sub {},
-        _includes            => sub {},
-        _constants           => sub {},
-        _subroutines         => sub {},
+        _lines                 => sub {},
+        _includes              => sub {},
+        _constants             => sub {},
+        _subroutines           => sub {},
     )
 }
 
@@ -137,6 +138,29 @@ sub might_redirect_user {
     }
 
     return $self->{_might_redirect_user};
+}
+
+
+## TODO:
+# Detect SELF:, PARENT: and REQUEST: calls
+# as well, they are slightly different
+sub might_call_components {
+    my ($self) = @_;
+
+    unless ( $self->{_might_call_components} ) {
+        my $words = $self->{_ppi}->find('PPI::Token::Word');
+
+        if ( $words ) {
+            $self->{_might_call_components} = (scalar grep {
+                $_->method_call && $_->literal eq 'comp'
+            } @$words) ? 1 : 0;
+        }
+        else {
+            $self->{_might_call_components} = 0;
+        }
+    }
+
+    return $self->{_might_call_components};
 }
 
 ## Subroutines
