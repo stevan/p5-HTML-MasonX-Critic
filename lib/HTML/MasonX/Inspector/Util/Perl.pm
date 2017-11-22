@@ -7,8 +7,9 @@ our $VERSION = '0.01';
 
 use HTML::MasonX::Inspector::Util::Perl::UsedModule;
 use HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional;
-use HTML::MasonX::Inspector::Util::Perl::Constant;
-use HTML::MasonX::Inspector::Util::Perl::Subroutine;
+
+use HTML::MasonX::Inspector::Util::Perl::ConstantDeclaration;
+use HTML::MasonX::Inspector::Util::Perl::SubroutineDeclaration;
 
 use Digest::MD5                 ();
 use PPI                         ();
@@ -164,7 +165,7 @@ sub might_call_components {
     return $self->{_might_call_components};
 }
 
-## Subroutines
+## SubroutineDeclarations
 
 sub number_of_subroutines {
     my ($self) = @_;
@@ -179,7 +180,7 @@ sub subroutines {
 
         $self->{_subroutines} = [
             map {
-                HTML::MasonX::Inspector::Util::Perl::Subroutine->new( ppi => $_ )
+                HTML::MasonX::Inspector::Util::Perl::SubroutineDeclaration->new( ppi => $_ )
             } @{ $subs || [] }
         ];
     }
@@ -187,7 +188,7 @@ sub subroutines {
     return @{ $self->{_subroutines} };
 }
 
-## Constants
+## ConstantDeclarations
 
 sub number_of_constants {
     my ($self) = @_;
@@ -202,7 +203,7 @@ sub constants {
 
         $self->{_constants} = [
             map {
-                HTML::MasonX::Inspector::Util::Perl::Constant->new( ppi => $_ )
+                HTML::MasonX::Inspector::Util::Perl::ConstantDeclaration->new( ppi => $_ )
             } grep {
                 # for this we only want the constants
                 $_->module eq 'constant'

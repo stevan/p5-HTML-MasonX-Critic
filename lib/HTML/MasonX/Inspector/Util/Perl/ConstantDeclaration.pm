@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Util::Perl::Constant;
+package HTML::MasonX::Inspector::Util::Perl::ConstantDeclaration;
 
 use strict;
 use warnings;
