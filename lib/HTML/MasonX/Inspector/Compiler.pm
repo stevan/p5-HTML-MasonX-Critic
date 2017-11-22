@@ -10,9 +10,6 @@ use Clone ();
 use HTML::MasonX::Inspector::Compiler::Component;
 use HTML::MasonX::Inspector::Compiler::Component::Arg;
 
-use HTML::MasonX::Inspector::Compiler::Method;
-use HTML::MasonX::Inspector::Compiler::SubComponent;
-
 use HTML::MasonX::Inspector::Util::Perl;
 
 use UNIVERSAL::Object;
@@ -102,7 +99,11 @@ sub get_main_component {
             && $self->{_compiler}->{main_compile}->{in_main};
 
     # steal all the data from Mason ...
-    $self->{_main_comp} //= _build_component( %{ $self->{_compiler}->{main_compile} } );
+    $self->{_main_comp} //= _build_component(
+        %{ $self->{_compiler}->{main_compile} },
+        name => $self->comp_path,
+        type => 'main',
+    );
 }
 
 ## ...
@@ -137,7 +138,11 @@ sub _build_component {
     $compile{methods} = {
         map {;
             $_,
-            _build_method_object( $_, $compile{methods}->{ $_ } )
+            _build_component(
+                %{ $compile{methods}->{ $_ } },
+                name => $_,
+                type => 'method',
+            )
         } keys %{ $compile{methods} }
     } if exists $compile{methods};
 
@@ -145,7 +150,11 @@ sub _build_component {
     $compile{sub_components} = {
         map {;
             $_,
-            _build_sub_component_object( $_, $compile{sub_components}->{ $_ } )
+            _build_component(
+                %{ $compile{sub_components}->{ $_ } },
+                name => $_,
+                type => 'sub',
+            )
         } keys %{ $compile{sub_components} }
     } if exists $compile{sub_components};
 
@@ -181,24 +190,6 @@ sub _build_arg_object {
 sub _build_perl_object {
     my ($body) = @_;
     return HTML::MasonX::Inspector::Util::Perl->new( source => \$body )
-}
-
-sub _build_method_object {
-    my ($name, $method) = @_;
-    return HTML::MasonX::Inspector::Compiler::Method->new(
-        name => $name,
-        args => [ map _build_arg_object( $_ ), @{ $method->{args} } ],
-        body => _build_perl_object( $method->{body} ),
-    );
-}
-
-sub _build_sub_component_object {
-    my ($name, $subcomp) = @_;
-    return HTML::MasonX::Inspector::Compiler::SubComponent->new(
-        name => $name,
-        args => [ map _build_arg_object( $_ ), @{ $subcomp->{args} } ],
-        body => _build_perl_object( $subcomp->{body} ),
-    );
 }
 
 sub _clean_value {

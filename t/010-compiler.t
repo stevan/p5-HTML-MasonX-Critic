@@ -74,6 +74,9 @@ subtest '... simple sloop test' => sub {
     isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
 
     my $comp = $state->get_main_component;
+    isa_ok($comp, 'HTML::MasonX::Inspector::Compiler::Component');
+
+    is($comp->name, '010-compiler-state.html', '... got the expected name');
 
     subtest '... testing the args' => sub {
 
@@ -135,6 +138,7 @@ subtest '... simple sloop test' => sub {
         is(1, scalar keys %methods, '... we have one method');
 
         my $method = $methods{'.label'};
+        isa_ok($method, 'HTML::MasonX::Inspector::Compiler::Component');
 
         is($method->name, '.label', '... got the expected name');
 
@@ -166,6 +170,7 @@ subtest '... simple sloop test' => sub {
         is(1, scalar keys %sub_components, '... we have one def');
 
         my $sub_comp = $sub_components{'.banner'};
+        isa_ok($sub_comp, 'HTML::MasonX::Inspector::Compiler::Component');
 
         is($sub_comp->name, '.banner', '... got the expected name');
 
