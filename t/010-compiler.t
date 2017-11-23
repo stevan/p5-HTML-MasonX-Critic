@@ -12,10 +12,10 @@ BEGIN {
     use_ok('HTML::MasonX::Inspector');
 }
 
-my $MASON_FILE = '010-compiler-state.html';
-my $COMP_ROOT  = Path::Tiny->tempdir;
+my $MASON_FILE_NAME = '010-compiler.html';
+my $COMP_ROOT       = Path::Tiny->tempdir;
 
-$COMP_ROOT->child( $MASON_FILE )->spew(q[
+$COMP_ROOT->child( $MASON_FILE_NAME )->spew(q[
 <%args>
 $foo => 10;
 $bar => undef;
@@ -70,13 +70,13 @@ subtest '... simple sloop test' => sub {
     my $sloop = HTML::MasonX::Inspector->new( comp_root => $COMP_ROOT );
     isa_ok($sloop, 'HTML::MasonX::Inspector');
 
-    my $state = $sloop->get_compiler_for_path( $MASON_FILE );
+    my $state = $sloop->get_compiler_for_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
 
     my $comp = $state->get_main_component;
     isa_ok($comp, 'HTML::MasonX::Inspector::Compiler::Component');
 
-    is($comp->name, '010-compiler-state.html', '... got the expected name');
+    is($comp->name, $MASON_FILE_NAME, '... got the expected name');
 
     subtest '... testing the args' => sub {
 
