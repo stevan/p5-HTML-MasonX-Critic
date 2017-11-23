@@ -142,6 +142,9 @@ subtest '... simple sloop test' => sub {
 
         is($method->name, '.label', '... got the expected name');
 
+        isa_ok($method->body, 'HTML::MasonX::Inspector::Util::Perl');
+        isa_ok($method->blocks, 'HTML::MasonX::Inspector::Compiler::Component::Blocks');
+
         my ($label, $value) = @{ $method->args };
 
         subtest '... check the $label argument' => sub {
@@ -174,6 +177,9 @@ subtest '... simple sloop test' => sub {
 
         is($sub_comp->name, '.banner', '... got the expected name');
 
+        isa_ok($sub_comp->body, 'HTML::MasonX::Inspector::Util::Perl');
+        isa_ok($sub_comp->blocks, 'HTML::MasonX::Inspector::Compiler::Component::Blocks');
+
         my ($title) = @{ $sub_comp->args };
 
         subtest '... check the $title argument' => sub {
@@ -184,6 +190,26 @@ subtest '... simple sloop test' => sub {
             is($title->line_number, 27, '... got the expected line_number');
             is($title->default_value, undef, '... got the expected default value');
         };
+
+    };
+
+    subtest '... testing the blocks' => sub {
+
+        my $blocks = $comp->blocks;
+        isa_ok($blocks, 'HTML::MasonX::Inspector::Compiler::Component::Blocks');
+
+        ok($blocks->has_once_blocks, '... we have once blocks');
+        ok($blocks->has_init_blocks, '... we have init blocks');
+
+        ok(!$blocks->has_filter_blocks, '... we do not have filter blocks');
+        ok(!$blocks->has_shared_blocks, '... we do not have shared blocks');
+        ok(!$blocks->has_cleanup_blocks, '... we do not have cleanup blocks');
+
+        my ($once) = @{ $blocks->once_blocks };
+        isa_ok($once, 'HTML::MasonX::Inspector::Util::Perl');
+
+        my ($init) = @{ $blocks->init_blocks };
+        isa_ok($init, 'HTML::MasonX::Inspector::Util::Perl');
 
     };
 

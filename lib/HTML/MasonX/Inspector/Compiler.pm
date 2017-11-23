@@ -9,6 +9,7 @@ use Clone ();
 
 use HTML::MasonX::Inspector::Compiler::Component;
 use HTML::MasonX::Inspector::Compiler::Component::Arg;
+use HTML::MasonX::Inspector::Compiler::Component::Blocks;
 
 use HTML::MasonX::Inspector::Util::Perl;
 
@@ -163,15 +164,8 @@ sub _build_component {
     # is basically a combination of any <%perl>
     # blocks as well as any HTML with embedded
     # templates in it.
-    $compile{body} = _build_perl_object( $compile{body} ) if exists $compile{body};
-
-    $compile{blocks} = {
-        once    => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{once}    || [] } ],
-        init    => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{init}    || [] } ],
-        filter  => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{filter}  || [] } ],
-        cleanup => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{cleanup} || [] } ],
-        shared  => [ map _build_perl_object ( $_ ), @{ $compile{blocks}->{shared}  || [] } ],
-    } if exists $compile{blocks};
+    $compile{body}   = _build_perl_object( $compile{body} )     if exists $compile{body};
+    $compile{blocks} = _build_blocks_object( $compile{blocks} ) if exists $compile{blocks};
 
     return HTML::MasonX::Inspector::Compiler::Component->new( %compile );
 }
@@ -184,6 +178,17 @@ sub _build_arg_object {
         default_value   => _clean_value( $arg->{default} ),
         type_constraint => $arg->{type_constraint},
         line_number     => $arg->{line},
+    );
+}
+
+sub _build_blocks_object {
+    my ($blocks) = @_;
+    return HTML::MasonX::Inspector::Compiler::Component::Blocks->new(
+        once    => [ map _build_perl_object ( $_ ), @{ $blocks->{once}    || [] } ],
+        init    => [ map _build_perl_object ( $_ ), @{ $blocks->{init}    || [] } ],
+        filter  => [ map _build_perl_object ( $_ ), @{ $blocks->{filter}  || [] } ],
+        cleanup => [ map _build_perl_object ( $_ ), @{ $blocks->{cleanup} || [] } ],
+        shared  => [ map _build_perl_object ( $_ ), @{ $blocks->{shared}  || [] } ],
     );
 }
 

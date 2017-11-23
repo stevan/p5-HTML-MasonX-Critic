@@ -19,7 +19,7 @@ our %HAS; BEGIN {
         methods        => sub { +{} }, # HashRef[ HTML::MasonX::Inspector::Compiler::Method ]
         sub_components => sub { +{} }, # HashRef[ HTML::MasonX::Inspector::Compiler::SubComponent ]
         body           => sub {     }, # HTML::MasonX::Inspector::Util::Perl
-        blocks         => sub { +{} }, # HashRef[ HTML::MasonX::Inspector::Util::Perl ]
+        blocks         => sub { +{} }, # HTML::MasonX::Inspector::Compiler::Component::Blocks
     )
 }
 
@@ -44,8 +44,6 @@ sub sub_components { $_[0]->{sub_components} }
 
 sub body   { $_[0]->{body}   }
 sub blocks { $_[0]->{blocks} }
-
-## ...
 
 1;
 
