@@ -32,7 +32,7 @@ subtest '... simple compiler test using perl blocks' => sub {
     my $sloop = HTML::MasonX::Inspector->new( comp_root => $COMP_ROOT );
     isa_ok($sloop, 'HTML::MasonX::Inspector');
 
-    my $state = $sloop->get_compiler_for_path( $MASON_FILE_NAME );
+    my $state = $sloop->get_compiler_inspector_for_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
 
     my $comp = $state->get_main_component;

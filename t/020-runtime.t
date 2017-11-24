@@ -76,7 +76,7 @@ subtest '... simple sloop test' => sub {
 
     subtest '... testing the runtime' => sub {
 
-        my $runtime = $sloop->get_runtime_for_path( $MASON_FILE );
+        my $runtime = $sloop->get_runtime_inspector_for_path( $MASON_FILE );
         isa_ok($runtime, 'HTML::MasonX::Inspector::Runtime');
 
         my $comp = $runtime->component;

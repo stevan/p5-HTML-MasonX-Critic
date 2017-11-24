@@ -83,7 +83,7 @@ sub interpreter { $_[0]->{_interpreter} }
 
 ## do things ...
 
-sub get_object_code_for_path {
+sub get_object_code_inspector_for_path {
     my ($self, $path) = @_;
 
     return HTML::MasonX::Inspector::ObjectCode->new(
@@ -92,7 +92,7 @@ sub get_object_code_for_path {
     );
 }
 
-sub get_compiler_for_path {
+sub get_compiler_inspector_for_path {
     my ($self, $path) = @_;
 
     return HTML::MasonX::Inspector::Compiler->new(
@@ -101,7 +101,7 @@ sub get_compiler_for_path {
     );
 }
 
-sub get_runtime_for_path {
+sub get_runtime_inspector_for_path {
     my ($self, $path) = @_;
 
     return HTML::MasonX::Inspector::Runtime->new(

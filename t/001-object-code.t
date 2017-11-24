@@ -35,7 +35,7 @@ subtest '... simple sloop test' => sub {
 
     subtest '... testing the object code' => sub {
 
-        my $obj_code = $sloop->get_object_code_for_path( $MASON_FILE );
+        my $obj_code = $sloop->get_object_code_inspector_for_path( $MASON_FILE );
         isa_ok($obj_code, 'HTML::MasonX::Inspector::ObjectCode');
 
         my $src = $obj_code->sanitized_source;
