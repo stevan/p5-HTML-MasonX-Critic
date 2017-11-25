@@ -1,86 +1,31 @@
-package HTML::MasonX::Inspector::Util::Perl;
+package HTML::MasonX::Inspector::Query::PerlCode;
 
 use strict;
 use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Inspector::Util::Perl::UsedModule;
-use HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional;
+use HTML::MasonX::Inspector::Perl::UsedModule;
+use HTML::MasonX::Inspector::Perl::UsedModule::Conditional;
 
-use HTML::MasonX::Inspector::Util::Perl::ConstantDeclaration;
-use HTML::MasonX::Inspector::Util::Perl::SubroutineDeclaration;
+use HTML::MasonX::Inspector::Perl::ConstantDeclaration;
+use HTML::MasonX::Inspector::Perl::SubroutineDeclaration;
 
-use Digest::MD5                 ();
-use PPI                         ();
-use Perl::Critic::Utils::McCabe ();
+sub find_includes {
+    my ($class, $perl_code) = @_;
 
-use UNIVERSAL::Object;
-
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        source                 => sub { die 'Some `source` is required' },
-        # ... internal fields
-        _ppi                   => sub {},
-        # CACHED DATA
-        # ... bools
-        _does_postproc         => sub {},
-        _might_abort_request   => sub {},
-        _might_redirect_user   => sub {},
-        _might_call_components => sub {},
-        # ... scalar
-        _checksum              => sub {},
-        _complexity            => sub {},
-        # ... collections
-        _lines                 => sub {},
-        _includes              => sub {},
-        _constants             => sub {},
-        _subroutines           => sub {},
-    )
+    return $perl_code->find_with_ppi(
+        node_type => 'PPI::Statement::Include',
+        filter    => sub { $_[0]->module ne 'constant' },
+        transform => sub {
+            $_[0]->module eq 'if'
+                ? HTML::MasonX::Inspector::Perl::UsedModule::Conditional->new( ppi => $_[0] )
+                : HTML::MasonX::Inspector::Perl::UsedModule->new( ppi => $_[0] )
+        }
+    );
 }
 
-sub BUILD {
-    my ($self, $params) = @_;
-
-    $self->{_ppi} = PPI::Document->new( $self->{source}, readonly => 1 );
-}
-
-## Info ...
-
-sub raw  { ${ $_[0]->{source} } }
-sub size { length $_[0]->raw  }
-
-sub starting_line_number {
-    my ($self) = @_;
-
-    my $code = ${ $_[0]->{source} };
-
-    my ($line_number) = ($code =~ /^#line (\d*)/);
-
-    Carp::confess('Unable to find line number in:['.$code.']')
-        if $code && not $line_number;
-
-    return $code ? $line_number : 0;
-}
-
-sub lines  {
-    my ($self) = @_;
-
-    $self->{_lines} //= scalar split /\n/ => ${ $self->{source} };
-}
-
-sub checksum {
-    my ($self) = @_;
-
-    $self->{_checksum} //= Digest::MD5::md5_hex( $self->raw );
-}
-
-sub complexity_score {
-    my ($self) = @_;
-
-    $self->{_complexity} //= Perl::Critic::Utils::McCabe::calculate_mccabe_of_main( $self->{_ppi} );
-}
+=pod
 
 ## Various Mason "Things" we want to catch
 

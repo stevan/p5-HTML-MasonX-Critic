@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Util::Perl::UsedModule;
+package HTML::MasonX::Inspector::Perl::UsedModule;
 
 use strict;
 use warnings;
@@ -8,7 +8,7 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
-use HTML::MasonX::Inspector::Util::Perl::UsedModule::ImportedToken;
+use HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken;
 
 use UNIVERSAL::Object;
 
@@ -81,7 +81,7 @@ sub imports {
 	my @args = $self->arguments;
 
 	$self->{_imports} = [
-		map HTML::MasonX::Inspector::Util::Perl::UsedModule::ImportedToken->new(
+		map HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken->new(
 			token => $_
 		), $self->_flatten_import_list_from_PPI( @args )
 	] unless $self->{_imports};

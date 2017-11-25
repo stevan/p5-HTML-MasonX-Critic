@@ -10,6 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Inspector');
+    use_ok('HTML::MasonX::Inspector::Query::PerlCode');
 }
 
 my $MASON_FILE_NAME = '011-compiler-perl.html';
@@ -26,23 +27,6 @@ use v5.20;
 require Test::More;
 </%once>
 ]);
-
-use HTML::MasonX::Inspector::Util::Perl::UsedModule;
-use HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional;
-
-sub find_includes {
-    my ($perl_code) = @_;
-
-    return $perl_code->find_with_ppi(
-        node_type => 'PPI::Statement::Include', 
-        filter    => sub { $_[0]->module ne 'constant' },
-        transform => sub {
-            $_[0]->module eq 'if'
-                ? HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional->new( ppi => $_[0] )
-                : HTML::MasonX::Inspector::Util::Perl::UsedModule->new( ppi => $_[0] )
-        }
-    );
-}
 
 subtest '... simple compiler test using perl blocks' => sub {
 
@@ -79,11 +63,11 @@ subtest '... simple compiler test using perl blocks' => sub {
             $datetime,
             $perl_version,
             $required_test_more,
-        ) = find_includes( $once );
+        ) = HTML::MasonX::Inspector::Query::PerlCode->find_includes( $once );
 
         subtest '... testing include `use Scalar::Util "blessed";`' => sub {
 
-            isa_ok($scalar_util, 'HTML::MasonX::Inspector::Util::Perl::UsedModule');
+            isa_ok($scalar_util, 'HTML::MasonX::Inspector::Perl::UsedModule');
 
             is($scalar_util->module, 'Scalar::Util', '... got the expected module name');
             is($scalar_util->module_version, undef, '... got the expected module version');
@@ -99,7 +83,7 @@ subtest '... simple compiler test using perl blocks' => sub {
 
         subtest '... testing include `use List::Util qw[ max uniq ]`' => sub {
 
-            isa_ok($list_util, 'HTML::MasonX::Inspector::Util::Perl::UsedModule');
+            isa_ok($list_util, 'HTML::MasonX::Inspector::Perl::UsedModule');
 
             is($list_util->module, 'List::Util', '... got the expected module name');
             is($list_util->module_version, undef, '... got the expected module version');
@@ -114,7 +98,7 @@ subtest '... simple compiler test using perl blocks' => sub {
 
         subtest '... testing include `use File::Spec ();`' => sub {
 
-            isa_ok($file_spec, 'HTML::MasonX::Inspector::Util::Perl::UsedModule');
+            isa_ok($file_spec, 'HTML::MasonX::Inspector::Perl::UsedModule');
 
             is($file_spec->module, 'File::Spec', '... got the expected module name');
             is($file_spec->module_version, undef, '... got the expected module version');
@@ -129,7 +113,7 @@ subtest '... simple compiler test using perl blocks' => sub {
 
         subtest '... testing include `use feature qw[ say ];`' => sub {
 
-            isa_ok($feature, 'HTML::MasonX::Inspector::Util::Perl::UsedModule');
+            isa_ok($feature, 'HTML::MasonX::Inspector::Perl::UsedModule');
 
             is($feature->module, 'feature', '... got the expected module name');
             is($feature->module_version, undef, '... got the expected module version');
@@ -143,7 +127,7 @@ subtest '... simple compiler test using perl blocks' => sub {
 
         subtest '... testing include `use DateTime 0.20;`' => sub {
 
-            isa_ok($datetime, 'HTML::MasonX::Inspector::Util::Perl::UsedModule');
+            isa_ok($datetime, 'HTML::MasonX::Inspector::Perl::UsedModule');
 
             is($datetime->module, 'DateTime', '... got the expected module name');
             is($datetime->module_version, '0.20', '... got the expected module version');
@@ -159,7 +143,7 @@ subtest '... simple compiler test using perl blocks' => sub {
 
         subtest '... testing include `use v5.20;`' => sub {
 
-            isa_ok($perl_version, 'HTML::MasonX::Inspector::Util::Perl::UsedModule');
+            isa_ok($perl_version, 'HTML::MasonX::Inspector::Perl::UsedModule');
 
             is($perl_version->module, '', '... got the expected module name');
             is($perl_version->module_version, undef, '... got the expected module version');
@@ -173,7 +157,7 @@ subtest '... simple compiler test using perl blocks' => sub {
 
         subtest '... testing include `require Test::More;`' => sub {
 
-            isa_ok($required_test_more, 'HTML::MasonX::Inspector::Util::Perl::UsedModule');
+            isa_ok($required_test_more, 'HTML::MasonX::Inspector::Perl::UsedModule');
 
             is($required_test_more->module, 'Test::More', '... got the expected module name');
             is($required_test_more->module_version, undef, '... got the expected module version');

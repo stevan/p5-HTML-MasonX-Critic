@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Util::Perl::UsedModule::ImportedToken;
+package HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken;
 
 use strict;
 use warnings;

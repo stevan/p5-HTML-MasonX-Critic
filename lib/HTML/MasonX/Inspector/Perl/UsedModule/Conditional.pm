@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional;
+package HTML::MasonX::Inspector::Perl::UsedModule::Conditional;
 
 use strict;
 use warnings;
@@ -10,12 +10,12 @@ use Scalar::Util    ();
 use List::Util      ();
 use Module::Runtime ();
 
-use HTML::MasonX::Inspector::Util::Perl::UsedModule;
+use HTML::MasonX::Inspector::Perl::UsedModule;
 
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Inspector::Util::Perl::UsedModule') }
+our @ISA; BEGIN { @ISA = ('HTML::MasonX::Inspector::Perl::UsedModule') }
 our %HAS; BEGIN {
     %HAS = (
-        %HTML::MasonX::Inspector::Util::Perl::UsedModule::HAS,
+        %HTML::MasonX::Inspector::Perl::UsedModule::HAS,
         # ... cache some data ...
         _module         => sub {},
         _module_version => sub {},

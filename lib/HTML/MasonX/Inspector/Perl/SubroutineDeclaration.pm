@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Util::Perl::SubroutineDeclaration;
+package HTML::MasonX::Inspector::Perl::SubroutineDeclaration;
 
 use strict;
 use warnings;
