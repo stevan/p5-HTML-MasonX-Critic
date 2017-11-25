@@ -13,11 +13,11 @@ use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
-        once    => sub { +[] },
-        init    => sub { +[] },
-        filter  => sub { +[] },
-        cleanup => sub { +[] },
-        shared  => sub { +[] },
+        once    => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
+        init    => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
+        filter  => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
+        cleanup => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
+        shared  => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
     )
 }
 

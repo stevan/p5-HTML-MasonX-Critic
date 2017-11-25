@@ -10,8 +10,7 @@ use Clone ();
 use HTML::MasonX::Inspector::Compiler::Component;
 use HTML::MasonX::Inspector::Compiler::Component::Arg;
 use HTML::MasonX::Inspector::Compiler::Component::Blocks;
-
-use HTML::MasonX::Inspector::Util::Perl;
+use HTML::MasonX::Inspector::Compiler::Component::PerlCode;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -194,7 +193,7 @@ sub _build_blocks_object {
 
 sub _build_perl_object {
     my ($body) = @_;
-    return HTML::MasonX::Inspector::Util::Perl->new( source => \$body )
+    return HTML::MasonX::Inspector::Compiler::Component::PerlCode->new( source => \$body )
 }
 
 sub _clean_value {

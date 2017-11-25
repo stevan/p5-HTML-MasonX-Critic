@@ -27,6 +27,24 @@ require Test::More;
 </%once>
 ]);
 
+use HTML::MasonX::Inspector::Util::Perl::UsedModule;
+use HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional;
+
+sub find_includes {
+    my ($perl_code) = @_;
+
+    my @incs = $perl_code->find_with_ppi(
+        'PPI::Statement::Include' => sub { $_->module ne 'constant' }
+    );
+
+    return map {
+        $_->module eq 'if'
+            ? HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional->new( ppi => $_ )
+            : HTML::MasonX::Inspector::Util::Perl::UsedModule->new( ppi => $_ )
+    } @incs;
+
+}
+
 subtest '... simple compiler test using perl blocks' => sub {
 
     my $sloop = HTML::MasonX::Inspector->new( comp_root => $COMP_ROOT );
@@ -52,7 +70,7 @@ subtest '... simple compiler test using perl blocks' => sub {
     subtest '... testing the once block' => sub {
 
         my ($once) = @{ $blocks->once_blocks };
-        isa_ok($once, 'HTML::MasonX::Inspector::Util::Perl');
+        isa_ok($once, 'HTML::MasonX::Inspector::Compiler::Component::PerlCode');
 
         my (
             $scalar_util,
@@ -62,7 +80,7 @@ subtest '... simple compiler test using perl blocks' => sub {
             $datetime,
             $perl_version,
             $required_test_more,
-        ) = $once->includes;
+        ) = find_includes( $once );
 
         subtest '... testing include `use Scalar::Util "blessed";`' => sub {
 

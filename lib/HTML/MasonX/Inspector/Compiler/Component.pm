@@ -16,9 +16,9 @@ our %HAS; BEGIN {
         args           => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::Arg ]
         attributes     => sub { +{} }, # HashRef
         flags          => sub { +{} }, # HashRef
-        methods        => sub { +{} }, # HashRef[ HTML::MasonX::Inspector::Compiler::Method ]
-        sub_components => sub { +{} }, # HashRef[ HTML::MasonX::Inspector::Compiler::SubComponent ]
-        body           => sub {     }, # HTML::MasonX::Inspector::Util::Perl
+        methods        => sub { +{} }, # HashRef[ HTML::MasonX::Inspector::Compiler::Component ]
+        sub_components => sub { +{} }, # HashRef[ HTML::MasonX::Inspector::Compiler::Component ]
+        body           => sub {     }, # HTML::MasonX::Inspector::Compiler::Component::PerlCode
         blocks         => sub { +{} }, # HTML::MasonX::Inspector::Compiler::Component::Blocks
     )
 }
