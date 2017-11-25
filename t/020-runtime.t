@@ -65,18 +65,18 @@ $bar //= $foo * $foo;
 <& SELF:.label, label => 'BAZ', value => $baz &>
 ]);
 
-subtest '... simple sloop test' => sub {
+subtest '... simple runtime test' => sub {
 
-    my $sloop = HTML::MasonX::Inspector->new(
+    my $i = HTML::MasonX::Inspector->new(
         comp_root     => $COMP_ROOT,
         allow_globals => [ '$x' ],
         static_source => 1
     );
-    isa_ok($sloop, 'HTML::MasonX::Inspector');
+    isa_ok($i, 'HTML::MasonX::Inspector');
 
     subtest '... testing the runtime' => sub {
 
-        my $runtime = $sloop->get_runtime_inspector_for_path( $MASON_FILE );
+        my $runtime = $i->get_runtime_inspector_for_path( $MASON_FILE );
         isa_ok($runtime, 'HTML::MasonX::Inspector::Runtime');
 
         my $comp = $runtime->component;

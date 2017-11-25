@@ -25,17 +25,17 @@ $greeting ||= 'World';
 <h1>Hello <% $greeting %></h1>
 ]);
 
-subtest '... simple sloop test' => sub {
+subtest '... simple object code test' => sub {
 
-    my $sloop = HTML::MasonX::Inspector->new(
+    my $i = HTML::MasonX::Inspector->new(
         comp_root     => $COMP_ROOT,
         allow_globals => [ '$x' ]
     );
-    isa_ok($sloop, 'HTML::MasonX::Inspector');
+    isa_ok($i, 'HTML::MasonX::Inspector');
 
     subtest '... testing the object code' => sub {
 
-        my $obj_code = $sloop->get_object_code_inspector_for_path( $MASON_FILE );
+        my $obj_code = $i->get_object_code_inspector_for_path( $MASON_FILE );
         isa_ok($obj_code, 'HTML::MasonX::Inspector::ObjectCode');
 
         my $src = $obj_code->sanitized_source;
