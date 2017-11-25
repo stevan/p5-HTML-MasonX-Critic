@@ -57,15 +57,16 @@ sub starting_line_number {
 }
 
 sub find_with_ppi {
-    my ($self, $ppi_class, $cb) = @_;
+    my ($self, %opts) = @_;
 
-    my $results = $self->{_ppi}->find( $ppi_class );
-    # we found nothing ...
-    return unless $results;
-    # we found stuff, but want to filter it ...
-    return grep { $cb->($_) } @$results if $cb;
-    # we found stuff and just want it ...
-    return @$results;
+    my ($node_type, $filter, $transform) = @opts{qw[ node_type filter transform ]};
+
+    my @results = @{ $self->{_ppi}->find( $node_type ) };
+    return unless @results;
+    
+    @results = grep { $filter->($_)    } @results if $filter;
+    @results = map  { $transform->($_) } @results if $transform;
+    return @results;
 }
 
 

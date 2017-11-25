@@ -33,16 +33,15 @@ use HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional;
 sub find_includes {
     my ($perl_code) = @_;
 
-    my @incs = $perl_code->find_with_ppi(
-        'PPI::Statement::Include' => sub { $_->module ne 'constant' }
+    return $perl_code->find_with_ppi(
+        node_type => 'PPI::Statement::Include', 
+        filter    => sub { $_[0]->module ne 'constant' },
+        transform => sub {
+            $_[0]->module eq 'if'
+                ? HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional->new( ppi => $_[0] )
+                : HTML::MasonX::Inspector::Util::Perl::UsedModule->new( ppi => $_[0] )
+        }
     );
-
-    return map {
-        $_->module eq 'if'
-            ? HTML::MasonX::Inspector::Util::Perl::UsedModule::Conditional->new( ppi => $_ )
-            : HTML::MasonX::Inspector::Util::Perl::UsedModule->new( ppi => $_ )
-    } @incs;
-
 }
 
 subtest '... simple compiler test using perl blocks' => sub {
