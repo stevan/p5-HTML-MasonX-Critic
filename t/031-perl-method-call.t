@@ -98,6 +98,18 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             is($method_calls[0]->find_invocant->name, '$a', '... got the expected invocant name');
             ok(!$method_calls[0]->find_invocant->is_virtual, '... got the expected virtual-ness');
         };
+
+        subtest '... testing the method call with a name and invocant' => sub {
+
+            my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls( $init, 'property', '$b' );
+            is(scalar(@method_calls), 1, '... got the one `property` call on the `$b` invocant');
+
+            is($method_calls[0]->name, 'property', '... got the name we expected');
+            is($method_calls[0]->line_number, 4, '... got the line_number we expected');
+            is($method_calls[0]->column_number, 5, '... got the column_number we expected');
+            is($method_calls[0]->find_invocant->name, '$b', '... got the expected invocant name');
+            ok(!$method_calls[0]->find_invocant->is_virtual, '... got the expected virtual-ness');
+        };
     };
 
 };

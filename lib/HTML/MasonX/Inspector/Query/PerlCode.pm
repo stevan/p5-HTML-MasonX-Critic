@@ -51,9 +51,9 @@ sub find_constant_declarations {
 }
 
 sub find_method_calls {
-    my ($class, $perl_code, $method_name) = @_;
+    my ($class, $perl_code, $method_name, $invocant_name) = @_;
 
-    return $perl_code->find_with_ppi(
+    my @method_calls = $perl_code->find_with_ppi(
         node_type => 'PPI::Token::Word',
         filter    => (defined $method_name
             ? sub { $_[0]->method_call && $_[0]->literal eq $method_name }
@@ -63,6 +63,19 @@ sub find_method_calls {
             HTML::MasonX::Inspector::Perl::MethodCall->new( ppi => $_[0] )
         }
     );
+
+    if ( $invocant_name ) {
+        my @filtered;
+        foreach my $method_call ( @method_calls ) {
+            if ( my $inv = $method_call->find_invocant ) {
+                push @filtered => $method_call
+                    if $inv->name eq $invocant_name;
+            }
+        }
+        @method_calls = @filtered;
+    }
+
+    return @method_calls;
 }
 
 1;
