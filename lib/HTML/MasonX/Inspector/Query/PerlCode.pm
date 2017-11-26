@@ -11,6 +11,8 @@ use HTML::MasonX::Inspector::Perl::UsedModule::Conditional;
 use HTML::MasonX::Inspector::Perl::ConstantDeclaration;
 use HTML::MasonX::Inspector::Perl::SubroutineDeclaration;
 
+use HTML::MasonX::Inspector::Perl::MethodCall;
+
 sub find_includes {
     my ($class, $perl_code) = @_;
 
@@ -31,7 +33,7 @@ sub find_subroutine_declarations {
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Sub',
         transform => sub {
-            HTML::MasonX::Inspector::Util::Perl::SubroutineDeclaration->new( ppi => $_[0] )
+            HTML::MasonX::Inspector::Perl::SubroutineDeclaration->new( ppi => $_[0] )
         }
     );
 }
@@ -43,7 +45,22 @@ sub find_constant_declarations {
         node_type => 'PPI::Statement::Include',
         filter    => sub { $_[0]->module eq 'constant' },
         transform => sub {
-            HTML::MasonX::Inspector::Util::Perl::ConstantDeclaration->new( ppi => $_[0] )
+            HTML::MasonX::Inspector::Perl::ConstantDeclaration->new( ppi => $_[0] )
+        }
+    );
+}
+
+sub find_method_calls {
+    my ($class, $perl_code, $method_name) = @_;
+
+    return $perl_code->find_with_ppi(
+        node_type => 'PPI::Token::Word',
+        filter    => (defined $method_name
+            ? sub { $_[0]->method_call && $_[0]->literal eq $method_name }
+            : sub { $_[0]->method_call }
+        ),
+        transform => sub {
+            HTML::MasonX::Inspector::Perl::MethodCall->new( ppi => $_[0] )
         }
     );
 }
