@@ -18,8 +18,9 @@ my $COMP_ROOT       = Path::Tiny->tempdir;
 
 $COMP_ROOT->child( $MASON_FILE_NAME )->spew(q[
 <%init>
-$m->comp( 'foo/bar' => 10 );
-$u->property( 'baz' );
+$a->comp( 'foo/bar' => 10 );
+$b->property( 'baz' );
+$c->this()->is->a_method_call;
 </%init>
 ]);
 
@@ -53,15 +54,37 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
         subtest '... testing the method call without a name' => sub {
 
             my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls( $init );
-            is(scalar(@method_calls), 2, '... got the two calls');
+            is(scalar(@method_calls), 5, '... got the two calls');
 
             is($method_calls[0]->name, 'comp', '... got the name we expected');
             is($method_calls[0]->line_number, 3, '... got the line_number we expected');
             is($method_calls[0]->column_number, 5, '... got the column_number we expected');
+            is($method_calls[0]->find_invocant->name, '$a', '... got the expected invocant name');
+            ok(!$method_calls[0]->find_invocant->is_virtual, '... got the expected virtual-ness');
 
             is($method_calls[1]->name, 'property', '... got the name we expected');
             is($method_calls[1]->line_number, 4, '... got the line_number we expected');
             is($method_calls[1]->column_number, 5, '... got the column_number we expected');
+            is($method_calls[1]->find_invocant->name, '$b', '... got the expected invocant name');
+            ok(!$method_calls[1]->find_invocant->is_virtual, '... got the expected virtual-ness');
+
+            is($method_calls[2]->name, 'this', '... got the name we expected');
+            is($method_calls[2]->line_number, 5, '... got the line_number we expected');
+            is($method_calls[2]->column_number, 5, '... got the column_number we expected');
+            is($method_calls[2]->find_invocant->name, '$c', '... got the expected invocant name');
+            ok(!$method_calls[2]->find_invocant->is_virtual, '... got the expected virtual-ness');
+
+            is($method_calls[3]->name, 'is', '... got the name we expected');
+            is($method_calls[3]->line_number, 5, '... got the line_number we expected');
+            is($method_calls[3]->column_number, 13, '... got the column_number we expected');
+            is($method_calls[3]->find_invocant->name, 'this', '... got the expected invocant name');
+            ok($method_calls[3]->find_invocant->is_virtual, '... got the expected virtual-ness');
+
+            is($method_calls[4]->name, 'a_method_call', '... got the name we expected');
+            is($method_calls[4]->line_number, 5, '... got the line_number we expected');
+            is($method_calls[4]->column_number, 17, '... got the column_number we expected');
+            is($method_calls[4]->find_invocant->name, 'is', '... got the expected invocant name');
+            ok($method_calls[4]->find_invocant->is_virtual, '... got the expected virtual-ness');
         };
 
         subtest '... testing the method call with a name' => sub {
@@ -72,6 +95,8 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             is($method_calls[0]->name, 'comp', '... got the name we expected');
             is($method_calls[0]->line_number, 3, '... got the line_number we expected');
             is($method_calls[0]->column_number, 5, '... got the column_number we expected');
+            is($method_calls[0]->find_invocant->name, '$a', '... got the expected invocant name');
+            ok(!$method_calls[0]->find_invocant->is_virtual, '... got the expected virtual-ness');
         };
     };
 
