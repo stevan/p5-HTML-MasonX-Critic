@@ -53,8 +53,19 @@ sub arguments { $_[0]->{ppi}->arguments }
 
 ## No import
 
+sub does_call_import {
+    my ($self) = @_;
+    return ! $self->does_not_call_import;
+}
+
 sub does_not_call_import {
 	my ($self) = @_;
+
+    # check some cases that
+    # can't possibly be true
+    return 1 if $self->is_perl_version; # there is no `import` to call with perl versions
+    return 1 if $self->is_runtime;      # `require` will not call `import`
+
 	# we should have no imports
 	return 0 unless $self->number_of_imports == 0;
 	# and we should have args ...

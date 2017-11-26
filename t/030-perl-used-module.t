@@ -180,6 +180,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             ok(!$perl_version->is_runtime, '... expected response from is_runtime');
             ok(!$perl_version->is_conditional, '... expected response from is_conditional');
             ok(!$perl_version->is_pragma, '... expected response from is_pragma');
+            ok($perl_version->does_not_call_import, '... this does not call import');
         };
 
         subtest '... testing include `require Test::More;`' => sub {
@@ -194,7 +195,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             ok(!$required_test_more->is_conditional, '... expected response from is_conditional');
             ok(!$required_test_more->is_pragma, '... expected response from is_pragma');
             ok(!$required_test_more->is_perl_version, '... expected response from is_perl_version');
-            ok(!$required_test_more->does_not_call_import, '... this calls import');
+            ok($required_test_more->does_not_call_import, '... this does not call import');
 
         };
 
