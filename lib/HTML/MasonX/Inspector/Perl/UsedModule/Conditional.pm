@@ -91,6 +91,10 @@ sub module         { $_[0]->{_module}         }
 sub module_version { $_[0]->{_module_version} }
 sub arguments      { @{ $_[0]->{_arguments} } }
 
+
+# HACK: ... yeah this is kind of a hack, but should work
+sub is_pragma { $_[0]->{_module} eq lc $_[0]->{_module} }
+
 1;
 
 __END__
