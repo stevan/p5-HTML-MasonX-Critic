@@ -21,10 +21,11 @@ $COMP_ROOT->child( $MASON_FILE_NAME )->spew(q[
 use Scalar::Util 'blessed';
 use List::Util   qw[ max uniq ];
 use File::Spec   ();
-use feature      qw[ say ];
+use feature      qw[ :CoolStuff ];
 use DateTime     0.20;
 use v5.20;
 require Test::More;
+use if BASEHEAD => 'File::Basename';
 </%once>
 ]);
 
@@ -63,6 +64,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             $datetime,
             $perl_version,
             $required_test_more,
+            $conditional_file_basename
         ) = HTML::MasonX::Inspector::Query::PerlCode->find_includes( $once );
 
         subtest '... testing include `use Scalar::Util "blessed";`' => sub {
@@ -79,6 +81,12 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
 
             ok(!$scalar_util->does_not_call_import, '... this calls import');
 
+            my ($blessed) = $scalar_util->imports;
+            isa_ok($blessed, 'HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken');
+
+            is($blessed->token, 'blessed', '... got the token we expected');
+            ok(!$blessed->is_tag, '... got the tag-ness we expected');
+            ok($blessed->is_name, '... got the name-ness we expected');
         };
 
         subtest '... testing include `use List::Util qw[ max uniq ]`' => sub {
@@ -94,6 +102,18 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             ok(!$list_util->is_perl_version, '... expected response from is_perl_version');
 
             ok(!$list_util->does_not_call_import, '... this calls import');
+
+            my ($max, $uniq) = $list_util->imports;
+            isa_ok($max, 'HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken');
+            isa_ok($uniq, 'HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken');
+
+            is($max->token, 'max', '... got the token we expected');
+            ok(!$max->is_tag, '... got the tag-ness we expected');
+            ok($max->is_name, '... got the name-ness we expected');
+
+            is($uniq->token, 'uniq', '... got the token we expected');
+            ok(!$uniq->is_tag, '... got the tag-ness we expected');
+            ok($uniq->is_name, '... got the name-ness we expected');
         };
 
         subtest '... testing include `use File::Spec ();`' => sub {
@@ -111,7 +131,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             ok($file_spec->does_not_call_import, '... this does not call import');
         };
 
-        subtest '... testing include `use feature qw[ say ];`' => sub {
+        subtest '... testing include `use feature qw[ :CoolStuff ];`' => sub {
 
             isa_ok($feature, 'HTML::MasonX::Inspector::Perl::UsedModule');
 
@@ -122,6 +142,13 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             ok(!$feature->is_runtime, '... expected response from is_runtime');
             ok(!$feature->is_conditional, '... expected response from is_conditional');
             ok(!$feature->is_perl_version, '... expected response from is_perl_version');
+
+            my ($tag) = $feature->imports;
+            isa_ok($tag, 'HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken');
+
+            is($tag->token, ':CoolStuff', '... got the token we expected');
+            ok($tag->is_tag, '... got the tag-ness we expected');
+            ok(!$tag->is_name, '... got the name-ness we expected');
 
         };
 
@@ -169,6 +196,22 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             ok(!$required_test_more->is_perl_version, '... expected response from is_perl_version');
             ok(!$required_test_more->does_not_call_import, '... this calls import');
 
+        };
+
+        subtest '... testing include `use if BASEHEAD => "File::Basename";`' => sub {
+
+            isa_ok($conditional_file_basename, 'HTML::MasonX::Inspector::Perl::UsedModule::Conditional');
+            isa_ok($conditional_file_basename, 'HTML::MasonX::Inspector::Perl::UsedModule');
+
+            is($conditional_file_basename->module, 'File::Basename', '... got the expected module name');
+            is($conditional_file_basename->module_version, undef, '... got the expected module version');
+
+            ok(!$conditional_file_basename->is_runtime, '... expected response from is_runtime');
+
+            ok($conditional_file_basename->is_conditional, '... expected response from is_conditional');
+            ok(!$conditional_file_basename->is_pragma, '... expected response from is_pragma');
+            ok(!$conditional_file_basename->is_perl_version, '... expected response from is_perl_version');
+            ok(!$conditional_file_basename->does_not_call_import, '... this calls import');
         };
 
     };
