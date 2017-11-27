@@ -52,8 +52,8 @@ sub BUILD {
            && $args[0]->isa('PPI::Token::Operator')
            && ($args[0]->content eq ',' || $args[0]->content eq '=>');
 
-    # and just take what is left of args ...
-    $self->{_arguments} = \@args;
+    # and just take what is left of args and strigify them ...
+    $self->{_arguments} = [ map { "$_" } @args ];
 }
 
 sub ppi { $_[0]->{ppi} }
