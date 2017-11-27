@@ -13,7 +13,7 @@ BEGIN {
     use_ok('HTML::MasonX::Inspector::Query::PerlCode');
 }
 
-my $MASON_FILE_NAME = '011-compiler-perl.html';
+my $MASON_FILE_NAME = '031-perl-method-call.html';
 my $COMP_ROOT       = Path::Tiny->tempdir;
 
 $COMP_ROOT->child( $MASON_FILE_NAME )->spew(q[

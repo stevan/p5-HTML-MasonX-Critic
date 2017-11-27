@@ -12,7 +12,7 @@ BEGIN {
     use_ok('HTML::MasonX::Inspector');
 }
 
-my $MASON_FILE = '001-basic.html';
+my $MASON_FILE = '001-object-code.html';
 my $COMP_ROOT  = Path::Tiny->tempdir;
 
 $COMP_ROOT->child( $MASON_FILE )->spew(q[
