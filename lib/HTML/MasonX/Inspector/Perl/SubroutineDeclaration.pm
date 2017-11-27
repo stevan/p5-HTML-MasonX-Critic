@@ -9,12 +9,10 @@ use Carp         ();
 use Scalar::Util ();
 
 use UNIVERSAL::Object;
-
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
         ppi => sub { die 'A `ppi` node is required' },
-        # private data
     )
 }
 

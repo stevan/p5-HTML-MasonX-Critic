@@ -11,7 +11,6 @@ use Scalar::Util ();
 use HTML::MasonX::Inspector::Perl::MethodCall::Invocant;
 
 use UNIVERSAL::Object;
-
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (

@@ -5,11 +5,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Carp         ();
-use Scalar::Util ();
-
 use UNIVERSAL::Object;
-
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (

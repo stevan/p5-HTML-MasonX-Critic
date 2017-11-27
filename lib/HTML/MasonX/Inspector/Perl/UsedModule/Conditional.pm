@@ -6,12 +6,10 @@ use warnings;
 our $VERSION = '0.01';
 
 use Carp            ();
-use Scalar::Util    ();
 use List::Util      ();
 use Module::Runtime ();
 
 use HTML::MasonX::Inspector::Perl::UsedModule;
-
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Inspector::Perl::UsedModule') }
 our %HAS; BEGIN {
     %HAS = (

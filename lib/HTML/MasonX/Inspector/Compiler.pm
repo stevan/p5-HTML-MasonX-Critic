@@ -5,7 +5,9 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Clone ();
+use Carp         ();
+use Scalar::Util ();
+use Clone        ();
 
 use HTML::MasonX::Inspector::Compiler::Component;
 use HTML::MasonX::Inspector::Compiler::Component::Arg;

@@ -6,7 +6,6 @@ use warnings;
 our $VERSION = '0.01';
 
 use Carp         ();
-use List::Util   ();
 use Scalar::Util ();
 
 use HTML::Mason::Interp;
