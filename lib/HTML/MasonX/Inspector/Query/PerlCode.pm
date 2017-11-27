@@ -14,7 +14,7 @@ use HTML::MasonX::Inspector::Perl::SubroutineDeclaration;
 use HTML::MasonX::Inspector::Perl::MethodCall;
 
 sub find_includes {
-    my ($class, $perl_code) = @_;
+    my ($class, $perl_code, %opts) = @_;
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Include',
@@ -28,7 +28,7 @@ sub find_includes {
 }
 
 sub find_subroutine_declarations {
-    my ($class, $perl_code) = @_;
+    my ($class, $perl_code, %opts) = @_;
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Sub',
@@ -39,7 +39,7 @@ sub find_subroutine_declarations {
 }
 
 sub find_constant_declarations {
-    my ($class, $perl_code) = @_;
+    my ($class, $perl_code, %opts) = @_;
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Include',
@@ -51,7 +51,11 @@ sub find_constant_declarations {
 }
 
 sub find_method_calls {
-    my ($class, $perl_code, $method_name, $invocant_name) = @_;
+    my ($class, $perl_code, %opts) = @_;
+
+    my ($invocant_name, $method_name);
+    $invocant_name = $opts{invocant_name} if exists $opts{invocant_name};
+    $method_name   = $opts{method_name}   if exists $opts{method_name};
 
     my @method_calls = $perl_code->find_with_ppi(
         node_type => 'PPI::Token::Word',

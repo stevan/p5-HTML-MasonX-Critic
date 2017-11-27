@@ -89,7 +89,9 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
 
         subtest '... testing the method call with a name' => sub {
 
-            my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls( $init, 'comp' );
+            my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls(
+                $init, ( method_name => 'comp' )
+            );
             is(scalar(@method_calls), 1, '... got the one `comp` call');
 
             is($method_calls[0]->name, 'comp', '... got the name we expected');
@@ -101,7 +103,12 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
 
         subtest '... testing the method call with a name and invocant' => sub {
 
-            my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls( $init, 'property', '$b' );
+            my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls(
+                $init, (
+                    invocant_name => '$b',
+                    method_name   => 'property',
+                )
+            );
             is(scalar(@method_calls), 1, '... got the one `property` call on the `$b` invocant');
 
             is($method_calls[0]->name, 'property', '... got the name we expected');
