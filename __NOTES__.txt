@@ -1,3 +1,7 @@
+Perl::Critic::Policy::Variables::ProhibitUnusedVarsStricter
+
+
+------------------
 
 use HTML::MasonX::Inspector::Util::Perl::CriticViolation;
 use Perl::Critic ();
