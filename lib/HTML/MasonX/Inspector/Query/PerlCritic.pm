@@ -16,7 +16,7 @@ sub critique_object_code {
         unless Scalar::Util::blessed($object_code)
             && $object_code->isa('HTML::MasonX::Inspector::ObjectCode');
 
-    my $critic     = Perl::Critic->new( %opts );
+    my $critic     = exists $opts{perl_critic} ? $opts{perl_critic} : Perl::Critic->new( %opts );
     my $code       = $object_code->object_code;
     my @violations = $critic->critique( $code );
 
@@ -30,7 +30,7 @@ sub critique_compiler_component {
         unless Scalar::Util::blessed($compiler)
             && $compiler->isa('HTML::MasonX::Inspector::Compiler');
 
-    my $critic   = Perl::Critic->new( %opts );
+    my $critic   = exists $opts{perl_critic} ? $opts{perl_critic} : Perl::Critic->new( %opts );
     my $filename = $compiler->comp_path;
     my $comp     = $compiler->get_main_component;
     my $blocks   = $comp->blocks;
