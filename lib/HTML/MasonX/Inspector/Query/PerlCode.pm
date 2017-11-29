@@ -5,6 +5,9 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use Carp         ();
+use Scalar::Util ();
+
 use HTML::MasonX::Inspector::Perl::UsedModule;
 use HTML::MasonX::Inspector::Perl::UsedModule::Conditional;
 
@@ -15,6 +18,10 @@ use HTML::MasonX::Inspector::Perl::MethodCall;
 
 sub find_includes {
     my ($class, $perl_code, %opts) = @_;
+
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+        unless Scalar::Util::blessed( $perl_code )
+            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Include',
@@ -30,6 +37,10 @@ sub find_includes {
 sub find_subroutine_declarations {
     my ($class, $perl_code, %opts) = @_;
 
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+        unless Scalar::Util::blessed( $perl_code )
+            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Sub',
         transform => sub {
@@ -40,6 +51,10 @@ sub find_subroutine_declarations {
 
 sub find_constant_declarations {
     my ($class, $perl_code, %opts) = @_;
+
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+        unless Scalar::Util::blessed( $perl_code )
+            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Include',
@@ -52,6 +67,10 @@ sub find_constant_declarations {
 
 sub find_method_calls {
     my ($class, $perl_code, %opts) = @_;
+
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+        unless Scalar::Util::blessed( $perl_code )
+            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
 
     my ($invocant_name, $method_name);
     $invocant_name = $opts{invocant_name} if exists $opts{invocant_name};
