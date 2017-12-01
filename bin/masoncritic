@@ -1,0 +1,143 @@
+#!/usr/bin/env perl
+
+# PODNAME: bin/masoncritic
+# ABSTRACT: A tool for combining Perl::Critic and Mason
+
+use strict;
+use warnings;
+use FindBin;
+
+use lib "$FindBin::Bin/../lib";
+
+$!++; # autoflushin'
+
+use Path::Tiny          ();
+use JSON::MaybeXS       ();
+use Getopt::Long        ();
+use Module::Runtime     ();
+use Perl::Critic::Utils ();
+use Term::ANSIColor     ':constants';
+
+use HTML::MasonX::Inspector;
+use HTML::MasonX::Inspector::Query::PerlCritic;
+use HTML::MasonX::Inspector::Util::MasonFileFinder;
+
+my $debug    = 0;
+my $verbose  = 0;
+my $no_color = 0;
+
+my ($dir, $policy, $format);
+Getopt::Long::GetOptions(
+    'debug|d'   => \$debug,
+    'verbose|v' => \$verbose,
+    'no-color'  => \$no_color,
+    'dir=s'     => \$dir,
+    'policy=s'  => \$policy,
+    'format=s'  => \$format,
+);
+
+$ENV{'ANSI_COLORS_DISABLED'} = $no_color;
+
+usage('You must specify a --dir and --policy.')
+    unless defined $dir && defined $policy;
+
+usage('The --dir must be a valid directory.')
+    unless -e $dir && -d $dir;
+
+my $root_dir         = Path::Tiny::path( $dir );
+my $policy_long_name = resolve_perl_critic_policy_classname( $policy );
+
+usage('Unable to find Perl::Critic policy ('.$policy.')')
+    unless $policy_long_name;
+
+my $inspector = HTML::MasonX::Inspector->new( comp_root => $root_dir );
+my $finder    = HTML::MasonX::Inspector::Util::MasonFileFinder->new( root_dir => $root_dir );
+my $all_files = $finder->find_all_mason_files;
+
+while ( my $file = $all_files->next ) {
+
+    my $rel        = $file->relative( $root_dir );
+    my $obj_code   = $inspector->get_object_code_inspector_for_path( $rel );
+    my @violations = HTML::MasonX::Inspector::Query::PerlCritic->critique_object_code(
+        $obj_code,
+        (
+            #'-severity'      => 1,
+            '-single-policy' => $policy_long_name
+        )
+    );
+
+    if ( @violations ) {
+        print BOLD, RED, "Found (".(scalar @violations).") violations in $rel\n", RESET;
+        foreach my $v ( @violations ) {
+            print RED, format_violation( $v, $format ), RESET;
+        }
+    }
+    else {
+        print ITALIC, GREEN, "No violations in $rel\n", RESET if $verbose;
+    }
+}
+
+exit;
+
+## ------------------------------------------
+
+sub format_violation {
+    my ($v, $format) = @_;
+
+    my $output;
+
+    if ( $format ) {
+        if ( $format eq 'json' ) {
+            $output = JSON::MaybeXS->new->encode({
+                policy        => $v->policy,
+                severity      => $v->severity,
+                line_number   => $v->logical_line_number,
+                column_number => $v->column_number,
+                source        => $v->source,
+            });
+        }
+        else {
+            Perl::Critic::Violation::set_format( $format );
+            $output = $v->to_string;
+        }
+    }
+    else {
+        $output = $v->to_string;
+    }
+
+    $output = "$output\n" unless $output =~ /\n$/;
+    return $output;
+}
+
+sub resolve_perl_critic_policy_classname {
+    my ($policy) = @_;
+    Module::Runtime::use_module(
+        Perl::Critic::Utils::policy_long_name(
+            $policy
+        )
+    );
+}
+
+sub usage {
+    my ($error) = @_;
+    print $error, "\n" if $error;
+    print <<'USAGE';
+masoncritic [-dv] [long options...]
+    --dir         the root directory to look within
+    --policy      the Perl::Critic policy to use
+    --format      Perl::Critic::Violation format string, or the string 'json'
+    -d --debug    turn on debugging
+    -v --verbose  turn on verbosity
+USAGE
+    exit(0);
+}
+
+1;
+
+__END__
+
+=pod
+
+=head1 DESCRIPTION
+
+=cut
