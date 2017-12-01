@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken;
+# ABSTRACT: Query result objects representing the import token for used Perl modules
 
 use strict;
 use warnings;
@@ -22,10 +23,6 @@ sub is_name { $_[0]->is_tag ? 0 : 1 }
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Util::Perl - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

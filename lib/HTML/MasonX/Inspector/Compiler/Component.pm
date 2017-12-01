@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Compiler::Component;
+# ABSTRACT: Compile time view of a Mason component
 
 use strict;
 use warnings;
@@ -50,10 +51,6 @@ sub blocks { $_[0]->{blocks} }
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Compiler::Attr - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

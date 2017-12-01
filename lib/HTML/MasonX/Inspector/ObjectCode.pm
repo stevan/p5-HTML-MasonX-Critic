@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::ObjectCode;
+# ABSTRACT: Tools for inspecting the generated object code of HTML::Mason
 
 use strict;
 use warnings;
@@ -71,10 +72,6 @@ sub sanitized_source {
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::ObjectCode - ...
 
 =head1 DESCRIPTION
 

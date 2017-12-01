@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Perl::MethodCall;
+# ABSTRACT: Query result objects representing a Perl method call
 
 use strict;
 use warnings;
@@ -58,10 +59,6 @@ sub find_invocant {
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Util::Perl - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

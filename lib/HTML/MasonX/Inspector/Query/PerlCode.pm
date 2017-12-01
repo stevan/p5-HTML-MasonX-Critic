@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Query::PerlCode;
+# ABSTRACT: Query HTML::MasonX::Component::PerlCode objects with PPI
 
 use strict;
 use warnings;
@@ -106,10 +107,6 @@ sub find_method_calls {
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Query::PerlCode - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

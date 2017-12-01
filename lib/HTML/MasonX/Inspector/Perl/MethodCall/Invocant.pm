@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Perl::MethodCall::Invocant;
+# ABSTRACT: Query result objects representing the invocant of a Perl method call
 
 use strict;
 use warnings;
@@ -36,10 +37,6 @@ sub column_number { $_[0]->{ppi}->column_number           }
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Util::Perl - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

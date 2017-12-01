@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Runtime;
+# ABSTRACT: Tools for inspecting the runtime objects of HTML::Mason
 
 use strict;
 use warnings;
@@ -50,10 +51,6 @@ sub component { $_[0]->{_component} }
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Runtime - ...
 
 =head1 DESCRIPTION
 

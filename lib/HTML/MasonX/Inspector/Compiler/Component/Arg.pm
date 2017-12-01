@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Compiler::Component::Arg;
+# ABSTRACT: Compile time view of a Mason argument
 
 use strict;
 use warnings;
@@ -39,10 +40,6 @@ sub default_value { $_[0]->{default_value} }
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Compiler::Arg - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

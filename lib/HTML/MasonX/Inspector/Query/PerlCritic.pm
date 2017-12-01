@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Query::PerlCritic;
+# ABSTRACT: Run Perl::Critic on inspector objects
 
 use strict;
 use warnings;
@@ -102,10 +103,6 @@ sub critique_compiler_component {
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Query::PerlCritic - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

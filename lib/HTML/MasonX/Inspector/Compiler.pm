@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Compiler;
+# ABSTRACT: Tools for inspecting the compiler internals of HTML::Mason
 
 use strict;
 use warnings;
@@ -223,12 +224,6 @@ __END__
 
 =pod
 
-=head1 NAME
-
-HTML::MasonX::Inspector::Compiler - HTML::Mason::Compiler sea cucumber
-
 =head1 DESCRIPTION
-
-
 
 =cut

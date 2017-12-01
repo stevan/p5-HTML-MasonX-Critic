@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Perl::UsedModule;
+# ABSTRACT: Query result objects representing used Perl modules
 
 use strict;
 use warnings;
@@ -151,10 +152,6 @@ sub _flatten_import_list_from_PPI {
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Util::Perl - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

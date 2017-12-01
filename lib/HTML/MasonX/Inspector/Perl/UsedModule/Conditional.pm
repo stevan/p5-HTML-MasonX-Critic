@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Perl::UsedModule::Conditional;
+# ABSTRACT: Query result objects representing conditionally used Perl modules
 
 use strict;
 use warnings;
@@ -98,10 +99,6 @@ sub is_pragma { $_[0]->{_module} eq lc $_[0]->{_module} }
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Util::Perl - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 

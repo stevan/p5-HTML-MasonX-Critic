@@ -1,4 +1,5 @@
 package HTML::MasonX::Inspector::Compiler::Component::PerlCode;
+# ABSTRACT: Compile time view of a peice of Perl code in a Mason component
 
 use strict;
 use warnings;
@@ -63,7 +64,7 @@ sub find_with_ppi {
 
     my @results = @{ $self->{_ppi}->find( $node_type ) };
     return unless @results;
-    
+
     @results = grep { $filter->($_)    } @results if $filter;
     @results = map  { $transform->($_) } @results if $transform;
     return @results;
@@ -75,10 +76,6 @@ sub find_with_ppi {
 __END__
 
 =pod
-
-=head1 NAME
-
-HTML::MasonX::Inspector::Util::Perl - HTML::Mason::Compiler sea cucumber guts
 
 =head1 DESCRIPTION
 
