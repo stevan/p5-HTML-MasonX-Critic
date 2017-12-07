@@ -25,8 +25,8 @@ use HTML::MasonX::Inspector::Util::MasonFileFinder;
 my $DEBUG       = $ENV{MASONCRITIC_DEBUG};
 my $VERBOSE     = $ENV{MASONCRITIC_VERBOSE};
 my $SHOW_SOURCE = $ENV{MASONCRITIC_SHOW_SOURCE} // 0;
-my $NO_COLOR    = $ENV{MASONCRITIC_NO_COLOR} // 0;
-my $AS_JSON     = $ENV{MASONCRITIC_AS_JSON} // 0;
+my $USE_COLOR   = $ENV{MASONCRITIC_USE_COLOR}   // 1;
+my $AS_JSON     = $ENV{MASONCRITIC_AS_JSON}     // 0;
 
 my $dir;
 my $perl_critic_policy;
@@ -38,8 +38,8 @@ GetOptions(
     'debug|d'                => \$DEBUG,
     'verbose|v'              => \$VERBOSE,
     'show-source'            => \$SHOW_SOURCE,
-    'no-color'               => \$NO_COLOR,
-    'as-json'                => \$AS_JSON,
+    'color'                  => \$USE_COLOR,
+    'json'                   => \$AS_JSON,
 
     'dir=s'                  => \$dir,
 
@@ -50,7 +50,7 @@ GetOptions(
 );
 
 # do this first ...
-$ENV{ANSI_COLORS_DISABLED} = $NO_COLOR;
+$ENV{ANSI_COLORS_DISABLED} = ! $USE_COLOR;
 
 ## Check the args
 
@@ -92,17 +92,20 @@ while ( my $file = $all_files->next ) {
     );
 
     if ( @violations ) {
-        print BOLD, "Found (".(scalar @violations).") violations in $rel\n", RESET;
+        print BOLD, "Found (".(scalar @violations).") violations in $rel\n", RESET
+            unless $AS_JSON;
         foreach my $v ( @violations ) {
             display_violation( $v, $rel );
             next unless $VERBOSE;
-            if ( my $x = prompt('> next violation?', 'y') ) {
+            next if     $AS_JSON;
+            if ( my $x = prompt( FAINT('> next violation?', RESET), 'y') ) {
                 last if $x eq 'n';
             }
         }
     }
     else {
-        print ITALIC, GREEN, "No violations in $rel\n", RESET;
+        print ITALIC, GREEN, "No violations in $rel\n", RESET
+            unless $AS_JSON;
     }
 }
 
@@ -133,7 +136,7 @@ sub display_violation {
             severity      => $violation->severity,
             source        => $violation->source,
             description   => $violation->description,
-        });
+        }), "\n";
     }
     else {
         if ( $VERBOSE ) {
@@ -209,7 +212,9 @@ masoncritic [-dv] [long options...]
     --perl-critic-theme    set the Perl::Critic theme to use, defaults to $ENV{MASONCRITIC_THEME}
     --perl_critic_severity set the Perl::Critic severity, defaults to $ENV{MASONCRITIC_SEVERITY} or 1
     --perl-critic-policy   set the Perl::Critic policy to use
-    --no-color             turn off color in the output
+    --color                turn on/off color in the output
+    --json                 output the violations as JSON
+    --show-source          include the Mason source code in the output when in verbose mode
     -d --debug             turn on debugging
     -v --verbose           turn on verbosity
 USAGE
