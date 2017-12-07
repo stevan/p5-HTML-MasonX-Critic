@@ -11,69 +11,98 @@ use lib "$FindBin::Bin/../lib";
 
 $!++; # autoflushin'
 
-use Path::Tiny          ();
 use JSON::MaybeXS       ();
-use Getopt::Long        ();
-use Module::Runtime     ();
-use Perl::Critic::Utils ();
+use Term::ReadKey       ();
+use Path::Tiny          'path';
+use Getopt::Long        'GetOptions';
+use IO::Prompt::Tiny    'prompt';
 use Term::ANSIColor     ':constants';
 
 use HTML::MasonX::Inspector;
 use HTML::MasonX::Inspector::Query::PerlCritic;
 use HTML::MasonX::Inspector::Util::MasonFileFinder;
 
-my $debug    = 0;
-my $verbose  = 0;
-my $no_color = 0;
+my $DEBUG       = $ENV{MASONCRITIC_DEBUG};
+my $VERBOSE     = $ENV{MASONCRITIC_VERBOSE};
+my $SHOW_SOURCE = $ENV{MASONCRITIC_SHOW_SOURCE} // 0;
+my $NO_COLOR    = $ENV{MASONCRITIC_NO_COLOR} // 0;
+my $AS_JSON     = $ENV{MASONCRITIC_AS_JSON} // 0;
 
-my ($dir, $policy, $format);
-Getopt::Long::GetOptions(
-    'debug|d'   => \$debug,
-    'verbose|v' => \$verbose,
-    'no-color'  => \$no_color,
-    'dir=s'     => \$dir,
-    'policy=s'  => \$policy,
-    'format=s'  => \$format,
+my $dir;
+my $perl_critic_policy;
+my $perl_critic_severity = $ENV{MASONCRITIC_SEVERITY} || 1;
+my $perl_critic_profile  = $ENV{MASONCRITIC_PROFILE};
+my $perl_critic_theme    = $ENV{MASONCRITIC_THEME};
+
+GetOptions(
+    'debug|d'                => \$DEBUG,
+    'verbose|v'              => \$VERBOSE,
+    'show-source'            => \$SHOW_SOURCE,
+    'no-color'               => \$NO_COLOR,
+    'as-json'                => \$AS_JSON,
+
+    'dir=s'                  => \$dir,
+
+    'perl-critic-profile=s'  => \$perl_critic_profile,
+    'perl-critic-theme=s'    => \$perl_critic_theme,
+    'perl-critic-policy=s'   => \$perl_critic_policy,
+    'perl_critic_severity=s' => \$perl_critic_severity,
 );
 
-$ENV{'ANSI_COLORS_DISABLED'} = $no_color;
+# do this first ...
+$ENV{ANSI_COLORS_DISABLED} = $NO_COLOR;
 
-usage('You must specify a --dir and --policy.')
-    unless defined $dir && defined $policy;
+## Check the args
+
+usage('You must specify a --dir')
+    unless defined $dir;
 
 usage('The --dir must be a valid directory.')
     unless -e $dir && -d $dir;
 
-my $root_dir         = Path::Tiny::path( $dir );
-my $policy_long_name = resolve_perl_critic_policy_classname( $policy );
+usage('You cannot set a Perl::Critic policy *and* a theme/profile')
+    if defined $perl_critic_policy && (defined $perl_critic_profile || defined $perl_critic_theme);
 
-usage('Unable to find Perl::Critic policy ('.$policy.')')
-    unless $policy_long_name;
+if ( $perl_critic_profile ) {
+    usage('Unable to find the Perl::Critic profile at ('.$perl_critic_profile.')')
+        unless -f $perl_critic_profile;
+}
 
-my $inspector = HTML::MasonX::Inspector->new( comp_root => $root_dir );
-my $finder    = HTML::MasonX::Inspector::Util::MasonFileFinder->new( root_dir => $root_dir );
-my $all_files = $finder->find_all_mason_files;
+## Set up globals
+
+my $ROOT_DIR = path( $dir );
+
+my $inspector        = HTML::MasonX::Inspector->new( comp_root => $ROOT_DIR, use_warnings => 1 );
+my $finder           = HTML::MasonX::Inspector::Util::MasonFileFinder->new( root_dir => $ROOT_DIR );
+my $all_files        = $finder->find_all_mason_files;
+my %perl_critic_args = (
+    ($perl_critic_severity ? ('-severity'      => $perl_critic_severity) : ()),
+    ($perl_critic_policy   ? ('-single-policy' => $perl_critic_policy)   : ()),
+    ($perl_critic_profile  ? ('-profile'       => $perl_critic_profile)  : ()),
+    ($perl_critic_theme    ? ('-theme'         => $perl_critic_theme)    : ()),
+);
 
 while ( my $file = $all_files->next ) {
 
-    my $rel        = $file->relative( $root_dir );
-    my $obj_code   = $inspector->get_object_code_inspector_for_path( $rel );
-    my @violations = HTML::MasonX::Inspector::Query::PerlCritic->critique_object_code(
-        $obj_code,
-        (
-            #'-severity'      => 1,
-            '-single-policy' => $policy_long_name
-        )
+    my $rel        = $file->relative( $ROOT_DIR );
+    my $compiler   = $inspector->get_compiler_inspector_for_path( $rel );
+    my @violations = HTML::MasonX::Inspector::Query::PerlCritic->critique_compiler_component(
+        $compiler,
+        %perl_critic_args
     );
 
     if ( @violations ) {
-        print BOLD, RED, "Found (".(scalar @violations).") violations in $rel\n", RESET;
+        print BOLD, "Found (".(scalar @violations).") violations in $rel\n", RESET;
         foreach my $v ( @violations ) {
-            print RED, format_violation( $v, $format ), RESET;
+            display_violation( $v, $rel );
+            next unless $VERBOSE;
+            if ( my $x = prompt('> next violation?', 'y') ) {
+                last if $x eq 'n';
+            }
         }
     }
     else {
-        print ITALIC, GREEN, "No violations in $rel\n", RESET if $verbose;
+        print ITALIC, GREEN, "No violations in $rel\n", RESET;
     }
 }
 
@@ -81,53 +110,108 @@ exit;
 
 ## ------------------------------------------
 
-sub format_violation {
-    my ($v, $format) = @_;
+sub TERM_WIDTH () {
+    return eval {
+        local $SIG{__WARN__} = sub {''};
+        ( Term::ReadKey::GetTerminalSize() )[0];
+    } || 80
+}
 
-    my $output;
+use constant HR_ERROR => ( '== ERROR ' . ( '=' x ( TERM_WIDTH - 9 ) ) );
+use constant HR_DARK  => ( '=' x TERM_WIDTH );
+use constant HR_LIGHT => ( '-' x TERM_WIDTH );
 
-    if ( $format ) {
-        if ( $format eq 'json' ) {
-            $output = JSON::MaybeXS->new->encode({
-                policy        => $v->policy,
-                severity      => $v->severity,
-                line_number   => $v->logical_line_number,
-                column_number => $v->column_number,
-                source        => $v->source,
-            });
-        }
-        else {
-            Perl::Critic::Violation::set_format( $format );
-            $output = $v->to_string;
-        }
+sub display_violation {
+    my ($violation, $rel) = @_;
+
+    if ( $AS_JSON ) {
+        print JSON::MaybeXS->new->encode({
+            filename      => $violation->logical_filename,
+            line_number   => $violation->logical_line_number,
+            column_number => $violation->column_number,
+            policy        => $violation->policy,
+            severity      => $violation->severity,
+            source        => $violation->source,
+            description   => $violation->description,
+        });
     }
     else {
-        $output = $v->to_string;
+        if ( $VERBOSE ) {
+            print HR_DARK, "\n";
+            print BOLD, RED, (sprintf "Violation: %s\n" => $violation->description), RESET;
+            print HR_DARK, "\n";
+            print sprintf "%s\n" => $violation->explanation;
+            print HR_LIGHT, "\n";
+            #if ( $DEBUG ) {
+            #    print sprintf "%s\n" => $violation->diagnostics;
+            #    print HR_LIGHT, "\n";
+            #}
+            print sprintf "  policy   : %s\n"           => $violation->policy;
+            print sprintf "  severity : %d\n"           => $violation->severity;
+            print sprintf "  location : %s @ <%d:%d>\n" => (
+                $rel,
+                $violation->logical_line_number,
+                $violation->column_number
+            );
+            print HR_LIGHT, "\n";
+            print ITALIC, (sprintf "%s\n" => $violation->source), RESET;
+            print HR_LIGHT, "\n";
+            if ( $SHOW_SOURCE ) {
+                my @lines;
+
+                my $starting_line       = $violation->logical_line_number - 5;
+                   $starting_line       = 1 if $starting_line < 0;
+                my $lines_to_capture    = 10;
+                my $line_number_counter = $starting_line;
+
+                my $fh = path( $violation->logical_filename )->openr;
+                # skip to the start line ....
+                $fh->getline                while --$starting_line;
+                push @lines => $fh->getline while not($fh->eof) && --$lines_to_capture;
+                $fh->close;
+
+                # drop the first line if it is a blank
+                if ( $lines[0] =~ /^\s*$/ ) {
+                    $line_number_counter++;
+                    shift @lines;
+                }
+
+                foreach my $line ( @lines ) {
+
+                    if ( $line_number_counter eq $violation->logical_line_number ) {
+                        print BOLD, (sprintf '%03d:> %s' => $line_number_counter, (join '' => RED, $line)), RESET;
+                    }
+                    else {
+                        print FAINT, (sprintf '%03d:  %s' => $line_number_counter, (join '' => RESET, $line)), RESET;
+                    }
+
+                    $line_number_counter++;
+                }
+
+                print HR_LIGHT, "\n";
+            }
+        }
+        else {
+            print RED, $violation, RESET;
+        }
     }
-
-    $output = "$output\n" unless $output =~ /\n$/;
-    return $output;
 }
 
-sub resolve_perl_critic_policy_classname {
-    my ($policy) = @_;
-    Module::Runtime::use_module(
-        Perl::Critic::Utils::policy_long_name(
-            $policy
-        )
-    );
-}
+## ------------------------------------------
 
 sub usage {
     my ($error) = @_;
     print $error, "\n" if $error;
     print <<'USAGE';
 masoncritic [-dv] [long options...]
-    --dir         the root directory to look within
-    --policy      the Perl::Critic policy to use
-    --format      Perl::Critic::Violation format string, or the string 'json'
-    -d --debug    turn on debugging
-    -v --verbose  turn on verbosity
+    --dir                  the root directory to look within
+    --perl-critic-profile  set the Perl::Critic profile to use, defaults to $ENV{MASONCRITIC_PROFILE}
+    --perl-critic-theme    set the Perl::Critic theme to use, defaults to $ENV{MASONCRITIC_THEME}
+    --perl_critic_severity set the Perl::Critic severity, defaults to $ENV{MASONCRITIC_SEVERITY} or 1
+    --perl-critic-policy   set the Perl::Critic policy to use
+    --no-color             turn off color in the output
+    -d --debug             turn on debugging
+    -v --verbose           turn on verbosity
 USAGE
     exit(0);
 }
