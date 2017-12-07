@@ -7,6 +7,7 @@ use warnings;
 our $VERSION = '0.01';
 
 use Scalar::Util ();
+use IO::String   ();
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -43,6 +44,7 @@ sub object_code { $_[0]->{_obj_code} }
 
 # ... source
 
+sub as_fh  { IO::String->new( $_[0]->object_code ) }
 sub source { ${ $_[0]->object_code } }
 
 sub sanitized_source {
