@@ -113,6 +113,27 @@ exit;
 
 ## ------------------------------------------
 
+sub usage {
+    my ($error) = @_;
+    print $error, "\n" if $error;
+    print <<'USAGE';
+masoncritic [-dv] [long options...]
+    --dir                  the root directory to look within
+    --perl-critic-profile  set the Perl::Critic profile to use, defaults to $ENV{MASONCRITIC_PROFILE}
+    --perl-critic-theme    set the Perl::Critic theme to use, defaults to $ENV{MASONCRITIC_THEME}
+    --perl_critic_severity set the Perl::Critic severity, defaults to $ENV{MASONCRITIC_SEVERITY} or 1
+    --perl-critic-policy   set the Perl::Critic policy to use
+    --color                turn on/off color in the output
+    --json                 output the violations as JSON
+    --show-source          include the Mason source code in the output when in verbose mode
+    -d --debug             turn on debugging
+    -v --verbose           turn on verbosity
+USAGE
+    exit(0);
+}
+
+## ------------------------------------------
+
 sub TERM_WIDTH () {
     return eval {
         local $SIG{__WARN__} = sub {''};
@@ -198,27 +219,6 @@ sub display_violation {
             print RED, $violation, RESET;
         }
     }
-}
-
-## ------------------------------------------
-
-sub usage {
-    my ($error) = @_;
-    print $error, "\n" if $error;
-    print <<'USAGE';
-masoncritic [-dv] [long options...]
-    --dir                  the root directory to look within
-    --perl-critic-profile  set the Perl::Critic profile to use, defaults to $ENV{MASONCRITIC_PROFILE}
-    --perl-critic-theme    set the Perl::Critic theme to use, defaults to $ENV{MASONCRITIC_THEME}
-    --perl_critic_severity set the Perl::Critic severity, defaults to $ENV{MASONCRITIC_SEVERITY} or 1
-    --perl-critic-policy   set the Perl::Critic policy to use
-    --color                turn on/off color in the output
-    --json                 output the violations as JSON
-    --show-source          include the Mason source code in the output when in verbose mode
-    -d --debug             turn on debugging
-    -v --verbose           turn on verbosity
-USAGE
-    exit(0);
 }
 
 1;
