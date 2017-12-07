@@ -23,6 +23,7 @@ our %HAS; BEGIN {
         path        => sub { die 'A `path` is required' },
         # ...
         _compiler  => sub {},
+        _abs_path  => sub {},
         _main_comp => sub {},
     )
 }
@@ -68,7 +69,12 @@ sub BUILD {
     ## we return from this BUILD. I weep.
     ## -----------------------------------
     $self->{_compiler} = Clone::clone( $compiler );
+    $self->{_abs_path} = $source->friendly_name;
 }
+
+## accessors
+
+sub abs_path { $_[0]->{_abs_path} }
 
 ## access stuff within the frozen compiler ...
 

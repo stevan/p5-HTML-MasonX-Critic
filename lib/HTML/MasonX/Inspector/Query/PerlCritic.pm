@@ -32,7 +32,7 @@ sub critique_compiler_component {
             && $compiler->isa('HTML::MasonX::Inspector::Compiler');
 
     my $critic   = exists $opts{perl_critic} ? $opts{perl_critic} : Perl::Critic->new( %opts );
-    my $filename = $compiler->comp_path;
+    my $filename = $compiler->abs_path;
     my $comp     = $compiler->get_main_component;
     my $blocks   = $comp->blocks;
 
