@@ -31,9 +31,9 @@ our %HAS; BEGIN {
         use_color            => sub { $ENV{MASONCRITIC_USE_COLOR}   // 1 },
         as_json              => sub { $ENV{MASONCRITIC_AS_JSON}     // 0 },
 
-        perl_critic_profile  => sub {},
+        perl_critic_policy   => sub {},
         perl_critic_theme    => sub { $ENV{MASONCRITIC_PERL_CRITIC_THEME}         },
-        perl_critic_policy   => sub { $ENV{MASONCRITIC_PERL_CRITIC_PROFILE}       },
+        perl_critic_profile  => sub { $ENV{MASONCRITIC_PERL_CRITIC_PROFILE}       },
         perl_critic_severity => sub { $ENV{MASONCRITIC_PERL_CRITIC_SEVERITY} || 1 },
 
         ## private data
