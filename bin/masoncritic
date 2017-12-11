@@ -18,9 +18,8 @@ use Getopt::Long        'GetOptions';
 use IO::Prompt::Tiny    'prompt';
 use Term::ANSIColor     ':constants';
 
-use HTML::MasonX::Inspector;
-use HTML::MasonX::Inspector::Query::PerlCritic;
-use HTML::MasonX::Inspector::Util::MasonFileFinder;
+use HTML::MasonX::Critic;
+use HTML::MasonX::Critic::Util::MasonFileFinder;
 
 my $DEBUG       = $ENV{MASONCRITIC_DEBUG};
 my $VERBOSE     = $ENV{MASONCRITIC_VERBOSE};
@@ -70,12 +69,10 @@ if ( $perl_critic_profile ) {
 
 ## Set up globals
 
-my $ROOT_DIR = path( $dir );
-
-my $inspector        = HTML::MasonX::Inspector->new( comp_root => $ROOT_DIR, use_warnings => 1 );
-my $finder           = HTML::MasonX::Inspector::Util::MasonFileFinder->new( root_dir => $ROOT_DIR );
-my $all_files        = $finder->find_all_mason_files;
-my %perl_critic_args = (
+my $root_dir    = path( $dir );
+my $critic      = HTML::MasonX::Critic->new( comp_root => $root_dir );
+my $all_files   = HTML::MasonX::Critic::Util::MasonFileFinder->new( root_dir => $root_dir )->find_all_mason_files;
+my %critic_args = (
     ($perl_critic_severity ? ('-severity'      => $perl_critic_severity) : ()),
     ($perl_critic_policy   ? ('-single-policy' => $perl_critic_policy)   : ()),
     ($perl_critic_profile  ? ('-profile'       => $perl_critic_profile)  : ()),
@@ -84,12 +81,8 @@ my %perl_critic_args = (
 
 while ( my $file = $all_files->next ) {
 
-    my $rel        = $file->relative( $ROOT_DIR );
-    my $compiler   = $inspector->get_compiler_inspector_for_path( $rel );
-    my @violations = HTML::MasonX::Inspector::Query::PerlCritic->critique_compiler_component(
-        $compiler,
-        %perl_critic_args
-    );
+    my $rel        = $file->relative( $root_dir );
+    my @violations = $critic->critique( $rel, %critic_args );
 
     if ( @violations ) {
         print BOLD, "Found (".(scalar @violations).") violations in $rel\n", RESET
