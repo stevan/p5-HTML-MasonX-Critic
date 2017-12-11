@@ -31,6 +31,8 @@ our %HAS; BEGIN {
         use_color            => sub { $ENV{MASONCRITIC_USE_COLOR}   // 1 },
         as_json              => sub { $ENV{MASONCRITIC_AS_JSON}     // 0 },
 
+        mason_critic_policy  => sub {},
+
         perl_critic_policy   => sub {},
         perl_critic_theme    => sub { $ENV{MASONCRITIC_PERL_CRITIC_THEME}    },
         perl_critic_profile  => sub { $ENV{MASONCRITIC_PERL_CRITIC_PROFILE}  },
@@ -45,17 +47,19 @@ sub BUILD {
     my ($self) = @_;
 
     Getopt::Long::GetOptions(
-        'debug|d'                => \$self->{debug},
-        'verbose|v'              => \$self->{verbose},
-        'show-source'            => \$self->{show_source},
-        'color'                  => \$self->{use_color},
-        'json'                   => \$self->{as_json},
+        'debug|d'               => \$self->{debug},
+        'verbose|v'             => \$self->{verbose},
+        'show-source'           => \$self->{show_source},
+        'color'                 => \$self->{use_color},
+        'json'                  => \$self->{as_json},
 
-        'dir=s'                  => \$self->{dir},
+        'dir=s'                 => \$self->{dir},
 
-        'perl-critic-profile=s'  => \$self->{perl_critic_profile},
-        'perl-critic-theme=s'    => \$self->{perl_critic_theme},
-        'perl-critic-policy=s'   => \$self->{perl_critic_policy},
+        'mason-critic-policy=s' => \$self->{mason_critic_policy},
+
+        'perl-critic-profile=s' => \$self->{perl_critic_profile},
+        'perl-critic-theme=s'   => \$self->{perl_critic_theme},
+        'perl-critic-policy=s'  => \$self->{perl_critic_policy},
     );
 
     # do this first ...
@@ -98,6 +102,7 @@ sub BUILD {
                 perl_critic_policy
                 perl_critic_profile
                 perl_critic_theme
+                mason_critic_policy
             ]
         }
     );
@@ -114,6 +119,7 @@ masoncritic [-dv] [long options...]
     --perl-critic-profile  set the Perl::Critic profile to use, defaults to $ENV{MASONCRITIC_PROFILE}
     --perl-critic-theme    set the Perl::Critic theme to use, defaults to $ENV{MASONCRITIC_THEME}
     --perl-critic-policy   set the Perl::Critic policy to use
+    --mason-critic-policy  set the HTML::MasonX::Critic::Policy to use
     --color                turn on/off color in the output
     --json                 output the violations as JSON
     --show-source          include the Mason source code in the output when in verbose mode
@@ -207,9 +213,11 @@ sub _display_violation {
             if ( $self->{show_source} ) {
                 my @lines;
 
+                my $source_num_lines    = scalar split /\n/ => $violation->source;
+
                 my $starting_line       = $violation->logical_line_number - 5;
                    $starting_line       = 1 if $starting_line < 0;
-                my $lines_to_capture    = 10;
+                my $lines_to_capture    = 10 + $source_num_lines;
                 my $line_number_counter = $starting_line;
 
                 my $fh = Path::Tiny::path( $violation->logical_filename )->openr;
@@ -224,10 +232,16 @@ sub _display_violation {
                     shift @lines;
                 }
 
+                my $in_violation = 0;
                 foreach my $line ( @lines ) {
 
-                    if ( $line_number_counter eq $violation->logical_line_number ) {
+                    $in_violation = 1
+                        if $line_number_counter eq $violation->logical_line_number;
+
+                    if ( $in_violation ) {
                         print BOLD, (sprintf '%03d:> %s' => $line_number_counter, (join '' => RED, $line)), RESET;
+                        $source_num_lines--;
+                        $in_violation = 0 if $source_num_lines == 0
                     }
                     else {
                         print FAINT, (sprintf '%03d:  %s' => $line_number_counter, (join '' => RESET, $line)), RESET;

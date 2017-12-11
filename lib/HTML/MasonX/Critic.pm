@@ -12,6 +12,7 @@ use Scalar::Util ();
 use HTML::MasonX::Inspector;
 
 use HTML::MasonX::Inspector::Query::PerlCritic;
+use HTML::MasonX::Inspector::Query::MasonCritic;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -51,23 +52,45 @@ sub BUILD {
 
     # stuff for Mason::Critic ...
     $self->{_mason_critic_config} = {
-
+        ($config->{mason_critic_policy} ? ('policy' => $config->{mason_critic_policy}) : ()),
     };
 }
-
 
 sub critique {
     my ($self, $file) = @_;
 
-    my $compiler   = $self->{_inspector}->get_compiler_inspector_for_path( $file );
-    my @violations = HTML::MasonX::Inspector::Query::PerlCritic->critique_compiler_component(
-        $compiler,
-        %{ $self->{_perl_critic_config} }
-    );
+    my $compiler = $self->{_inspector}->get_compiler_inspector_for_path( $file );
+
+    my @violations;
+
+    if ( $self->_has_perl_critic_config ) {
+        push @violations => HTML::MasonX::Inspector::Query::PerlCritic->critique_compiler_component(
+            $compiler,
+            %{ $self->{_perl_critic_config} }
+        );
+    }
+
+    if ( $self->_has_mason_critic_config ) {
+        push @violations => HTML::MasonX::Inspector::Query::MasonCritic->critique_compiler_component(
+            $compiler,
+            %{ $self->{_mason_critic_config} }
+        );
+    }
 
     return @violations;
 }
 
+## ...
+
+sub _has_perl_critic_config {
+    my ($self) = @_;
+    return !! keys %{ $self->{_perl_critic_config} };
+}
+
+sub _has_mason_critic_config {
+    my ($self) = @_;
+    return !! keys %{ $self->{_mason_critic_config} };
+}
 
 1;
 
