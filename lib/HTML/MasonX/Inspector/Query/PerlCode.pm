@@ -9,6 +9,8 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
+use Perl::Critic::Utils ();
+
 use HTML::MasonX::Inspector::Perl::UsedModule;
 use HTML::MasonX::Inspector::Perl::UsedModule::Conditional;
 
@@ -16,6 +18,7 @@ use HTML::MasonX::Inspector::Perl::ConstantDeclaration;
 use HTML::MasonX::Inspector::Perl::SubroutineDeclaration;
 
 use HTML::MasonX::Inspector::Perl::MethodCall;
+use HTML::MasonX::Inspector::Perl::SubroutineCall;
 
 sub find_includes {
     my ($class, $perl_code, %opts) = @_;
@@ -101,6 +104,29 @@ sub find_method_calls {
 
     return @method_calls;
 }
+
+sub find_subroutine_calls {
+    my ($class, $perl_code, %opts) = @_;
+
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+        unless Scalar::Util::blessed( $perl_code )
+            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+
+    my @sub_calls = $perl_code->find_with_ppi(
+        node_type => 'PPI::Token::Word',
+        filter    => sub {
+            Perl::Critic::Utils::is_function_call( $_[0] )
+                &&
+            $_[0]->literal !~ /^(my|our|local)$/
+        },
+        transform => sub {
+            HTML::MasonX::Inspector::Perl::SubroutineCall->new( ppi => $_[0] )
+        }
+    );
+
+    return @sub_calls;
+}
+
 
 1;
 
