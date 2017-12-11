@@ -17,9 +17,12 @@ use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
-        comp_root    => sub { die 'A `comp_root` is required' },
+        comp_root => sub { die 'A `comp_root` is required' },
+        config    => sub { +{} },
         # ... private
-        _inspector   => sub {},
+        _inspector           => sub {},
+        _mason_critic_config => sub { +{} },
+        _perl_critic_config  => sub { +{} },
     )
 }
 
@@ -35,16 +38,31 @@ sub BUILD {
         comp_root    => $self->{comp_root},
         use_warnings => 1, # FIXME - not sure how, but this is ugly
     );
+
+    my $config = $self->{config};
+
+    # convert the perl-critic-* stuff to fit proper Perl::Critic args
+    $self->{_perl_critic_config} = {
+        ($config->{perl_critic_severity} ? ('-severity'      => $config->{perl_critic_severity}) : ()),
+        ($config->{perl_critic_policy}   ? ('-single-policy' => $config->{perl_critic_policy})   : ()),
+        ($config->{perl_critic_profile}  ? ('-profile'       => $config->{perl_critic_profile})  : ()),
+        ($config->{perl_critic_theme}    ? ('-theme'         => $config->{perl_critic_theme})    : ()),
+    };
+
+    # stuff for Mason::Critic ...
+    $self->{_mason_critic_config} = {
+
+    };
 }
 
 
 sub critique {
-    my ($self, $file, %critic_args) = @_;
+    my ($self, $file) = @_;
 
     my $compiler   = $self->{_inspector}->get_compiler_inspector_for_path( $file );
     my @violations = HTML::MasonX::Inspector::Query::PerlCritic->critique_compiler_component(
         $compiler,
-        %critic_args
+        %{ $self->{_perl_critic_config} }
     );
 
     return @violations;

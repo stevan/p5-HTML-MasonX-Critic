@@ -39,7 +39,6 @@ our %HAS; BEGIN {
         ## private data
         _mason_critic => sub {},
         _file_finder  => sub {},
-        _critic_args  => sub {},
     )
 }
 
@@ -91,14 +90,20 @@ sub BUILD {
         unless Scalar::Util::blessed( $self->{dir} )
             && $self->{dir}->isa('Path::Tiny');
 
-    $self->{_mason_critic} = HTML::MasonX::Critic->new( comp_root => $self->{dir} );
     $self->{_file_finder}  = HTML::MasonX::Critic::Util::MasonFileFinder->new( root_dir => $self->{dir} );
-    $self->{_critic_args}  = {
-        ($self->{perl_critic_severity} ? ('-severity'      => $self->{perl_critic_severity}) : ()),
-        ($self->{perl_critic_policy}   ? ('-single-policy' => $self->{perl_critic_policy})   : ()),
-        ($self->{perl_critic_profile}  ? ('-profile'       => $self->{perl_critic_profile})  : ()),
-        ($self->{perl_critic_theme}    ? ('-theme'         => $self->{perl_critic_theme})    : ()),
-    };
+    $self->{_mason_critic} = HTML::MasonX::Critic->new(
+        comp_root => $self->{dir},
+        config    => {
+            map {
+                $_ => $self->{ $_ }
+            } qw[
+                perl_critic_severity
+                perl_critic_policy
+                perl_critic_profile
+                perl_critic_theme
+            ]
+        }
+    );
 }
 
 ## ...
@@ -127,12 +132,11 @@ sub run {
 
     my $root_dir    = $self->{dir};
     my $critic      = $self->{_mason_critic};
-    my %critic_args = %{ $self->{_critic_args} };
     my $all_files   = $self->{_file_finder}->find_all_mason_files( relative => 1 );
 
     while ( my $file = $all_files->next ) {
 
-        if ( my @violations = $critic->critique( $file, %critic_args ) ) {
+        if ( my @violations = $critic->critique( $file ) ) {
 
             print BOLD, "Found (".(scalar @violations).") violations in $file\n", RESET
                 unless $self->{as_json};
