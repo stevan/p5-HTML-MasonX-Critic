@@ -14,7 +14,7 @@ our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
 our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
 
 use constant DESC => 'Importing Tags is bad';
-use constant EXPL => 'It is bad to import whole tags into Mason';
+use constant EXPL => 'Importing the tag set \'%s\' into Mason is ill-advised due to Mason using the global HTML::Mason::Command namespace.';
 
 sub violates {
     my ($self, $component) = @_;
@@ -42,7 +42,7 @@ sub violates {
                 if (  $import->is_tag ) {
                     push @violations => HTML::MasonX::Critic::Violation->new(
                         description   => DESC,
-                        explanation   => EXPL,
+                        explanation   => (sprintf EXPL, $import->token),
                         policy        => __PACKAGE__,
                         filename      => $include->ppi->logical_filename,
                         source        => $include->source,
