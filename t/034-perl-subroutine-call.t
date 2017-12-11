@@ -62,17 +62,29 @@ subtest '... testing querying for subroutine calls' => sub {
             my @subcalls = HTML::MasonX::Inspector::Query::PerlCode->find_subroutine_calls( $init );
             is(scalar(@subcalls), 3, '... got the two calls');
 
-            is($subcalls[0]->name, 'Scalar::Util::looks_like_number', '... got the name we expected');
+            is($subcalls[0]->literal, 'Scalar::Util::looks_like_number', '... got the literal value we expected');
             is($subcalls[0]->line_number, 8, '... got the line_number we expected');
             is($subcalls[0]->column_number, 6, '... got the column_number we expected');
+
+            ok($subcalls[0]->is_fully_qualified_call, '... got the answer we expected');
+            is($subcalls[0]->name, 'looks_like_number', '... got the name we expected');
+            is($subcalls[0]->package_name, 'Scalar::Util', '... got the name we expected');
 
             is($subcalls[1]->name, 'max', '... got the name we expected');
             is($subcalls[1]->line_number, 9, '... got the line_number we expected');
             is($subcalls[1]->column_number, 10, '... got the column_number we expected');
 
+            ok(!$subcalls[1]->is_fully_qualified_call, '... got the answer we expected');
+            is($subcalls[1]->name, 'max', '... got the name we expected');
+            is($subcalls[1]->package_name, undef, '... got the name we expected');
+
             is($subcalls[2]->name, 'blessed', '... got the name we expected');
             is($subcalls[2]->line_number, 10, '... got the line_number we expected');
             is($subcalls[2]->column_number, 12, '... got the column_number we expected');
+
+            ok(!$subcalls[2]->is_fully_qualified_call, '... got the answer we expected');
+            is($subcalls[2]->name, 'blessed', '... got the name we expected');
+            is($subcalls[2]->package_name, undef, '... got the name we expected');
 
         };
 

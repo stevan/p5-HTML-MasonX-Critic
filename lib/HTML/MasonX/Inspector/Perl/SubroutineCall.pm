@@ -29,9 +29,43 @@ sub BUILD {
 
 sub ppi { $_[0]->{ppi} }
 
-sub name          { $_[0]->{ppi}->literal             }
+sub literal       { $_[0]->{ppi}->literal             }
 sub line_number   { $_[0]->{ppi}->logical_line_number }
 sub column_number { $_[0]->{ppi}->column_number       }
+
+sub is_fully_qualified_call {
+    my ($self) = @_;
+    return index( $self->literal, '::' ) >= 0;
+}
+
+sub package_name {
+    my ($self) = @_;
+
+    # split it into parts ...
+    my @namespace = split /\:\:/ => $self->literal;
+
+    # pop off the last part (the sub name)
+    pop @namespace;
+
+    # if we have nothing left, oh well
+    return undef unless @namespace;
+
+    # but if we do, make it a package again ...
+    return join '::' => @namespace;
+}
+
+sub name {
+    my ($self) = @_;
+
+    if ( $self->is_fully_qualified_call ) {
+        return (split /\:\:/ => $self->literal)[-1]
+    }
+    else {
+        return $self->literal;
+    }
+}
+
+
 
 1;
 
