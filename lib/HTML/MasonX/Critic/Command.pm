@@ -32,9 +32,9 @@ our %HAS; BEGIN {
         as_json              => sub { $ENV{MASONCRITIC_AS_JSON}     // 0 },
 
         perl_critic_profile  => sub {},
-        perl_critic_theme    => sub { $ENV{MASONCRITIC_THEME}         },
-        perl_critic_policy   => sub { $ENV{MASONCRITIC_PROFILE}       },
-        perl_critic_severity => sub { $ENV{MASONCRITIC_SEVERITY} || 1 },
+        perl_critic_theme    => sub { $ENV{MASONCRITIC_PERL_CRITIC_THEME}         },
+        perl_critic_policy   => sub { $ENV{MASONCRITIC_PERL_CRITIC_PROFILE}       },
+        perl_critic_severity => sub { $ENV{MASONCRITIC_PERL_CRITIC_SEVERITY} || 1 },
 
         ## private data
         _mason_critic => sub {},
