@@ -27,6 +27,13 @@ sub BUILD {
 		unless Scalar::Util::blessed( $self->{ppi} )
 			&& $self->{ppi}->isa('PPI::Statement::Include');
 
+    # TODO:
+    # Look into using PPIx::Utilities::Statement export,
+    # &get_constant_name_elements_from_declaring_statement
+    # to parse out the constant values, the code below is
+    # probably not as good.
+    # - SL
+
     my @args = $self->{ppi}->arguments;
 
     # if we have a HASH ref constructor ...
