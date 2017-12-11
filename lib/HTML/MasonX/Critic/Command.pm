@@ -214,9 +214,8 @@ sub _display_violation {
                 my @lines;
 
                 my $source_num_lines    = scalar split /\n/ => $violation->source;
-
                 my $starting_line       = $violation->logical_line_number - 5;
-                   $starting_line       = 1 if $starting_line < 0;
+                   $starting_line       = 1 if $starting_line <= 0;
                 my $lines_to_capture    = 10 + $source_num_lines;
                 my $line_number_counter = $starting_line;
 
