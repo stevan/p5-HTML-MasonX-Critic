@@ -180,7 +180,7 @@ sub _display_violation {
             severity      => $violation->severity,
             source        => $violation->source,
             description   => $violation->description,
-            explanation   => $violation->explanation,
+            explanation  => $violation->explanation,
         }), "\n";
     }
     else {
