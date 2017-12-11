@@ -54,7 +54,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
         subtest '... testing the method call without a name' => sub {
 
             my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls( $init );
-            is(scalar(@method_calls), 5, '... got the two calls');
+            is(scalar(@method_calls), 5, '... got the 5 calls');
 
             is($method_calls[0]->name, 'comp', '... got the name we expected');
             is($method_calls[0]->line_number, 3, '... got the line_number we expected');
