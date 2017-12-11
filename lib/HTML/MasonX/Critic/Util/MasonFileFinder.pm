@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Util::MasonFileFinder;
+package HTML::MasonX::Critic::Util::MasonFileFinder;
 # ABSTRACT: Utility module to locate Mason files
 
 use strict;
