@@ -32,9 +32,8 @@ our %HAS; BEGIN {
         as_json              => sub { $ENV{MASONCRITIC_AS_JSON}     // 0 },
 
         perl_critic_policy   => sub {},
-        perl_critic_theme    => sub { $ENV{MASONCRITIC_PERL_CRITIC_THEME}         },
-        perl_critic_profile  => sub { $ENV{MASONCRITIC_PERL_CRITIC_PROFILE}       },
-        perl_critic_severity => sub { $ENV{MASONCRITIC_PERL_CRITIC_SEVERITY} || 1 },
+        perl_critic_theme    => sub { $ENV{MASONCRITIC_PERL_CRITIC_THEME}    },
+        perl_critic_profile  => sub { $ENV{MASONCRITIC_PERL_CRITIC_PROFILE}  },
 
         ## private data
         _mason_critic => sub {},
@@ -57,7 +56,6 @@ sub BUILD {
         'perl-critic-profile=s'  => \$self->{perl_critic_profile},
         'perl-critic-theme=s'    => \$self->{perl_critic_theme},
         'perl-critic-policy=s'   => \$self->{perl_critic_policy},
-        'perl-critic-severity=s' => \$self->{perl_critic_severity},
     );
 
     # do this first ...
@@ -97,7 +95,6 @@ sub BUILD {
             map {
                 $_ => $self->{ $_ }
             } qw[
-                perl_critic_severity
                 perl_critic_policy
                 perl_critic_profile
                 perl_critic_theme
@@ -116,7 +113,6 @@ masoncritic [-dv] [long options...]
     --dir                  the root directory to look within
     --perl-critic-profile  set the Perl::Critic profile to use, defaults to $ENV{MASONCRITIC_PROFILE}
     --perl-critic-theme    set the Perl::Critic theme to use, defaults to $ENV{MASONCRITIC_THEME}
-    --perl_critic_severity set the Perl::Critic severity, defaults to $ENV{MASONCRITIC_SEVERITY} or 1
     --perl-critic-policy   set the Perl::Critic policy to use
     --color                turn on/off color in the output
     --json                 output the violations as JSON
