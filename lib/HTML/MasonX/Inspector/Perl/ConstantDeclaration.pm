@@ -64,7 +64,8 @@ sub BUILD {
     $self->{_arguments} = [ map { "$_" } @args ];
 }
 
-sub ppi { $_[0]->{ppi} }
+sub ppi    { $_[0]->{ppi} }
+sub source { $_[0]->{ppi}->content }
 
 sub symbol        {    $_[0]->{_symbol}               }
 sub arguments     { @{ $_[0]->{_arguments} }          }

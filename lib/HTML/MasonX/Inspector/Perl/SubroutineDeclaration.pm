@@ -25,7 +25,8 @@ sub BUILD {
 			&& $self->{ppi}->isa('PPI::Statement::Sub');
 }
 
-sub ppi { $_[0]->{ppi} }
+sub ppi    { $_[0]->{ppi} }
+sub source { $_[0]->{ppi}->content }
 
 sub symbol        { $_[0]->{ppi}->name                }
 sub line_number   { $_[0]->{ppi}->logical_line_number }

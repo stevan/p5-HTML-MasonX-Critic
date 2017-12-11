@@ -27,7 +27,8 @@ sub BUILD {
             && $self->{ppi}->isa('PPI::Token::Word');
 }
 
-sub ppi { $_[0]->{ppi} }
+sub ppi    { $_[0]->{ppi} }
+sub source { $_[0]->{ppi}->content }
 
 sub literal       { $_[0]->{ppi}->literal             }
 sub line_number   { $_[0]->{ppi}->logical_line_number }

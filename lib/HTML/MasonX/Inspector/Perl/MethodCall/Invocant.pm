@@ -25,7 +25,8 @@ sub BUILD {
             && ($self->{ppi}->isa('PPI::Token::Symbol') || $self->{ppi}->isa('PPI::Token::Word'));
 }
 
-sub ppi { $_[0]->{ppi} }
+sub ppi    { $_[0]->{ppi} }
+sub source { $_[0]->{ppi}->content }
 
 sub name          { $_[0]->{ppi}->content                 }
 sub is_virtual    { $_[0]->{ppi}->isa('PPI::Token::Word') }
