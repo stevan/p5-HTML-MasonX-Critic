@@ -20,6 +20,9 @@ $COMP_ROOT->child( $MASON_FILE_NAME )->spew(q[
 <%shared>
 my ($foo, $bar);
 </%shared>
+<%filter>
+tr/a-z/A-Z/
+</%filter>
 ]);
 
 subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
@@ -51,6 +54,38 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
         is($shared->column_number, 1, '... got the expected column number');
         is($shared->filename, $state->abs_path, '... got the expected filename');
         is($shared->policy, $POLICY, '... got the expected policy');
+    };
+};
+
+subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
+
+    my $POLICY = 'HTML::MasonX::Critic::Policy::Blocks::ProhibitFilterBlocks';
+
+    my $i = HTML::MasonX::Inspector->new( comp_root => $COMP_ROOT );
+    isa_ok($i, 'HTML::MasonX::Inspector');
+
+    my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
+    isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
+
+    my @violations = HTML::MasonX::Inspector::Query::MasonCritic->critique_compiler_component(
+        $state,
+        policy => $POLICY
+    );
+
+    is(scalar(@violations), 1, '... got two violations back');
+    my ($filter) = @violations;
+
+    subtest '... testing the violation' => sub {
+
+        is(
+            $filter->source,
+            (join "\n" => '<%filter>', 'tr/a-z/A-Z/', '</%filter>'),
+            '... got the expected source'
+        );
+        is($filter->line_number, 5, '... got the expected line number');
+        is($filter->column_number, 1, '... got the expected column number');
+        is($filter->filename, $state->abs_path, '... got the expected filename');
+        is($filter->policy, $POLICY, '... got the expected policy');
     };
 };
 
