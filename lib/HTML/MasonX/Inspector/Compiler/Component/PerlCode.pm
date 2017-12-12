@@ -62,7 +62,7 @@ sub find_with_ppi {
 
     my ($node_type, $filter, $transform) = @opts{qw[ node_type filter transform ]};
 
-    my @results = @{ $self->{_ppi}->find( $node_type ) };
+    my @results = @{ $self->{_ppi}->find( $node_type ) || [] };
     return unless @results;
 
     @results = grep { $filter->($_)    } @results if $filter;
