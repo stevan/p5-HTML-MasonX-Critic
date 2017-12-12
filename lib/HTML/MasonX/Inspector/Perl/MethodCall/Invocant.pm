@@ -30,6 +30,7 @@ sub source { $_[0]->{ppi}->content }
 
 sub name          { $_[0]->{ppi}->content                 }
 sub is_virtual    { $_[0]->{ppi}->isa('PPI::Token::Word') }
+sub filename      { $_[0]->{ppi}->logical_filename        }
 sub line_number   { $_[0]->{ppi}->logical_line_number     }
 sub column_number { $_[0]->{ppi}->column_number           }
 
