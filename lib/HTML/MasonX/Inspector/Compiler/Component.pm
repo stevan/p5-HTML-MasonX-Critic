@@ -42,9 +42,10 @@ sub attributes     { $_[0]->{attributes}     }
 sub flags          { $_[0]->{flags}          }
 sub methods        { $_[0]->{methods}        }
 sub sub_components { $_[0]->{sub_components} }
+sub blocks         { $_[0]->{blocks}         }
 
-sub body   { $_[0]->{body}   }
-sub blocks { $_[0]->{blocks} }
+sub body     {         $_[0]->{body} }
+sub has_body { defined $_[0]->{body} }
 
 1;
 
