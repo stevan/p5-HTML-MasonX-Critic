@@ -14,28 +14,28 @@ our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
 our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
 
 use constant DESC => q[Only allow modules to be loaded within <%once> blocks.];
-use constant EXPL => q[Module '%s' should only be used within <%%once> blocks, all other blocks may be executed multiple times.];
+use constant EXPL => q[Using the module '%s' in the '%s' block is bad, modules should only be used within <%%once> blocks.];
 
 sub violates {
     my ($self, $component) = @_;
 
     my @violations;
 
-    push @violations, $self->_check_blocks_for_includes( $component->body )
+    push @violations, $self->_check_blocks_for_includes( body => $component->body )
         if $component->has_body;
 
     my $blocks = $component->blocks;
 
-    push @violations => $self->_check_blocks_for_includes( @{ $blocks->init_blocks } )
+    push @violations => $self->_check_blocks_for_includes( init => @{ $blocks->init_blocks } )
         if $blocks->has_init_blocks;
 
-    push @violations => $self->_check_blocks_for_includes( @{ $blocks->filter_blocks } )
+    push @violations => $self->_check_blocks_for_includes( filter => @{ $blocks->filter_blocks } )
         if $blocks->has_filter_blocks;
 
-    push @violations => $self->_check_blocks_for_includes( @{ $blocks->cleanup_blocks } )
+    push @violations => $self->_check_blocks_for_includes( cleanup => @{ $blocks->cleanup_blocks } )
         if $blocks->has_cleanup_blocks;
 
-    push @violations => $self->_check_blocks_for_includes( @{ $blocks->shared_blocks } )
+    push @violations => $self->_check_blocks_for_includes( shared => @{ $blocks->shared_blocks } )
         if $blocks->has_shared_blocks;
 
     return @violations;
@@ -44,7 +44,7 @@ sub violates {
 # ...
 
 sub _check_blocks_for_includes {
-    my ($self, @blocks) = @_;
+    my ($self, $block_type, @blocks) = @_;
 
     my @violations;
     foreach my $block ( @blocks ) {
@@ -54,7 +54,7 @@ sub _check_blocks_for_includes {
         foreach my $include ( @includes ) {
             push @violations => $self->violation(
                 DESC,
-                (sprintf EXPL, $include->module),
+                (sprintf EXPL, $include->module, $block_type),
                 $include,
             );
         }
