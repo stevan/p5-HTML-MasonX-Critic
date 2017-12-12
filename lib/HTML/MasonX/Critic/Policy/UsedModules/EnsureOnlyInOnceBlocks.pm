@@ -6,7 +6,6 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Critic::Violation;
 use HTML::MasonX::Inspector::Query::PerlCode;
 
 use HTML::MasonX::Critic::Policy;
