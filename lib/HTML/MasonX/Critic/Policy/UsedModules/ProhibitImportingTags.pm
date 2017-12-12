@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Policy::ProhibitIncludesFromImportingTags;
+package HTML::MasonX::Critic::Policy::UsedModules::ProhibitImportingTags;
 # ABSTRACT: Mason policy to not allow tags to be imported
 
 use strict;
@@ -13,7 +13,7 @@ use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
 our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
 
-use constant DESC => q[Importing tags (sets of exported functions) into Mason is bad.];
+use constant DESC => q[Importing tags (sets of exported functions) is bad.];
 use constant EXPL => q[Importing tag '%s' into Mason is ill-advised because Mason includes all imports in the same HTML::Mason::Command namespace.];
 
 sub violates {
@@ -60,8 +60,17 @@ __END__
 
 =pod
 
-=head1 SYNOPSIS
-
 =head1 DESCRIPTION
+
+Importing tags (sets of subroutine exports) into Mason is ill-advised
+because Mason adds all imports into the same L<HTML::Mason::Command>
+namespace. This is a problem because all Mason pages share this same
+namespace and so can easily trample on each other's imports. This
+can create bugs that are sensitive to the loading order of Mason pages
+since Mason pages are often compiled on-demand.
+
+Because of all this it is better to be explict about exactly what you
+wish to import, or to not import anything at all and use fully qualified
+subroutine calls.
 
 =cut
