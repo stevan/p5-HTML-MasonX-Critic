@@ -6,6 +6,9 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use Carp         ();
+use Scalar::Util ();
+
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
@@ -13,22 +16,33 @@ our %HAS; BEGIN {
         description   => sub { die 'A `description` must be provided'  },
         explanation   => sub { die 'An `explanation` must be provided' },
         policy        => sub { die 'An `policy` must be provided'      },
-        filename      => sub { die 'A `filename` must be provided'     },
-        source        => sub { die 'A `source` must be provided'       },
-        line_number   => sub { 0 },
-        column_number => sub { 0 },
+        element       => sub { die 'An `element` must be provided'     },
     )
+}
+
+sub BUILD {
+    my ($self, $params) = @_;
+
+    Carp::confess('The `element` must be an object which responds to the following methods: filename, source, line_number, column_number')
+        unless Scalar::Util::blessed( $self->{element} )
+            && $self->{element}->can('filename')
+            && $self->{element}->can('source')
+            && $self->{element}->can('line_number')
+            && $self->{element}->can('column_number');
 }
 
 ## accessors
 
-sub description   { $_[0]->{description}   }
-sub explanation   { $_[0]->{explanation}   }
-sub policy        { $_[0]->{policy}        }
-sub filename      { $_[0]->{filename}      }
-sub source        { $_[0]->{source}        }
-sub line_number   { $_[0]->{line_number}   }
-sub column_number { $_[0]->{column_number} }
+sub description   { $_[0]->{description} }
+sub explanation   { $_[0]->{explanation} }
+sub policy        { $_[0]->{policy}      }
+
+# deletgators ...
+
+sub filename      { $_[0]->{element}->filename      }
+sub source        { $_[0]->{element}->source        }
+sub line_number   { $_[0]->{element}->line_number   }
+sub column_number { $_[0]->{element}->column_number }
 
 ## Fulfill the expected interface ...
 
