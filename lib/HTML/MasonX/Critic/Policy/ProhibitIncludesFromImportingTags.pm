@@ -40,14 +40,10 @@ sub violates {
 
             foreach my $import ( @imports ) {
                 if (  $import->is_tag ) {
-                    push @violations => HTML::MasonX::Critic::Violation->new(
-                        description   => DESC,
-                        explanation   => (sprintf EXPL, $import->token),
-                        policy        => __PACKAGE__,
-                        filename      => $include->ppi->logical_filename,
-                        source        => $include->source,
-                        line_number   => $include->line_number,
-                        column_number => $include->column_number,
+                    push @violations => $self->violation(
+                        DESC,
+                        (sprintf EXPL, $import->token),
+                        $include,
                     );
                 }
             }

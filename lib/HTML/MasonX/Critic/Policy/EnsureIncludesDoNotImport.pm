@@ -36,14 +36,10 @@ sub violates {
             # skip if we have no imports ...
             next if $include->number_of_imports == 0;
 
-            push @violations => HTML::MasonX::Critic::Violation->new(
-                description   => DESC,
-                explanation   => (sprintf EXPL, $include->module),
-                policy        => __PACKAGE__,
-                filename      => $include->ppi->logical_filename,
-                source        => $include->source,
-                line_number   => $include->line_number,
-                column_number => $include->column_number,
+            push @violations => $self->violation(
+                DESC,
+                (sprintf EXPL, $include->module),
+                $include
             );
         }
     }
