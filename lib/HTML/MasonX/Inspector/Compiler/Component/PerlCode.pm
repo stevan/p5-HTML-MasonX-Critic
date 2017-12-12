@@ -44,6 +44,19 @@ sub checksum {
     $self->{_checksum} //= Digest::MD5::md5_hex( $self->raw );
 }
 
+sub discover_filename {
+    my ($self) = @_;
+
+    my $code = ${ $_[0]->{source} };
+
+    my ($filename) = ($code =~ /^#line \d* \"(.*)\"/);
+
+    Carp::confess('Unable to find filename in:['.$code.']')
+        if $code && not $filename;
+
+    return $filename;
+}
+
 sub starting_line_number {
     my ($self) = @_;
 
