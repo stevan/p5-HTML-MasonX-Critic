@@ -17,6 +17,9 @@ sub critique_compiler_component {
         unless Scalar::Util::blessed($compiler)
             && $compiler->isa('HTML::MasonX::Inspector::Compiler');
 
+    $opts{policy} = 'HTML::MasonX::Critic::Policy::'.$opts{policy}
+        unless index( $opts{policy}, 'HTML::MasonX::Critic::Policy::' ) == 0;
+
     my $policy     = Module::Runtime::use_package_optimistically( $opts{policy} )->new;
     my $component  = $compiler->get_main_component;
     my @violations = $policy->violates( $component );
