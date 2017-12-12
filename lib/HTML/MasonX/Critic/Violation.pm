@@ -17,6 +17,11 @@ our %HAS; BEGIN {
         explanation   => sub { die 'An `explanation` must be provided' },
         policy        => sub { die 'An `policy` must be provided'      },
         element       => sub { die 'An `element` must be provided'     },
+        # private data
+        _filename      => sub {},
+        _source        => sub {},
+        _line_number   => sub {},
+        _column_number => sub {},
     )
 }
 
@@ -29,20 +34,28 @@ sub BUILD {
             && $self->{element}->can('source')
             && $self->{element}->can('line_number')
             && $self->{element}->can('column_number');
+
+    # NOTE:
+    # grab this information now, otherwise it is
+    # possible that these values in the element
+    # might get garbage collected because PPI
+    # is so freakin' insane about that stuff.
+    # - SL
+    $self->{_filename}      = $self->{element}->filename;
+    $self->{_source}        = $self->{element}->source;
+    $self->{_line_number}   = $self->{element}->line_number;
+    $self->{_column_number} = $self->{element}->column_number;
 }
 
 ## accessors
 
-sub description   { $_[0]->{description} }
-sub explanation   { $_[0]->{explanation} }
-sub policy        { $_[0]->{policy}      }
-
-# deletgators ...
-
-sub filename      { $_[0]->{element}->filename      }
-sub source        { $_[0]->{element}->source        }
-sub line_number   { $_[0]->{element}->line_number   }
-sub column_number { $_[0]->{element}->column_number }
+sub description   { $_[0]->{description}    }
+sub explanation   { $_[0]->{explanation}    }
+sub policy        { $_[0]->{policy}         }
+sub filename      { $_[0]->{_filename}      }
+sub source        { $_[0]->{_source}        }
+sub line_number   { $_[0]->{_line_number}   }
+sub column_number { $_[0]->{_column_number} }
 
 ## Fulfill the expected interface ...
 
