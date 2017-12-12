@@ -13,8 +13,8 @@ use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
 our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
 
-use constant DESC => 'Importing functions in Mason is bad';
-use constant EXPL => 'Importing functions from \'%s\' is ill-advised due to Mason using the global HTML::Mason::Command namespace.';
+use constant DESC => q[Importing functions into Mason is bad.];
+use constant EXPL => q[Importing functions from \'%s\' into Mason is ill-advised because Mason includes all imports in the same HTML::Mason::Command namespace.];
 
 sub violates {
     my ($self, $component) = @_;
