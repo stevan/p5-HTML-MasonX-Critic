@@ -58,7 +58,7 @@ sub get_violation_lines {
         @lines = $self->get_all_lines;
     }
     else {
-        Carp::confess('You must choose some options');
+        @lines = $self->get_lines_at( $start, $end );
     }
 
     foreach my $line ( @lines ) {
