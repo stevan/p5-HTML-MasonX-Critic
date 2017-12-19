@@ -1,5 +1,5 @@
 package HTML::MasonX::Critic::Policy::UsedModules::ProhibitSubCallsWithoutExplicitImport;
-# ABSTRACT: Make sure that all explictly imported subroutines are used
+# ABSTRACT: Make sure that all called subroutines are explicitly imported
 
 use strict;
 use warnings;
