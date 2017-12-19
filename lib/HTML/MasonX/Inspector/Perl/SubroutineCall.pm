@@ -6,8 +6,9 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Carp         ();
-use Scalar::Util ();
+use Carp                ();
+use Scalar::Util        ();
+use Perl::Critic::Utils ();
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -34,6 +35,10 @@ sub literal       { $_[0]->{ppi}->literal             }
 sub filename      { $_[0]->{ppi}->logical_filename    }
 sub line_number   { $_[0]->{ppi}->logical_line_number }
 sub column_number { $_[0]->{ppi}->column_number       }
+
+sub is_built_in {
+    Perl::Critic::Utils::is_perl_builtin( $_[0]->{ppi} )
+}
 
 sub is_fully_qualified_call {
     my ($self) = @_;
