@@ -6,8 +6,13 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use Carp         ();
-use Scalar::Util ();
+use Carp                ();
+use Scalar::Util        ();
+use String::Format      ();
+use File::Basename      ();
+use Perl::Critic::Utils ();
+
+use overload '""' => 'to_string';
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -59,10 +64,44 @@ sub column_number { $_[0]->{_column_number} }
 
 ## Fulfill the expected interface ...
 
-sub severity { 1 }
+sub severity { 1 } # we don't mess around
 
 *logical_filename    = \&filename;
 *logical_line_number = \&line_number;
+
+# NOTE:
+# this whole &to_string and &{get,set}_format
+# thing is stolen from Perl::Critic.
+# - SL
+
+my $format = Perl::Critic::Utils::verbosity_to_format;
+
+sub set_format { $format = Perl::Critic::Utils::verbosity_to_format( $_[0] ) }
+sub get_format { $format }
+
+sub to_string {
+    my $self = shift;
+
+    return String::Format::stringf(
+        $format => (
+            'f' => sub { $self->logical_filename },
+            'g' => sub { $self->filename },
+            'F' => sub { File::Basename::basename( $self->logical_filename ) },
+            'G' => sub { File::Basename::basename( $self->filename ) },
+            'l' => sub { $self->logical_line_number },
+            'L' => sub { $self->line_number },
+            'c' => sub { $self->column_number },
+            'C' => sub { Scalar::Util::blessed( $self->{element} ) },
+            'm' => $self->description,
+            'e' => $self->explanation,
+            's' => $self->severity,
+            'P' => $self->policy,
+            'p' => ($self->policy =~ s/^.*\:\:Critic\:\:Policy\:\://r),
+            'd' => sub { $self->explanation },
+            'r' => sub { $self->source },
+        )
+    );
+}
 
 1;
 
