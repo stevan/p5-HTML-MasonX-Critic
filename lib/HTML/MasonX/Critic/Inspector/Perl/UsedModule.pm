@@ -36,6 +36,8 @@ sub BUILD {
 sub ppi    { $_[0]->{ppi} }
 sub source { $_[0]->{ppi}->content }
 
+sub highlight     { $_[0]->module }
+
 sub filename      { $_[0]->{ppi}->logical_filename    }
 sub line_number   { $_[0]->{ppi}->logical_line_number }
 sub column_number { $_[0]->{ppi}->column_number       }

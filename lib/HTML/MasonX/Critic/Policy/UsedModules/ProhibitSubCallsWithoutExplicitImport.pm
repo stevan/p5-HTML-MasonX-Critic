@@ -8,8 +8,6 @@ our $VERSION = '0.01';
 
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
-use HTML::MasonX::Critic::Inspector::Mason::SubroutineCall;
-
 use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
 our %HAS; BEGIN {
@@ -76,9 +74,7 @@ sub violates {
                 push @violations => $self->violation(
                     DESC,
                     (sprintf EXPL, $sub_call->literal),
-                    HTML::MasonX::Critic::Inspector::Mason::SubroutineCall->new(
-                        sub_call => $sub_call
-                    )
+                    $sub_call
                 );
             }
         }
