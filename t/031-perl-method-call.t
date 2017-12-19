@@ -9,7 +9,7 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok('HTML::MasonX::Critic::Inspector');
+    use_ok('HTML::MasonX::Critic');
     use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCode');
 }
 

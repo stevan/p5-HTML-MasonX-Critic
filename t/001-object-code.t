@@ -9,7 +9,7 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok('HTML::MasonX::Critic::Inspector');
+    use_ok('HTML::MasonX::Critic');
 }
 
 my $MASON_FILE = '001-object-code.html';

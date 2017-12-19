@@ -6,7 +6,7 @@ use warnings;
 use Test::More;
 
 BEGIN {
-    use_ok('HTML::MasonX::Critic::Inspector');
+    use_ok('HTML::MasonX::Critic');
 }
 
 done_testing;
