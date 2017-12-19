@@ -9,10 +9,14 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
+use HTML::MasonX::Critic::Policy;
+use HTML::MasonX::Critic::Violation;
+
 use HTML::MasonX::Critic::Inspector;
 
 use HTML::MasonX::Critic::Inspector::Query::PerlCritic;
 use HTML::MasonX::Critic::Inspector::Query::MasonCritic;
+use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
