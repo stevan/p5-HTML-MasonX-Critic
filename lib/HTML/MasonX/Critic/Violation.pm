@@ -29,6 +29,7 @@ our %HAS; BEGIN {
         _source        => sub {},
         _line_number   => sub {},
         _column_number => sub {},
+        _highlight     => sub {},
     )
 }
 
@@ -52,6 +53,10 @@ sub BUILD {
     $self->{_source}        = $self->{element}->source;
     $self->{_line_number}   = $self->{element}->line_number;
     $self->{_column_number} = $self->{element}->column_number;
+
+    if ( $self->{element}->can('highlight') ) {
+        $self->{_highlight} = $self->{element}->highlight;
+    }
 }
 
 ## accessors
@@ -63,6 +68,7 @@ sub filename      { $_[0]->{_filename}      }
 sub source        { $_[0]->{_source}        }
 sub line_number   { $_[0]->{_line_number}   }
 sub column_number { $_[0]->{_column_number} }
+sub highlight     { $_[0]->{_highlight}     }
 
 ## the associated source file ...
 

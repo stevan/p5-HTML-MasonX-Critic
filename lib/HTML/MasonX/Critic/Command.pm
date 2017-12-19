@@ -228,14 +228,14 @@ sub _display_violation {
                     shift @lines;
                 }
 
-                my $plain_source       = $violation->source;
-                my $highlighted_source = join '' => BLUE, $plain_source, RED;
+                my $highlight = $violation->highlight;
 
                 foreach my $line ( @lines ) {
                     if ( $line->in_violation ) {
                         my $source = $line->line;
-                        if ( $source ne $plain_source && $source !~ /^\s*$plain_source\s*$/ ) {
-                            $source =~ s/$plain_source/$highlighted_source/;
+                        if ( $highlight && $source ne $highlight ) {
+                            my $highlighted = join '' => BLUE, $highlight, RED;
+                            $source =~ s/$highlight/$highlighted/;
                         }
                         print BOLD, (sprintf '%03d:> %s' => $line->line_num, (join '' => RED, $source)), RESET;
                     }
