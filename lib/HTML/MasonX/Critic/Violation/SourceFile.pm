@@ -42,7 +42,7 @@ sub get_violation_lines {
     my $violation_end   = $end;
 
     my @lines;
-    if ( $opts{before} && $opts{after} ) {
+    if ( $opts{before} || $opts{after} ) {
         if ( my $lines_before = $opts{before} ) {
             $start -= $lines_before;
             $start = 1 if $start <= 0;
