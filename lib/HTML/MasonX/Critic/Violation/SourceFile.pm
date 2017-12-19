@@ -6,6 +6,8 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use HTML::MasonX::Critic::Violation::SourceFile::Line;
+
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
@@ -59,10 +61,9 @@ sub get_violation_lines {
         Carp::confess('You must choose some options');
     }
 
-    foreach my $l ( @lines ) {
-        $l->{in_violation}++
-            if $l->{line_num} >= $violation_start
-            && $l->{line_num} <  $violation_end;
+    foreach my $line ( @lines ) {
+        $line->in_violation(1)
+            if $line->is_in_between( $violation_start, $violation_end );
     }
 
     return @lines;
@@ -84,10 +85,10 @@ sub get_lines_at {
     $fh->getline  while --$starting_line;
 
     while ( not($fh->eof) && $lines_to_capture ) {
-        push @lines => {
+        push @lines => HTML::MasonX::Critic::Violation::SourceFile::Line->new(
             line_num => $line_number_counter,
             line     => $fh->getline
-        };
+        );
         $lines_to_capture--;
         $line_number_counter++;
     }
@@ -106,10 +107,10 @@ sub get_all_lines {
 
     my $fh = $self->{_path}->openr;
     while ( not($fh->eof) ) {
-        push @lines => {
+        push @lines => HTML::MasonX::Critic::Violation::SourceFile::Line->new(
             line_num => $line_number_counter,
             line     => $fh->getline
-        };
+        );
         $line_number_counter++;
     }
 

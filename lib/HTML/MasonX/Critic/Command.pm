@@ -224,16 +224,23 @@ sub _display_violation {
                 );
 
                 # drop the first line if it is a blank
-                if ( $lines[0]->{line} =~ /^\s*$/ ) {
+                if ( $lines[0]->line =~ /^\s*$/ ) {
                     shift @lines;
                 }
 
+                my $plain_source       = $violation->source;
+                my $highlighted_source = join '' => BLUE, $plain_source, RED;
+
                 foreach my $line ( @lines ) {
-                    if ( $line->{in_violation} ) {
-                        print BOLD, (sprintf '%03d:> %s' => $line->{line_num}, (join '' => RED, $line->{line})), RESET;
+                    if ( $line->in_violation ) {
+                        my $source = $line->line;
+                        if ( $source ne $plain_source && $source !~ /^\s*$plain_source\s*$/ ) {
+                            $source =~ s/$plain_source/$highlighted_source/;
+                        }
+                        print BOLD, (sprintf '%03d:> %s' => $line->line_num, (join '' => RED, $source)), RESET;
                     }
                     else {
-                        print FAINT, (sprintf '%03d:  %s' => $line->{line_num}, (join '' => RESET, $line->{line})), RESET;
+                        print FAINT, (sprintf '%03d:  %s' => $line->line_num, (join '' => RESET, $line->line)), RESET;
                     }
                 }
 
