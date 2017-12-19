@@ -30,13 +30,11 @@ sub BUILD {
     $self->{_source_lines} = [ split /\n/ => $self->{violation}->source ];
 }
 
-sub calculate_violation_line_count { scalar @{ $_[0]->{_source_lines} } }
-
 sub get_violation_lines {
     my ($self, %opts) = @_;
 
     my $start = $self->{violation}->logical_line_number;
-    my $end   = $start + $self->calculate_violation_line_count;
+    my $end   = $start + scalar @{ $self->{_source_lines} };
 
     my $violation_start = $start;
     my $violation_end   = $end;
