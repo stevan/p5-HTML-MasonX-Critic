@@ -229,14 +229,12 @@ sub _display_violation {
                 }
 
                 foreach my $line ( @lines ) {
-
                     if ( $line->{in_violation} ) {
                         print BOLD, (sprintf '%03d:> %s' => $line->{line_num}, (join '' => RED, $line->{line})), RESET;
                     }
                     else {
                         print FAINT, (sprintf '%03d:  %s' => $line->{line_num}, (join '' => RESET, $line->{line})), RESET;
                     }
-
                 }
 
                 print HR_LIGHT, "\n";
