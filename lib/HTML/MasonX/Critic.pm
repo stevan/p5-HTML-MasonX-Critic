@@ -47,12 +47,12 @@ sub BUILD {
         ($config->{perl_critic_severity} ? ('-severity'      => $config->{perl_critic_severity}) : ()),
         ($config->{perl_critic_policy}   ? ('-single-policy' => $config->{perl_critic_policy})   : ()),
         ($config->{perl_critic_profile}  ? ('-profile'       => $config->{perl_critic_profile})  : ()),
-        ($config->{perl_critic_theme}    ? ('-theme'         => $config->{perl_critic_theme})    : ()),
     };
 
     # stuff for Mason::Critic ...
     $self->{_mason_critic_config} = {
-        ($config->{mason_critic_policy} ? ('policy' => $config->{mason_critic_policy}) : ()),
+        ($config->{mason_critic_policy}  ? ('policy'  => $config->{mason_critic_policy})  : ()),
+        ($config->{mason_critic_profile} ? ('profile' => $config->{mason_critic_profile}) : ()),
     };
 }
 

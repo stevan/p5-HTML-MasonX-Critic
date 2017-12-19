@@ -32,10 +32,10 @@ our %HAS; BEGIN {
         as_json              => sub { $ENV{MASONCRITIC_AS_JSON}     // 0 },
 
         mason_critic_policy  => sub {},
+        mason_critic_profile => sub {},
 
         perl_critic_policy   => sub {},
-        perl_critic_theme    => sub { $ENV{MASONCRITIC_PERL_CRITIC_THEME}    },
-        perl_critic_profile  => sub { $ENV{MASONCRITIC_PERL_CRITIC_PROFILE}  },
+        perl_critic_profile  => sub {},
 
         ## private data
         _mason_critic => sub {},
@@ -47,19 +47,19 @@ sub BUILD {
     my ($self) = @_;
 
     Getopt::Long::GetOptions(
-        'debug|d'               => \$self->{debug},
-        'verbose|v'             => \$self->{verbose},
-        'show-source'           => \$self->{show_source},
-        'color'                 => \$self->{use_color},
-        'json'                  => \$self->{as_json},
+        'debug|d'                => \$self->{debug},
+        'verbose|v'              => \$self->{verbose},
+        'show-source'            => \$self->{show_source},
+        'color'                  => \$self->{use_color},
+        'json'                   => \$self->{as_json},
 
-        'dir=s'                 => \$self->{dir},
+        'dir=s'                  => \$self->{dir},
 
-        'mason-critic-policy=s' => \$self->{mason_critic_policy},
+        'mason-critic-policy=s'  => \$self->{mason_critic_policy},
+        'mason-critic-profile=s' => \$self->{mason_critic_profile},
 
-        'perl-critic-profile=s' => \$self->{perl_critic_profile},
-        'perl-critic-theme=s'   => \$self->{perl_critic_theme},
-        'perl-critic-policy=s'  => \$self->{perl_critic_policy},
+        'perl-critic-profile=s'  => \$self->{perl_critic_profile},
+        'perl-critic-policy=s'   => \$self->{perl_critic_policy},
     );
 
     # do this first ...
@@ -73,17 +73,23 @@ sub BUILD {
     $self->usage('The --dir must be a valid directory.')
         unless -e $self->{dir} && -d $self->{dir};
 
-    $self->usage('You cannot set a Perl::Critic policy *and* a theme/profile')
+    $self->usage('You cannot set a Perl::Critic policy *and* a profile')
         if defined $self->{perl_critic_policy}
-            && (
-                defined $self->{perl_critic_profile}
-                    ||
-                defined $self->{perl_critic_theme}
-            );
+        && defined $self->{perl_critic_profile};
+
+    $self->usage('You cannot set a HTML::MasonX::Critic policy *and* a profile')
+        if defined $self->{mason_critic_policy}
+        && defined $self->{mason_critic_profile};
 
     if ( $self->{perl_critic_profile} ) {
         $self->usage('Unable to find the Perl::Critic profile at ('.$self->{perl_critic_profile}.')')
             unless -f $self->{perl_critic_profile};
+    }
+
+
+    if ( $self->{mason_critic_profile} ) {
+        $self->usage('Unable to find the HTML::MasonX::Critic profile at ('.$self->{mason_critic_profile}.')')
+            unless -f $self->{mason_critic_profile};
     }
 
     ## Build some sub-objects
@@ -101,8 +107,8 @@ sub BUILD {
             } qw[
                 perl_critic_policy
                 perl_critic_profile
-                perl_critic_theme
                 mason_critic_policy
+                mason_critic_profile
             ]
         }
     );
@@ -116,10 +122,10 @@ sub usage {
     print <<'USAGE';
 masoncritic [-dv] [long options...]
     --dir                  the root directory to look within
-    --perl-critic-profile  set the Perl::Critic profile to use, defaults to $ENV{MASONCRITIC_PROFILE}
-    --perl-critic-theme    set the Perl::Critic theme to use, defaults to $ENV{MASONCRITIC_THEME}
+    --perl-critic-profile  set the Perl::Critic profile to use
     --perl-critic-policy   set the Perl::Critic policy to use
-    --mason-critic-policy  set the HTML::MasonX::Critic::Policy to use
+    --mason-critic-policy  set the HTML::MasonX::Critic policy to use
+    --mason_critic_profile set the HTML::MasonX::Critic profile to use
     --color                turn on/off color in the output
     --json                 output the violations as JSON
     --show-source          include the Mason source code in the output when in verbose mode
