@@ -39,29 +39,25 @@ sub get_violation_lines {
     my $violation_start = $start;
     my $violation_end   = $end;
 
-    my $lines_before = $opts{before};
-    my $lines_after  = $opts{after};
+    my @lines;
+    if ( $opts{before} && $opts{after} ) {
+        if ( my $lines_before = $opts{before} ) {
+            $start -= $lines_before;
+            $start = 1 if $start <= 0;
+        }
 
-    #use Data::Dumper;
-    #warn Dumper +{
-    #    start => $start,
-    #    end => $end,
-    #    violation_start => $violation_start,
-    #    violation_end => $violation_end,
-    #    lines_before => $lines_before,
-    #    lines_after => $lines_after,
-    #};
+        if ( my $lines_after = $opts{after} ) {
+            $end += $lines_after;
+        }
 
-    if ( $lines_before ) {
-        $start -= $lines_before;
-        $start = 1 if $start <= 0;
+        @lines = $self->get_lines_at( $start, $end );
     }
-
-    if ( $lines_after ) {
-        $end += $lines_after;
+    elsif ( $opts{all} ) {
+        @lines = $self->get_all_lines;
     }
-
-    my @lines = $self->get_lines_at( $start, $end );
+    else {
+        Carp::confess('You must choose some options');
+    }
 
     foreach my $l ( @lines ) {
         $l->{in_violation}++
@@ -82,39 +78,42 @@ sub get_lines_at {
     my $lines_to_capture    = $end - $start;
     my $line_number_counter = $starting_line;
 
-    #use Data::Dumper;
-    #warn Dumper +{
-    #    start => $start,
-    #    end => $end,
-    #    starting_line => $starting_line,
-    #    lines_to_capture => $lines_to_capture,
-    #    line_number_counter => $line_number_counter,
-    #};
-
     my $fh = $self->{_path}->openr;
+
     # skip to the start line ....
+    $fh->getline  while --$starting_line;
 
-    $fh->getline                while --$starting_line;
-
-    #warn Dumper [ 'START', $starting_line, $lines_to_capture ];
-
-    while (not($fh->eof) && $lines_to_capture) {
+    while ( not($fh->eof) && $lines_to_capture ) {
         push @lines => {
             line_num => $line_number_counter,
             line     => $fh->getline
         };
-        #warn Dumper [ 'CAPTURE', $lines_to_capture, scalar @lines ];
         $lines_to_capture--;
         $line_number_counter++;
     }
 
-    #warn Dumper [ "DONE", $lines_to_capture, scalar @lines ];
-
     $fh->close;
 
-    #warn 'CLOSED';
-    #warn scalar @lines;
-    #warn "GOODBYE!";
+    return @lines;
+}
+
+sub get_all_lines {
+    my ($self) = @_;
+
+    my @lines;
+
+    my $line_number_counter = 1;
+
+    my $fh = $self->{_path}->openr;
+    while ( not($fh->eof) ) {
+        push @lines => {
+            line_num => $line_number_counter,
+            line     => $fh->getline
+        };
+        $line_number_counter++;
+    }
+
+    $fh->close;
 
     return @lines;
 }
