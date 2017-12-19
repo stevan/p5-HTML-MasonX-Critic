@@ -112,7 +112,7 @@ sub find_subroutine_calls {
         unless Scalar::Util::blessed( $perl_code )
             && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
 
-    my $ignore_built_ins = $opts{ignore_built_ins};
+    my $ignore_builtins = $opts{ignore_builtins};
 
     my @sub_calls = $perl_code->find_with_ppi(
         node_type => 'PPI::Token::Word',
@@ -128,7 +128,7 @@ sub find_subroutine_calls {
             # then we can stop filtering and return
             # true here since we know that $is_function_call
             # is true.
-            return 1 if not $ignore_built_ins;
+            return 1 if not $ignore_builtins;
 
             # if it is a function call and we are not
             # planning to filter out the built-ins, then

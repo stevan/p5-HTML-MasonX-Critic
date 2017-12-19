@@ -62,7 +62,7 @@ sub violates {
     # Check ...
     foreach my $block ( @blocks ) {
 
-        my @sub_calls = HTML::MasonX::Inspector::Query::PerlCode->find_subroutine_calls( $block, ignore_built_ins => 1 );
+        my @sub_calls = HTML::MasonX::Inspector::Query::PerlCode->find_subroutine_calls( $block, ignore_builtins => 1 );
 
         foreach my $sub_call ( @sub_calls ) {
             # If this is a fully qualified call, then skip it

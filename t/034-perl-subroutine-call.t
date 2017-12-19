@@ -59,7 +59,7 @@ subtest '... testing querying for subroutine calls' => sub {
 
         subtest '... testing the subroutine calls' => sub {
 
-            my @subcalls = HTML::MasonX::Inspector::Query::PerlCode->find_subroutine_calls( $init );
+            my @subcalls = HTML::MasonX::Inspector::Query::PerlCode->find_subroutine_calls( $init, ignore_builtins => 1 );
             is(scalar(@subcalls), 3, '... got the two calls');
 
             is($subcalls[0]->literal, 'Scalar::Util::looks_like_number', '... got the literal value we expected');
