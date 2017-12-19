@@ -104,7 +104,7 @@ sub get_all_lines {
     my $line_number_counter = 1;
 
     my $fh = $self->{_path}->openr;
-    while ( not($fh->eof) ) {
+    until ( $fh->eof ) {
         push @lines => HTML::MasonX::Critic::Violation::SourceFile::Line->new(
             line_num => $line_number_counter,
             line     => $fh->getline
