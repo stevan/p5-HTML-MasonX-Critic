@@ -30,6 +30,19 @@ sub filter_blocks  { $_[0]->{filter}  }
 sub cleanup_blocks { $_[0]->{cleanup} }
 sub shared_blocks  { $_[0]->{shared}  }
 
+sub has_any_blocks { !! scalar @{ $_[0]->all_blocks } }
+
+sub all_blocks {
+    my ($self) = @_;
+
+    my @blocks;
+    foreach my $type ( keys %HAS ) {
+        push @blocks => @{ $self->{ $type } };
+    }
+
+    return \@blocks;
+}
+
 1;
 
 __END__
