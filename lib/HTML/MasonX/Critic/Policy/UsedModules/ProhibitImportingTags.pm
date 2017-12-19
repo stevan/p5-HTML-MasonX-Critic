@@ -8,6 +8,8 @@ our $VERSION = '0.01';
 
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
+use HTML::MasonX::Critic::Inspector::Mason::ModuleImport;
+
 use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
 our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
@@ -42,7 +44,10 @@ sub violates {
                     push @violations => $self->violation(
                         DESC,
                         (sprintf EXPL, $import->token),
-                        $include,
+                        HTML::MasonX::Critic::Inspector::Mason::ModuleImport->new(
+                            include => $include,
+                            import  => $import
+                        )
                     );
                 }
             }
