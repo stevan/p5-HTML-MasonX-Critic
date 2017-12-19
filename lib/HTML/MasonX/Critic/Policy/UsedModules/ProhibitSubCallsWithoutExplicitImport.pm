@@ -92,4 +92,24 @@ __END__
 
 =head1 DESCRIPTION
 
+All subroutines calls should be explicitly imported. This policy
+will collect all subroutine calls and make sure there is a
+corresponding explict import.
+
+This is advised because Mason adds all imports into the same
+L<HTML::Mason::Command> namespace. This is a problem because all
+Mason pages share this same namespace at runtime. This can create
+subtle bugs that are sensitive to the loading order of Mason pages
+since Mason pages are often compiled on-demand.
+
+=head1 OPTIONS
+
+=over 4
+
+=item C<allow>
+
+This is a list of implicit subroutines imports we allow.
+
+=back
+
 =cut

@@ -70,4 +70,12 @@ __END__
 
 =head1 DESCRIPTION
 
+Modules should only be used within C<< <%once> >> blocks because
+these are the only ones that will run only once at compile-time.
+
+All other blocks are possibly re-executed at runtime, which is
+often not a problem because C<perl> will not try to load again,
+but this is not good for code organization and is generally not
+the right way to do things in Mason so should be discouraged.
+
 =cut

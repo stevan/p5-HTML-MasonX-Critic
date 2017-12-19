@@ -45,4 +45,9 @@ __END__
 
 =head1 DESCRIPTION
 
+Mason C<< <%filter> >> blocks are basically just a regular
+expression run over the entire output, this is horrible
+action-at-a-distance and really problematic when trying to
+get a handle upon a Mason codebase.
+
 =cut

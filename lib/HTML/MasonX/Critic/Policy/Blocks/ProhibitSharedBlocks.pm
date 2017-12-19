@@ -45,4 +45,9 @@ __END__
 
 =head1 DESCRIPTION
 
+Mason C<< <%shared> >> blocks are a means of sharing variables
+between components, therefore expanding the variables scope,
+which is really problematic when trying to get a handle upon a
+Mason codebase.
+
 =cut

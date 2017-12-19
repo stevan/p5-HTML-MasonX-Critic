@@ -89,4 +89,26 @@ __END__
 
 =head1 DESCRIPTION
 
+If a subroutine is no longer used, it should no longer be
+imported. This policy will compile a list of all explicitly
+imported subroutines and then ensure that there is at least
+one call to that subroutine.
+
+This is advised because Mason adds all imports into the same
+L<HTML::Mason::Command> namespace. This is a problem because all
+Mason pages share this same namespace at runtime. This can create
+subtle bugs that are sensitive to the loading order of Mason pages
+since Mason pages are often compiled on-demand.
+
+=head1 OPTIONS
+
+=over 4
+
+=item C<ignore>
+
+This is a list of subroutines imports we can ignore.
+
+=back
+
 =cut
+
