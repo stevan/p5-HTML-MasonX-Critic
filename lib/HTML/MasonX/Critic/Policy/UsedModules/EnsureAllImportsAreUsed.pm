@@ -27,10 +27,6 @@ sub violates {
 
     my %imported_subs;
 
-    if ( my @ignored = @{ $self->{ignore} } ) {
-        $imported_subs{ $_ } = 'ignored' foreach @ignored;
-    }
-
     my @blocks = @{ $component->blocks->all_blocks };
 
     # Gather ....
@@ -49,6 +45,11 @@ sub violates {
         }
     }
 
+    if ( my @ignored = @{ $self->{ignore} } ) {
+        # if we are ignoring it, just delete it
+        delete $imported_subs{ $_ } foreach @ignored;
+    }
+
     # Check ...
     foreach my $block ( @blocks ) {
 
@@ -62,11 +63,12 @@ sub violates {
 
             # if we find a call to it, we can remove
             # it from the list of imported subs ...
-            delete $imported_subs{ $sub_call->literal }
-                if exists $imported_subs{ $sub_call->literal };
+            delete $imported_subs{ $sub_call->literal };
         }
     }
 
+    # anything that remains is stuff
+    # that didn't get called ...
     foreach my $sub_name ( keys %imported_subs ) {
         push @violations => $self->violation(
             DESC,
