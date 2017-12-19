@@ -48,7 +48,6 @@ sub BUILD {
 
     # convert the perl-critic-* stuff to fit proper Perl::Critic args
     $self->{_perl_critic_config} = {
-        ($config->{perl_critic_severity} ? ('-severity'      => $config->{perl_critic_severity}) : ()),
         ($config->{perl_critic_policy}   ? ('-single-policy' => $config->{perl_critic_policy})   : ()),
         ($config->{perl_critic_profile}  ? ('-profile'       => $config->{perl_critic_profile})  : ()),
     };
