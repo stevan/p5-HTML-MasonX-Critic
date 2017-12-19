@@ -1,0 +1,15 @@
+
+# Simple HTML::MasonX::Critic profile
+
+[Blocks::ProhibitFilterBlocks]
+[Blocks::ProhibitSharedBlocks]
+
+[UsedModules::EnsureDoNotCallImport]
+[UsedModules::EnsureOnlyInOnceBlocks]
+[UsedModules::ProhibitImportingTags]
+[UsedModules::ProhibitSubCallsWithoutExplicitImport]
+# allow = gettext,sesparam
+[UsedModules::EnsureAllImportsAreUsed]
+# ignore = blessed,confess
+
+
