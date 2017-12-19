@@ -9,7 +9,7 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok('HTML::MasonX::Inspector');
+    use_ok('HTML::MasonX::Critic::Inspector');
 }
 
 my $MASON_FILE_NAME = '010-compiler.html';
@@ -67,14 +67,14 @@ $bar //= $foo * $foo;
 
 subtest '... simple inspector test' => sub {
 
-    my $i = HTML::MasonX::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Inspector');
+    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
+    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
     my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
+    isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
     my $comp = $state->get_main_component;
-    isa_ok($comp, 'HTML::MasonX::Inspector::Compiler::Component');
+    isa_ok($comp, 'HTML::MasonX::Critic::Inspector::Compiler::Component');
 
     is($comp->name, $MASON_FILE_NAME, '... got the expected name');
 
@@ -86,7 +86,7 @@ subtest '... simple inspector test' => sub {
         my ($foo, $bar, $baz) = @args;
 
         subtest '... check the $foo argument' => sub {
-            isa_ok($foo, 'HTML::MasonX::Inspector::Compiler::Component::Arg');
+            isa_ok($foo, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Arg');
             is($foo->sigil, '$', '... got the expected sigil');
             is($foo->symbol, 'foo', '... got the expected symbol');
             is($foo->name, '$foo', '... got the expected name');
@@ -95,7 +95,7 @@ subtest '... simple inspector test' => sub {
         };
 
         subtest '... check the $bar argument' => sub {
-            isa_ok($bar, 'HTML::MasonX::Inspector::Compiler::Component::Arg');
+            isa_ok($bar, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Arg');
             is($bar->sigil, '$', '... got the expected sigil');
             is($bar->symbol, 'bar', '... got the expected symbol');
             is($bar->name, '$bar', '... got the expected name');
@@ -104,7 +104,7 @@ subtest '... simple inspector test' => sub {
         };
 
         subtest '... check the $baz argument' => sub {
-            isa_ok($baz, 'HTML::MasonX::Inspector::Compiler::Component::Arg');
+            isa_ok($baz, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Arg');
             is($baz->sigil, '$', '... got the expected sigil');
             is($baz->symbol, 'baz', '... got the expected symbol');
             is($baz->name, '$baz', '... got the expected name');
@@ -138,17 +138,17 @@ subtest '... simple inspector test' => sub {
         is(1, scalar keys %methods, '... we have one method');
 
         my $method = $methods{'.label'};
-        isa_ok($method, 'HTML::MasonX::Inspector::Compiler::Component');
+        isa_ok($method, 'HTML::MasonX::Critic::Inspector::Compiler::Component');
 
         is($method->name, '.label', '... got the expected name');
 
-        isa_ok($method->body, 'HTML::MasonX::Inspector::Compiler::Component::PerlCode');
-        isa_ok($method->blocks, 'HTML::MasonX::Inspector::Compiler::Component::Blocks');
+        isa_ok($method->body, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+        isa_ok($method->blocks, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks');
 
         my ($label, $value) = @{ $method->args };
 
         subtest '... check the $label argument' => sub {
-            isa_ok($label, 'HTML::MasonX::Inspector::Compiler::Component::Arg');
+            isa_ok($label, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Arg');
             is($label->sigil, '$', '... got the expected sigil');
             is($label->symbol, 'label', '... got the expected symbol');
             is($label->name, '$label', '... got the expected name');
@@ -157,7 +157,7 @@ subtest '... simple inspector test' => sub {
         };
 
         subtest '... check the $value argument' => sub {
-            isa_ok($value, 'HTML::MasonX::Inspector::Compiler::Component::Arg');
+            isa_ok($value, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Arg');
             is($value->sigil, '$', '... got the expected sigil');
             is($value->symbol, 'value', '... got the expected symbol');
             is($value->name, '$value', '... got the expected name');
@@ -173,17 +173,17 @@ subtest '... simple inspector test' => sub {
         is(1, scalar keys %sub_components, '... we have one def');
 
         my $sub_comp = $sub_components{'.banner'};
-        isa_ok($sub_comp, 'HTML::MasonX::Inspector::Compiler::Component');
+        isa_ok($sub_comp, 'HTML::MasonX::Critic::Inspector::Compiler::Component');
 
         is($sub_comp->name, '.banner', '... got the expected name');
 
-        isa_ok($sub_comp->body, 'HTML::MasonX::Inspector::Compiler::Component::PerlCode');
-        isa_ok($sub_comp->blocks, 'HTML::MasonX::Inspector::Compiler::Component::Blocks');
+        isa_ok($sub_comp->body, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+        isa_ok($sub_comp->blocks, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks');
 
         my ($title) = @{ $sub_comp->args };
 
         subtest '... check the $title argument' => sub {
-            isa_ok($title, 'HTML::MasonX::Inspector::Compiler::Component::Arg');
+            isa_ok($title, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Arg');
             is($title->sigil, '$', '... got the expected sigil');
             is($title->symbol, 'title', '... got the expected symbol');
             is($title->name, '$title', '... got the expected name');
@@ -196,7 +196,7 @@ subtest '... simple inspector test' => sub {
     subtest '... testing the blocks' => sub {
 
         my $blocks = $comp->blocks;
-        isa_ok($blocks, 'HTML::MasonX::Inspector::Compiler::Component::Blocks');
+        isa_ok($blocks, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks');
 
         ok($blocks->has_once_blocks, '... we have once blocks');
         ok($blocks->has_init_blocks, '... we have init blocks');
@@ -206,10 +206,10 @@ subtest '... simple inspector test' => sub {
         ok(!$blocks->has_cleanup_blocks, '... we do not have cleanup blocks');
 
         my ($once) = @{ $blocks->once_blocks };
-        isa_ok($once, 'HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+        isa_ok($once, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
         my ($init) = @{ $blocks->init_blocks };
-        isa_ok($init, 'HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+        isa_ok($init, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
     };
 

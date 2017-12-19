@@ -6,7 +6,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Inspector::Query::PerlCode;
+use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
 use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
@@ -36,7 +36,7 @@ sub violates {
     # Gather ....
     foreach my $block ( @blocks ) {
 
-        my @includes = HTML::MasonX::Inspector::Query::PerlCode->find_includes( $block );
+        my @includes = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_includes( $block );
         foreach my $include ( @includes ) {
 
             next if $include->does_not_call_import;
@@ -48,12 +48,12 @@ sub violates {
             }
         }
 
-        my @constants = HTML::MasonX::Inspector::Query::PerlCode->find_constant_declarations( $block );
+        my @constants = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_constant_declarations( $block );
         foreach my $constant ( @constants ) {
             $available_subs{ $constant->symbol } = 'constant';
         }
 
-        my @subroutines = HTML::MasonX::Inspector::Query::PerlCode->find_subroutine_declarations( $block );
+        my @subroutines = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_subroutine_declarations( $block );
         foreach my $subroutine ( @subroutines ) {
             $available_subs{ $subroutine->symbol } = 'sub';
         }
@@ -62,7 +62,7 @@ sub violates {
     # Check ...
     foreach my $block ( @blocks ) {
 
-        my @sub_calls = HTML::MasonX::Inspector::Query::PerlCode->find_subroutine_calls( $block, ignore_builtins => 1 );
+        my @sub_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_subroutine_calls( $block, ignore_builtins => 1 );
 
         foreach my $sub_call ( @sub_calls ) {
             # If this is a fully qualified call, then skip it

@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Query::MasonCritic;
+package HTML::MasonX::Critic::Inspector::Query::MasonCritic;
 # ABSTRACT: Run Mason critic on inspector objects
 
 use strict;
@@ -14,9 +14,9 @@ use Config::Tiny    ();
 sub critique_compiler_component {
     my ($class, $compiler, %opts) = @_;
 
-    Carp::confess('The compiler must be an instance of `HTML::MasonX::Inspector::Compiler`')
+    Carp::confess('The compiler must be an instance of `HTML::MasonX::Critic::Inspector::Compiler`')
         unless Scalar::Util::blessed($compiler)
-            && $compiler->isa('HTML::MasonX::Inspector::Compiler');
+            && $compiler->isa('HTML::MasonX::Critic::Inspector::Compiler');
 
     my @policies;
 

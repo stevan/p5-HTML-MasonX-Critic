@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken;
+package HTML::MasonX::Critic::Inspector::Perl::UsedModule::ImportedToken;
 # ABSTRACT: Query result objects representing the import token for used Perl modules
 
 use strict;

@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Compiler::Component::Blocks;
+package HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks;
 # ABSTRACT: Compile time view of a set of Mason component blocks
 
 use strict;
@@ -10,11 +10,11 @@ use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
 our %HAS; BEGIN {
     %HAS = (
-        once    => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
-        init    => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
-        filter  => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
-        cleanup => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
-        shared  => sub { +[] }, # ArrayRef[ HTML::MasonX::Inspector::Compiler::Component::PerlCode ]
+        once    => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode ]
+        init    => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode ]
+        filter  => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode ]
+        cleanup => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode ]
+        shared  => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode ]
     )
 }
 

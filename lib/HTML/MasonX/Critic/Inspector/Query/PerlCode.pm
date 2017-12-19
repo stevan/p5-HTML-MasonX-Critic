@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Query::PerlCode;
+package HTML::MasonX::Critic::Inspector::Query::PerlCode;
 # ABSTRACT: Query HTML::MasonX::Component::PerlCode objects with PPI
 
 use strict;
@@ -11,29 +11,29 @@ use Scalar::Util ();
 
 use Perl::Critic::Utils ();
 
-use HTML::MasonX::Inspector::Perl::UsedModule;
-use HTML::MasonX::Inspector::Perl::UsedModule::Conditional;
+use HTML::MasonX::Critic::Inspector::Perl::UsedModule;
+use HTML::MasonX::Critic::Inspector::Perl::UsedModule::Conditional;
 
-use HTML::MasonX::Inspector::Perl::ConstantDeclaration;
-use HTML::MasonX::Inspector::Perl::SubroutineDeclaration;
+use HTML::MasonX::Critic::Inspector::Perl::ConstantDeclaration;
+use HTML::MasonX::Critic::Inspector::Perl::SubroutineDeclaration;
 
-use HTML::MasonX::Inspector::Perl::MethodCall;
-use HTML::MasonX::Inspector::Perl::SubroutineCall;
+use HTML::MasonX::Critic::Inspector::Perl::MethodCall;
+use HTML::MasonX::Critic::Inspector::Perl::SubroutineCall;
 
 sub find_includes {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Include',
         filter    => sub { $_[0]->module ne 'constant' },
         transform => sub {
             $_[0]->module eq 'if'
-                ? HTML::MasonX::Inspector::Perl::UsedModule::Conditional->new( ppi => $_[0] )
-                : HTML::MasonX::Inspector::Perl::UsedModule->new( ppi => $_[0] )
+                ? HTML::MasonX::Critic::Inspector::Perl::UsedModule::Conditional->new( ppi => $_[0] )
+                : HTML::MasonX::Critic::Inspector::Perl::UsedModule->new( ppi => $_[0] )
         }
     );
 }
@@ -41,14 +41,14 @@ sub find_includes {
 sub find_subroutine_declarations {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Sub',
         transform => sub {
-            HTML::MasonX::Inspector::Perl::SubroutineDeclaration->new( ppi => $_[0] )
+            HTML::MasonX::Critic::Inspector::Perl::SubroutineDeclaration->new( ppi => $_[0] )
         }
     );
 }
@@ -56,15 +56,15 @@ sub find_subroutine_declarations {
 sub find_constant_declarations {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Include',
         filter    => sub { $_[0]->module eq 'constant' },
         transform => sub {
-            HTML::MasonX::Inspector::Perl::ConstantDeclaration->new( ppi => $_[0] )
+            HTML::MasonX::Critic::Inspector::Perl::ConstantDeclaration->new( ppi => $_[0] )
         }
     );
 }
@@ -72,9 +72,9 @@ sub find_constant_declarations {
 sub find_method_calls {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
     my ($invocant_name, $method_name);
     $invocant_name = $opts{invocant_name} if exists $opts{invocant_name};
@@ -87,7 +87,7 @@ sub find_method_calls {
             : sub { $_[0]->method_call }
         ),
         transform => sub {
-            HTML::MasonX::Inspector::Perl::MethodCall->new( ppi => $_[0] )
+            HTML::MasonX::Critic::Inspector::Perl::MethodCall->new( ppi => $_[0] )
         }
     );
 
@@ -108,9 +108,9 @@ sub find_method_calls {
 sub find_subroutine_calls {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
     my $ignore_builtins = $opts{ignore_builtins};
 
@@ -136,7 +136,7 @@ sub find_subroutine_calls {
             return not(Perl::Critic::Utils::is_perl_builtin( $_[0] ));
         },
         transform => sub {
-            HTML::MasonX::Inspector::Perl::SubroutineCall->new( ppi => $_[0] )
+            HTML::MasonX::Critic::Inspector::Perl::SubroutineCall->new( ppi => $_[0] )
         }
     );
 

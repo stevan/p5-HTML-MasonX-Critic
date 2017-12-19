@@ -9,8 +9,8 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok('HTML::MasonX::Inspector');
-    use_ok('HTML::MasonX::Inspector::Query::MasonCritic');
+    use_ok('HTML::MasonX::Critic::Inspector');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::MasonCritic');
 }
 
 my $MASON_FILE_NAME = '051-mason-critic-policy-blocks.html';
@@ -29,13 +29,13 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
 
     my $POLICY = 'HTML::MasonX::Critic::Policy::Blocks::ProhibitSharedBlocks';
 
-    my $i = HTML::MasonX::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Inspector');
+    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
+    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
     my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
+    isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
-    my @violations = HTML::MasonX::Inspector::Query::MasonCritic->critique_compiler_component(
+    my @violations = HTML::MasonX::Critic::Inspector::Query::MasonCritic->critique_compiler_component(
         $state,
         policy => $POLICY
     );
@@ -61,13 +61,13 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
 
     my $POLICY = 'HTML::MasonX::Critic::Policy::Blocks::ProhibitFilterBlocks';
 
-    my $i = HTML::MasonX::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Inspector');
+    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
+    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
     my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
+    isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
-    my @violations = HTML::MasonX::Inspector::Query::MasonCritic->critique_compiler_component(
+    my @violations = HTML::MasonX::Critic::Inspector::Query::MasonCritic->critique_compiler_component(
         $state,
         policy => $POLICY
     );

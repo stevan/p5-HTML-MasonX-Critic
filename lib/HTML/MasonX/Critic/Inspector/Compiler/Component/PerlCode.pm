@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Compiler::Component::PerlCode;
+package HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode;
 # ABSTRACT: Compile time view of a peice of Perl code in a Mason component
 
 use strict;

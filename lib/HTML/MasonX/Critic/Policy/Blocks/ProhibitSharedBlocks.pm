@@ -6,7 +6,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Inspector::Mason::Block;
+use HTML::MasonX::Critic::Inspector::Mason::Block;
 
 use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
@@ -25,7 +25,7 @@ sub violates {
                 push @violations => $self->violation(
                     DESC,
                     EXPL,
-                    HTML::MasonX::Inspector::Mason::Block->new(
+                    HTML::MasonX::Critic::Inspector::Mason::Block->new(
                         type => 'shared',
                         code => $block,
                     )

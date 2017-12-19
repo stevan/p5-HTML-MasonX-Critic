@@ -1,4 +1,4 @@
-# HTML::MasonX::Inspector
+# HTML::MasonX::Critic
 
 Tools for inspecting a HTML::Mason codebase
 

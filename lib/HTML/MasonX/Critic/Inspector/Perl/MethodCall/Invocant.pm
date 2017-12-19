@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Perl::MethodCall::Invocant;
+package HTML::MasonX::Critic::Inspector::Perl::MethodCall::Invocant;
 # ABSTRACT: Query result objects representing the invocant of a Perl method call
 
 use strict;

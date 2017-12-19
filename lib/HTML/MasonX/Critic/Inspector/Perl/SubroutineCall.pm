@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Perl::SubroutineCall;
+package HTML::MasonX::Critic::Inspector::Perl::SubroutineCall;
 # ABSTRACT: Query result objects representing a Perl subroutine call
 
 use strict;

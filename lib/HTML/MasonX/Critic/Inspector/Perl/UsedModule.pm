@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Perl::UsedModule;
+package HTML::MasonX::Critic::Inspector::Perl::UsedModule;
 # ABSTRACT: Query result objects representing used Perl modules
 
 use strict;
@@ -9,7 +9,7 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
-use HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken;
+use HTML::MasonX::Critic::Inspector::Perl::UsedModule::ImportedToken;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -94,7 +94,7 @@ sub imports {
 	my @args = $self->arguments;
 
 	$self->{_imports} = [
-		map HTML::MasonX::Inspector::Perl::UsedModule::ImportedToken->new(
+		map HTML::MasonX::Critic::Inspector::Perl::UsedModule::ImportedToken->new(
 			token => $_
 		), $self->_flatten_import_list_from_PPI( @args )
 	] unless $self->{_imports};

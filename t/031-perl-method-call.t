@@ -9,8 +9,8 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok('HTML::MasonX::Inspector');
-    use_ok('HTML::MasonX::Inspector::Query::PerlCode');
+    use_ok('HTML::MasonX::Critic::Inspector');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCode');
 }
 
 my $MASON_FILE_NAME = '031-perl-method-call.html';
@@ -26,19 +26,19 @@ $c->this()->is->a_method_call;
 
 subtest '... simple compiler test using perl blocks and queries' => sub {
 
-    my $i = HTML::MasonX::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Inspector');
+    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
+    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
     my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Inspector::Compiler');
+    isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
     my $comp = $state->get_main_component;
-    isa_ok($comp, 'HTML::MasonX::Inspector::Compiler::Component');
+    isa_ok($comp, 'HTML::MasonX::Critic::Inspector::Compiler::Component');
 
     is($comp->name, $MASON_FILE_NAME, '... got the expected name');
 
     my $blocks = $comp->blocks;
-    isa_ok($blocks, 'HTML::MasonX::Inspector::Compiler::Component::Blocks');
+    isa_ok($blocks, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks');
 
     ok(!$blocks->has_once_blocks, '... we do not have once blocks');
     ok($blocks->has_init_blocks, '... we have init blocks');
@@ -49,11 +49,11 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
     subtest '... testing the init block' => sub {
 
         my ($init) = @{ $blocks->init_blocks };
-        isa_ok($init, 'HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+        isa_ok($init, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
         subtest '... testing the method call without a name' => sub {
 
-            my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls( $init );
+            my @method_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_method_calls( $init );
             is(scalar(@method_calls), 5, '... got the 5 calls');
 
             is($method_calls[0]->name, 'comp', '... got the name we expected');
@@ -89,7 +89,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
 
         subtest '... testing the method call with a name' => sub {
 
-            my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls(
+            my @method_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_method_calls(
                 $init, ( method_name => 'comp' )
             );
             is(scalar(@method_calls), 1, '... got the one `comp` call');
@@ -103,7 +103,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
 
         subtest '... testing the method call with a name and invocant' => sub {
 
-            my @method_calls = HTML::MasonX::Inspector::Query::PerlCode->find_method_calls(
+            my @method_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_method_calls(
                 $init, (
                     invocant_name => '$b',
                     method_name   => 'property',

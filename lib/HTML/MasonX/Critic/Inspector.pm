@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector;
+package HTML::MasonX::Critic::Inspector;
 # ABSTRACT: Tools for inspecting a HTML::Mason codebase
 
 use strict;
@@ -11,9 +11,9 @@ use Scalar::Util ();
 
 use HTML::Mason::Interp;
 
-use HTML::MasonX::Inspector::ObjectCode;
-use HTML::MasonX::Inspector::Compiler;
-use HTML::MasonX::Inspector::Runtime;
+use HTML::MasonX::Critic::Inspector::ObjectCode;
+use HTML::MasonX::Critic::Inspector::Compiler;
+use HTML::MasonX::Critic::Inspector::Runtime;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -70,7 +70,7 @@ sub BUILD {
 
         # then set up the minimum needs to mock this run ...
         $interpreter->set_global(
-            $_ => HTML::MasonX::Inspector::__EVIL__->new
+            $_ => HTML::MasonX::Critic::Inspector::__EVIL__->new
         ) foreach map s/^[$@%]//r, $interpreter->compiler->allow_globals; #/
 
         $self->{_interpreter} = $interpreter;
@@ -86,7 +86,7 @@ sub interpreter { $_[0]->{_interpreter} }
 sub get_object_code_inspector_for_path {
     my ($self, $path) = @_;
 
-    return HTML::MasonX::Inspector::ObjectCode->new(
+    return HTML::MasonX::Critic::Inspector::ObjectCode->new(
         interpreter => $self->interpreter,
         path        => $path,
     );
@@ -95,7 +95,7 @@ sub get_object_code_inspector_for_path {
 sub get_compiler_inspector_for_path {
     my ($self, $path) = @_;
 
-    return HTML::MasonX::Inspector::Compiler->new(
+    return HTML::MasonX::Critic::Inspector::Compiler->new(
         interpreter => $self->interpreter,
         path        => $path,
     );
@@ -104,7 +104,7 @@ sub get_compiler_inspector_for_path {
 sub get_runtime_inspector_for_path {
     my ($self, $path) = @_;
 
-    return HTML::MasonX::Inspector::Runtime->new(
+    return HTML::MasonX::Critic::Inspector::Runtime->new(
         interpreter => $self->interpreter,
         path        => $path,
     );
@@ -117,7 +117,7 @@ sub get_runtime_inspector_for_path {
 ## ------------------------------------------- ##
 
 package    # ignore this, internal use only
-  HTML::MasonX::Inspector::__EVIL__ {
+  HTML::MasonX::Critic::Inspector::__EVIL__ {
     sub AUTOLOAD { return bless {}, __PACKAGE__ }
     sub DESTROY { () }
 }

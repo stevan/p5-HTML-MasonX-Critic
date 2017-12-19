@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Runtime;
+package HTML::MasonX::Critic::Inspector::Runtime;
 # ABSTRACT: Tools for inspecting the runtime objects of HTML::Mason
 
 use strict;

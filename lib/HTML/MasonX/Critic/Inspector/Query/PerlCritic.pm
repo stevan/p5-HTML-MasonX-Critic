@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Query::PerlCritic;
+package HTML::MasonX::Critic::Inspector::Query::PerlCritic;
 # ABSTRACT: Run Perl::Critic on inspector objects
 
 use strict;
@@ -13,9 +13,9 @@ use Perl::Critic ();
 sub critique_object_code {
     my ($class, $object_code, %opts) = @_;
 
-    Carp::confess('The object code must be an instance of `HTML::MasonX::Inspector::ObjectCode`')
+    Carp::confess('The object code must be an instance of `HTML::MasonX::Critic::Inspector::ObjectCode`')
         unless Scalar::Util::blessed($object_code)
-            && $object_code->isa('HTML::MasonX::Inspector::ObjectCode');
+            && $object_code->isa('HTML::MasonX::Critic::Inspector::ObjectCode');
 
     my $critic     = exists $opts{perl_critic} ? $opts{perl_critic} : Perl::Critic->new( -severity => 1, %opts );
     my $code       = $object_code->object_code;
@@ -27,9 +27,9 @@ sub critique_object_code {
 sub critique_compiler_component {
     my ($class, $compiler, %opts) = @_;
 
-    Carp::confess('The compiler must be an instance of `HTML::MasonX::Inspector::Compiler`')
+    Carp::confess('The compiler must be an instance of `HTML::MasonX::Critic::Inspector::Compiler`')
         unless Scalar::Util::blessed($compiler)
-            && $compiler->isa('HTML::MasonX::Inspector::Compiler');
+            && $compiler->isa('HTML::MasonX::Critic::Inspector::Compiler');
 
     my $critic   = exists $opts{perl_critic} ? $opts{perl_critic} : Perl::Critic->new( -severity => 1, %opts );
     my $filename = $compiler->abs_path;

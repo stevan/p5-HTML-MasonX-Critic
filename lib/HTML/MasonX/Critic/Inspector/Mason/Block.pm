@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Mason::Block;
+package HTML::MasonX::Critic::Inspector::Mason::Block;
 # ABSTRACT: An object representing a Mason block
 
 use strict;
@@ -19,9 +19,9 @@ our %HAS; BEGIN {
 sub BUILD {
     my ($self, $params) = @_;
 
-    Carp::confess('The `code` node must be an instance of `HTML::MasonX::Inspector::Compiler::Component::PerlCode`, not '.ref($self->{code}))
+    Carp::confess('The `code` node must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`, not '.ref($self->{code}))
         unless Scalar::Util::blessed( $self->{code} )
-            && $self->{code}->isa('HTML::MasonX::Inspector::Compiler::Component::PerlCode');
+            && $self->{code}->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 }
 
 sub source {

@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Compiler;
+package HTML::MasonX::Critic::Inspector::Compiler;
 # ABSTRACT: Tools for inspecting the compiler internals of HTML::Mason
 
 use strict;
@@ -10,10 +10,10 @@ use Carp         ();
 use Scalar::Util ();
 use Clone        ();
 
-use HTML::MasonX::Inspector::Compiler::Component;
-use HTML::MasonX::Inspector::Compiler::Component::Arg;
-use HTML::MasonX::Inspector::Compiler::Component::Blocks;
-use HTML::MasonX::Inspector::Compiler::Component::PerlCode;
+use HTML::MasonX::Critic::Inspector::Compiler::Component;
+use HTML::MasonX::Critic::Inspector::Compiler::Component::Arg;
+use HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks;
+use HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -175,12 +175,12 @@ sub _build_component {
     $compile{body}   = _build_perl_object( $compile{body} )     if exists $compile{body};
     $compile{blocks} = _build_blocks_object( $compile{blocks} ) if exists $compile{blocks};
 
-    return HTML::MasonX::Inspector::Compiler::Component->new( %compile );
+    return HTML::MasonX::Critic::Inspector::Compiler::Component->new( %compile );
 }
 
 sub _build_arg_object {
     my ($arg) = @_;
-    return HTML::MasonX::Inspector::Compiler::Component::Arg->new(
+    return HTML::MasonX::Critic::Inspector::Compiler::Component::Arg->new(
         sigil           => $arg->{type},
         symbol          => $arg->{name},
         default_value   => _clean_value( $arg->{default} ),
@@ -191,7 +191,7 @@ sub _build_arg_object {
 
 sub _build_blocks_object {
     my ($blocks) = @_;
-    return HTML::MasonX::Inspector::Compiler::Component::Blocks->new(
+    return HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks->new(
         once    => [ map _build_perl_object ( $_ ), @{ $blocks->{once}    || [] } ],
         init    => [ map _build_perl_object ( $_ ), @{ $blocks->{init}    || [] } ],
         filter  => [ map _build_perl_object ( $_ ), @{ $blocks->{filter}  || [] } ],
@@ -202,7 +202,7 @@ sub _build_blocks_object {
 
 sub _build_perl_object {
     my ($body) = @_;
-    return HTML::MasonX::Inspector::Compiler::Component::PerlCode->new( source => \$body )
+    return HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode->new( source => \$body )
 }
 
 sub _clean_value {

@@ -9,7 +9,7 @@ use Test::More;
 use Test::Fatal;
 
 BEGIN {
-    use_ok('HTML::MasonX::Inspector');
+    use_ok('HTML::MasonX::Critic::Inspector');
 }
 
 my $MASON_FILE = '020-runtime.html';
@@ -67,17 +67,17 @@ $bar //= $foo * $foo;
 
 subtest '... simple runtime test' => sub {
 
-    my $i = HTML::MasonX::Inspector->new(
+    my $i = HTML::MasonX::Critic::Inspector->new(
         comp_root     => $COMP_ROOT,
         allow_globals => [ '$x' ],
         static_source => 1
     );
-    isa_ok($i, 'HTML::MasonX::Inspector');
+    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
     subtest '... testing the runtime' => sub {
 
         my $runtime = $i->get_runtime_inspector_for_path( $MASON_FILE );
-        isa_ok($runtime, 'HTML::MasonX::Inspector::Runtime');
+        isa_ok($runtime, 'HTML::MasonX::Critic::Inspector::Runtime');
 
         my $comp = $runtime->component;
         isa_ok($comp, 'HTML::Mason::Component');

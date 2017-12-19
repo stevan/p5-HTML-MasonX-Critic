@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::Compiler::Component::Arg;
+package HTML::MasonX::Critic::Inspector::Compiler::Component::Arg;
 # ABSTRACT: Compile time view of a Mason argument
 
 use strict;

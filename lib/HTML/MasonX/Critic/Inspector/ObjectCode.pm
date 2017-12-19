@@ -1,4 +1,4 @@
-package HTML::MasonX::Inspector::ObjectCode;
+package HTML::MasonX::Critic::Inspector::ObjectCode;
 # ABSTRACT: Tools for inspecting the generated object code of HTML::Mason
 
 use strict;
