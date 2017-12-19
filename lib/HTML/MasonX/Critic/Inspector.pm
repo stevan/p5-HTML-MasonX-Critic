@@ -13,7 +13,6 @@ use HTML::Mason::Interp;
 
 use HTML::MasonX::Critic::Inspector::ObjectCode;
 use HTML::MasonX::Critic::Inspector::Compiler;
-use HTML::MasonX::Critic::Inspector::Runtime;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -96,15 +95,6 @@ sub get_compiler_inspector_for_path {
     my ($self, $path) = @_;
 
     return HTML::MasonX::Critic::Inspector::Compiler->new(
-        interpreter => $self->interpreter,
-        path        => $path,
-    );
-}
-
-sub get_runtime_inspector_for_path {
-    my ($self, $path) = @_;
-
-    return HTML::MasonX::Critic::Inspector::Runtime->new(
         interpreter => $self->interpreter,
         path        => $path,
     );
