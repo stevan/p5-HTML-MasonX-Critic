@@ -12,6 +12,8 @@ use String::Format      ();
 use File::Basename      ();
 use Perl::Critic::Utils ();
 
+use HTML::MasonX::Critic::Violation::SourceFile;
+
 use overload '""' => 'to_string';
 
 use UNIVERSAL::Object;
@@ -61,6 +63,10 @@ sub filename      { $_[0]->{_filename}      }
 sub source        { $_[0]->{_source}        }
 sub line_number   { $_[0]->{_line_number}   }
 sub column_number { $_[0]->{_column_number} }
+
+## the associated source file ...
+
+sub source_file { HTML::MasonX::Critic::Violation::SourceFile->new( violation => $_[0] ) }
 
 ## Fulfill the expected interface ...
 

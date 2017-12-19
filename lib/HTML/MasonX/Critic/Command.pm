@@ -217,42 +217,26 @@ sub _display_violation {
             print ITALIC, (sprintf "%s\n" => $violation->source), RESET;
             print HR_LIGHT, "\n";
             if ( $self->{show_source} ) {
-                my @lines;
 
-                my $source_num_lines    = scalar split /\n/ => $violation->source;
-                my $starting_line       = $violation->logical_line_number - 5;
-                   $starting_line       = 1 if $starting_line <= 0;
-                my $lines_to_capture    = 10 + $source_num_lines;
-                my $line_number_counter = $starting_line;
-
-                my $fh = Path::Tiny::path( $violation->logical_filename )->openr;
-                # skip to the start line ....
-                $fh->getline                while --$starting_line;
-                push @lines => $fh->getline while not($fh->eof) && --$lines_to_capture;
-                $fh->close;
+                my @lines = $violation->source_file->get_violation_lines(
+                    before => 5,
+                    after  => 5,
+                );
 
                 # drop the first line if it is a blank
-                if ( $lines[0] =~ /^\s*$/ ) {
-                    $line_number_counter++;
+                if ( $lines[0]->{line} =~ /^\s*$/ ) {
                     shift @lines;
                 }
 
-                my $in_violation = 0;
                 foreach my $line ( @lines ) {
 
-                    $in_violation = 1
-                        if $line_number_counter eq $violation->logical_line_number;
-
-                    if ( $in_violation ) {
-                        print BOLD, (sprintf '%03d:> %s' => $line_number_counter, (join '' => RED, $line)), RESET;
-                        $source_num_lines--;
-                        $in_violation = 0 if $source_num_lines == 0
+                    if ( $line->{in_violation} ) {
+                        print BOLD, (sprintf '%03d:> %s' => $line->{line_num}, (join '' => RED, $line->{line})), RESET;
                     }
                     else {
-                        print FAINT, (sprintf '%03d:  %s' => $line_number_counter, (join '' => RESET, $line)), RESET;
+                        print FAINT, (sprintf '%03d:  %s' => $line->{line_num}, (join '' => RESET, $line->{line})), RESET;
                     }
 
-                    $line_number_counter++;
                 }
 
                 print HR_LIGHT, "\n";

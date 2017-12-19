@@ -1,0 +1,133 @@
+package HTML::MasonX::Critic::Violation::SourceFile;
+# ABSTRACT: The source file associated with a violation
+
+use strict;
+use warnings;
+
+our $VERSION = '0.01';
+
+use UNIVERSAL::Object;
+our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
+our %HAS; BEGIN {
+    %HAS = (
+        violation     => sub { die 'A `violation` is required' },
+        # private data
+        _path         => sub {},
+        _source_lines => sub {},
+    )
+}
+
+
+sub BUILD {
+    my ($self, $params) = @_;
+
+    Carp::confess('The violation must reference a valid filename, not ('.$self->{violation}->logical_filename.')')
+        unless -f $self->{violation}->logical_filename;
+
+    $self->{_path}         = Path::Tiny::path( $self->{violation}->logical_filename );
+    $self->{_source_lines} = [ split /\n/ => $self->{violation}->source ];
+}
+
+sub calculate_violation_line_count { scalar @{ $_[0]->{_source_lines} } }
+
+sub get_violation_lines {
+    my ($self, %opts) = @_;
+
+    my $start = $self->{violation}->logical_line_number;
+    my $end   = $start + $self->calculate_violation_line_count;
+
+    my $violation_start = $start;
+    my $violation_end   = $end;
+
+    my $lines_before = $opts{before};
+    my $lines_after  = $opts{after};
+
+    #use Data::Dumper;
+    #warn Dumper +{
+    #    start => $start,
+    #    end => $end,
+    #    violation_start => $violation_start,
+    #    violation_end => $violation_end,
+    #    lines_before => $lines_before,
+    #    lines_after => $lines_after,
+    #};
+
+    if ( $lines_before ) {
+        $start -= $lines_before;
+        $start = 1 if $start <= 0;
+    }
+
+    if ( $lines_after ) {
+        $end += $lines_after;
+    }
+
+    my @lines = $self->get_lines_at( $start, $end );
+
+    foreach my $l ( @lines ) {
+        $l->{in_violation}++
+            if $l->{line_num} >= $violation_start
+            && $l->{line_num} <  $violation_end;
+    }
+
+    return @lines;
+}
+
+sub get_lines_at {
+    my ($self, $start, $end) = @_;
+
+    my @lines;
+
+    my $starting_line       = $start;
+       $starting_line       = 1 if $starting_line <= 0;
+    my $lines_to_capture    = $end - $start;
+    my $line_number_counter = $starting_line;
+
+    #use Data::Dumper;
+    #warn Dumper +{
+    #    start => $start,
+    #    end => $end,
+    #    starting_line => $starting_line,
+    #    lines_to_capture => $lines_to_capture,
+    #    line_number_counter => $line_number_counter,
+    #};
+
+    my $fh = $self->{_path}->openr;
+    # skip to the start line ....
+
+    $fh->getline                while --$starting_line;
+
+    #warn Dumper [ 'START', $starting_line, $lines_to_capture ];
+
+    while (not($fh->eof) && $lines_to_capture) {
+        push @lines => {
+            line_num => $line_number_counter,
+            line     => $fh->getline
+        };
+        #warn Dumper [ 'CAPTURE', $lines_to_capture, scalar @lines ];
+        $lines_to_capture--;
+        $line_number_counter++;
+    }
+
+    #warn Dumper [ "DONE", $lines_to_capture, scalar @lines ];
+
+    $fh->close;
+
+    #warn 'CLOSED';
+    #warn scalar @lines;
+    #warn "GOODBYE!";
+
+    return @lines;
+}
+
+1;
+
+__END__
+
+=pod
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=cut
+
