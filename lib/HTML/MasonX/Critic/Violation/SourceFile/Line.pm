@@ -17,6 +17,8 @@ our %HAS; BEGIN {
     )
 }
 
+sub metadata { sprintf '%04d', $_[0]->line_num }
+
 sub line     { $_[0]->{line}     }
 sub line_num { $_[0]->{line_num} }
 

@@ -28,6 +28,7 @@ our %HAS; BEGIN {
         debug                => sub { $ENV{MASONCRITIC_DEBUG}            },
         verbose              => sub { $ENV{MASONCRITIC_VERBOSE}          },
         show_source          => sub { $ENV{MASONCRITIC_SHOW_SOURCE} // 0 },
+        show_blame           => sub { $ENV{MASONCRITIC_SHOW_BLAME}  // 0 },
         use_color            => sub { $ENV{MASONCRITIC_USE_COLOR}   // 1 },
         as_json              => sub { $ENV{MASONCRITIC_AS_JSON}     // 0 },
 
@@ -50,6 +51,7 @@ sub BUILD {
         'debug|d'                => \$self->{debug},
         'verbose|v'              => \$self->{verbose},
         'show-source'            => \$self->{show_source},
+        'show-blame'             => \$self->{show_blame},
         'color'                  => \$self->{use_color},
         'json'                   => \$self->{as_json},
 
@@ -129,6 +131,7 @@ masoncritic [-dv] [long options...]
     --color                turn on/off color in the output
     --json                 output the violations as JSON
     --show-source          include the Mason source code in the output when in verbose mode
+    --show-blame           include git-blamed Mason source code in the output when in verbose mode
     -d --debug             turn on debugging
     -v --verbose           turn on verbosity
 USAGE
@@ -150,7 +153,7 @@ sub run {
                 unless $self->{as_json};
 
             foreach my $violation ( @violations ) {
-                $self->_display_violation( $file, $violation );
+                $self->_display_violation( $root_dir, $file, $violation );
                 next unless $self->{verbose};
                 next if     $self->{as_json};
                 if ( my $x = IO::Prompt::Tiny::prompt( FAINT('> next violation?', RESET), 'y') ) {
@@ -181,10 +184,11 @@ use constant HR_DARK  => ( '=' x TERM_WIDTH );
 use constant HR_LIGHT => ( '-' x TERM_WIDTH );
 
 sub _display_violation {
-    my ($self, $file, $violation) = @_;
+    my ($self, $root_dir, $file, $violation) = @_;
 
     if ( $self->{as_json} ) {
         print JSON::MaybeXS->new->encode({
+            comp_root     => $root_dir->stringify,
             filename      => $violation->logical_filename,
             line_number   => $violation->logical_line_number,
             column_number => $violation->column_number,
@@ -192,7 +196,7 @@ sub _display_violation {
             severity      => $violation->severity,
             source        => $violation->source,
             description   => $violation->description,
-            explanation  => $violation->explanation,
+            explanation   => $violation->explanation,
         }), "\n";
     }
     else {
@@ -216,9 +220,23 @@ sub _display_violation {
             print HR_LIGHT, "\n";
             print ITALIC, (sprintf "%s\n" => $violation->source), RESET;
             print HR_LIGHT, "\n";
-            if ( $self->{show_source} ) {
+            if ( $self->{show_source} || $self->{show_blame} ) {
 
-                my @lines = $violation->source_file->get_violation_lines(
+                my $file_obj;
+
+                if ( $self->{show_source} ) {
+                    $file_obj = $violation->source_file;
+                }
+                elsif ( $self->{show_blame} ) {
+                    $file_obj = $violation->blame_file( git_work_tree => $root_dir );
+                    print ITALIC, YELLOW, (sprintf "... blame-ing %s\n" => $file), RESET;
+                    print HR_LIGHT, "\n";
+                }
+                else {
+                    ; # never happen
+                }
+
+                my @lines = $file_obj->get_violation_lines(
                     before => 5,
                     after  => 5,
                 );
@@ -237,10 +255,10 @@ sub _display_violation {
                             my $highlighted = join '' => BLUE, $highlight, RED;
                             $source =~ s/$highlight/$highlighted/;
                         }
-                        print BOLD, (sprintf '%03d:> %s' => $line->line_num, (join '' => RED, $source)), RESET;
+                        print BOLD, (sprintf '%s:> %s' => $line->metadata, (join '' => RED, $source)), RESET;
                     }
                     else {
-                        print FAINT, (sprintf '%03d:  %s' => $line->line_num, (join '' => RESET, $line->line)), RESET;
+                        print FAINT, (sprintf '%s:  %s' => $line->metadata, (join '' => RESET, $line->line)), RESET;
                     }
                 }
 

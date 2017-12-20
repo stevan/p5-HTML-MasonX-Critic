@@ -13,6 +13,7 @@ use File::Basename      ();
 use Perl::Critic::Utils ();
 
 use HTML::MasonX::Critic::Violation::SourceFile;
+use HTML::MasonX::Critic::Violation::BlameFile;
 
 use overload '""' => 'to_string';
 
@@ -73,6 +74,21 @@ sub highlight     { $_[0]->{_highlight}     }
 ## the associated source file ...
 
 sub source_file { HTML::MasonX::Critic::Violation::SourceFile->new( violation => $_[0] ) }
+
+sub blame_file {
+    my ($self, %opts) = @_;
+
+    Carp::confess('A `git_work_tree` is required to create a BlameFile object')
+        unless exists $opts{git_work_tree};
+
+    Carp::confess('The `git_work_tree` must be a valid directory')
+        unless -d $opts{git_work_tree};
+
+    HTML::MasonX::Critic::Violation::BlameFile->new(
+        violation     => $_[0],
+        git_work_tree => $opts{git_work_tree},
+    );
+}
 
 ## Fulfill the expected interface ...
 
