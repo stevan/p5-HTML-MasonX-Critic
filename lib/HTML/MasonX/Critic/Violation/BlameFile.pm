@@ -36,6 +36,9 @@ sub BUILD {
 sub get_lines_at {
     my ($self, $start, $end) = @_;
 
+    my $line_count = scalar $self->{_path}->lines;
+    $end = $line_count if $end > $line_count;
+
     my @lines = $self->{_git}->blame(
         $self->{_path}->relative( $self->{_git}->dir ),
         {
