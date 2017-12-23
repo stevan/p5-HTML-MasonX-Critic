@@ -53,8 +53,6 @@ sub is_perl_version { !! $_[0]->{ppi}->version }
 sub module         { $_[0]->{ppi}->module         }
 sub module_version { $_[0]->{ppi}->module_version }
 
-sub arguments { $_[0]->{ppi}->arguments }
-
 ## No import
 
 sub does_call_import {
