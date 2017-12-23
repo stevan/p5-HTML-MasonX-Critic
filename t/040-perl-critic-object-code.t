@@ -46,7 +46,7 @@ subtest '... simple perl-cricit query test' => sub {
         my $compiler = $i->compile_path( $MASON_FILE );
         isa_ok($compiler, 'HTML::MasonX::Critic::Inspector::CompiledPath');
 
-        my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique_compiler_component(
+        my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique(
             $compiler,
             ( '-single-policy' => 'Variables::ProhibitUnusedVariables' )
         );

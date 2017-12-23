@@ -37,7 +37,7 @@ subtest '... testing UsedModules::ProhibitImportingTags policy' => sub {
     my $state = $i->compile_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
 
-    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(
+    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
         $state,
         policy => $POLICY
     );
@@ -73,7 +73,7 @@ subtest '... testing UsedModules::EnsureDoNotCallImport policy' => sub {
     my $state = $i->compile_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
 
-    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(
+    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
         $state,
         policy => $POLICY
     );
@@ -109,7 +109,7 @@ subtest '... testing UsedModules::EnsureOnlyInOnceBlocks policy' => sub {
     my $state = $i->compile_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
 
-    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(
+    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
         $state,
         policy => $POLICY
     );

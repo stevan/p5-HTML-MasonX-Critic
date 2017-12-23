@@ -10,7 +10,7 @@ use Carp         ();
 use Scalar::Util ();
 use Perl::Critic ();
 
-sub critique_compiler_component {
+sub critique {
     my ($class, $compiler, %opts) = @_;
 
     Carp::confess('The compiler must be an instance of `HTML::MasonX::Critic::Inspector::CompiledPath`')

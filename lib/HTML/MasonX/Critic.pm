@@ -67,14 +67,14 @@ sub critique {
     my @violations;
 
     if ( keys %{ $self->{_perl_critic_config} } ) {
-        push @violations => HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique_compiler_component(
+        push @violations => HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique(
             $compiler,
             %{ $self->{_perl_critic_config} }
         );
     }
 
     if ( keys %{ $self->{_mason_critic_config} } ) {
-        push @violations => HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(
+        push @violations => HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
             $compiler,
             %{ $self->{_mason_critic_config} }
         );
