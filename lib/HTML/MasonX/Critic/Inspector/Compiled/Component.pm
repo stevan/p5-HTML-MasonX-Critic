@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Compiler::Component;
+package HTML::MasonX::Critic::Inspector::Compiled::Component;
 # ABSTRACT: Compile time view of a Mason component
 
 use strict;
@@ -14,13 +14,13 @@ our %HAS; BEGIN {
     %HAS = (
         name           => sub { die 'A `name` is required' },
         type           => sub { die 'A `type` is required' },
-        args           => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiler::Component::Arg ]
+        args           => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::Arg ]
         attributes     => sub { +{} }, # HashRef
         flags          => sub { +{} }, # HashRef
-        methods        => sub { +{} }, # HashRef[ HTML::MasonX::Critic::Inspector::Compiler::Component ]
-        sub_components => sub { +{} }, # HashRef[ HTML::MasonX::Critic::Inspector::Compiler::Component ]
-        body           => sub {     }, # HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode
-        blocks         => sub { +{} }, # HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks
+        methods        => sub { +{} }, # HashRef[ HTML::MasonX::Critic::Inspector::Compiled::Component ]
+        sub_components => sub { +{} }, # HashRef[ HTML::MasonX::Critic::Inspector::Compiled::Component ]
+        body           => sub {     }, # HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode
+        blocks         => sub { +{} }, # HTML::MasonX::Critic::Inspector::Compiled::Component::Blocks
     )
 }
 

@@ -11,7 +11,7 @@ use Scalar::Util ();
 
 use HTML::Mason::Interp;
 
-use HTML::MasonX::Critic::Inspector::Compiler;
+use HTML::MasonX::Critic::Inspector::CompiledPath;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -84,7 +84,7 @@ sub interpreter { $_[0]->{_interpreter} }
 sub compile_path {
     my ($self, $path) = @_;
 
-    return HTML::MasonX::Critic::Inspector::Compiler->new(
+    return HTML::MasonX::Critic::Inspector::CompiledPath->new(
         interpreter => $self->interpreter,
         path        => $path,
     );

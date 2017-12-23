@@ -20,9 +20,9 @@ our %HAS;  BEGIN {
 sub BUILD {
     my ($self, $params) = @_;
 
-    Carp::confess('The `code` node must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`, not '.ref($self->{code}))
+    Carp::confess('The `code` node must be an instance of `HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode`, not '.ref($self->{code}))
         unless Scalar::Util::blessed( $self->{code} )
-            && $self->{code}->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+            && $self->{code}->isa('HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 }
 
 # Element API

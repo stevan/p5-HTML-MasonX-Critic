@@ -13,9 +13,9 @@ use Perl::Critic ();
 sub critique_compiler_component {
     my ($class, $compiler, %opts) = @_;
 
-    Carp::confess('The compiler must be an instance of `HTML::MasonX::Critic::Inspector::Compiler`')
+    Carp::confess('The compiler must be an instance of `HTML::MasonX::Critic::Inspector::CompiledPath`')
         unless Scalar::Util::blessed($compiler)
-            && $compiler->isa('HTML::MasonX::Critic::Inspector::Compiler');
+            && $compiler->isa('HTML::MasonX::Critic::Inspector::CompiledPath');
 
     my $critic   = exists $opts{perl_critic} ? $opts{perl_critic} : Perl::Critic->new( -severity => 1, %opts );
     my $filename = $compiler->abs_path;

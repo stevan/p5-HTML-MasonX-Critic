@@ -44,7 +44,7 @@ subtest '... simple perl-cricit query test' => sub {
     subtest '... testing the object code' => sub {
 
         my $compiler = $i->compile_path( $MASON_FILE );
-        isa_ok($compiler, 'HTML::MasonX::Critic::Inspector::Compiler');
+        isa_ok($compiler, 'HTML::MasonX::Critic::Inspector::CompiledPath');
 
         my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique_compiler_component(
             $compiler,

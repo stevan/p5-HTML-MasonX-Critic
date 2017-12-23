@@ -12,8 +12,10 @@ use Scalar::Util ();
 use HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::ImportedToken;
 
 use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
+use HTML::MasonX::Critic::Inspector::Query::Element;
+our @ISA;  BEGIN { @ISA = ('UNIVERSAL::Object') }
+our @DOES; BEGIN { @DOES = ('HTML::MasonX::Critic::Inspector::Query::Element') }
+our %HAS;  BEGIN {
     %HAS = (
         ppi => sub { die 'A `ppi` node is required' },
         # ... cache some data ...
@@ -37,11 +39,11 @@ sub BUILD {
     $self->{_imports} = [ $self->_flatten_import_list_from_PPI( $self->{ppi}->arguments ) ];
 }
 
-sub ppi    { $_[0]->{ppi} }
-sub source { $_[0]->{ppi}->content }
+sub ppi { $_[0]->{ppi} }
 
-sub highlight     { $_[0]->module }
-
+# Element API
+sub highlight     { $_[0]->module                     }
+sub source        { $_[0]->{ppi}->content             }
 sub filename      { $_[0]->{ppi}->logical_filename    }
 sub line_number   { $_[0]->{ppi}->logical_line_number }
 sub column_number { $_[0]->{ppi}->column_number       }

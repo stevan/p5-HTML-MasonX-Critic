@@ -30,15 +30,15 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
     isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
     my $state = $i->compile_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
+    isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
 
     my $comp = $state->root_component;
-    isa_ok($comp, 'HTML::MasonX::Critic::Inspector::Compiler::Component');
+    isa_ok($comp, 'HTML::MasonX::Critic::Inspector::Compiled::Component');
 
     is($comp->name, $MASON_FILE_NAME, '... got the expected name');
 
     my $blocks = $comp->blocks;
-    isa_ok($blocks, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks');
+    isa_ok($blocks, 'HTML::MasonX::Critic::Inspector::Compiled::Component::Blocks');
 
     ok($blocks->has_once_blocks, '... we have once blocks');
     ok(!$blocks->has_init_blocks, '... we do not have init blocks');
@@ -49,7 +49,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
     subtest '... testing the once block' => sub {
 
         my ($once) = @{ $blocks->once_blocks };
-        isa_ok($once, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+        isa_ok($once, 'HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 
         my ($FOO, $BAR) = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_constant_declarations( $once );
 

@@ -29,16 +29,16 @@ subtest '... simple violation test' => sub {
     isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
     my $state = $i->compile_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
+    isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
 
     my $comp = $state->root_component;
-    isa_ok($comp, 'HTML::MasonX::Critic::Inspector::Compiler::Component');
+    isa_ok($comp, 'HTML::MasonX::Critic::Inspector::Compiled::Component');
 
     my $blocks = $comp->blocks;
-    isa_ok($blocks, 'HTML::MasonX::Critic::Inspector::Compiler::Component::Blocks');
+    isa_ok($blocks, 'HTML::MasonX::Critic::Inspector::Compiled::Component::Blocks');
 
     my ($init) = @{ $blocks->init_blocks };
-    isa_ok($init, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+    isa_ok($init, 'HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 
     my @subcalls = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_subroutine_calls( $init, ignore_builtins => 1 );
     is(scalar(@subcalls), 3, '... got the three calls');

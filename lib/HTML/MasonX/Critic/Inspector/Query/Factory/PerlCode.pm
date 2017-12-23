@@ -23,9 +23,9 @@ use HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineCall;
 sub find_includes {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Include',
@@ -41,9 +41,9 @@ sub find_includes {
 sub find_subroutine_declarations {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Sub',
@@ -56,9 +56,9 @@ sub find_subroutine_declarations {
 sub find_constant_declarations {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Include',
@@ -72,9 +72,9 @@ sub find_constant_declarations {
 sub find_method_calls {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 
     my ($invocant_name, $method_name);
     $invocant_name = $opts{invocant_name} if exists $opts{invocant_name};
@@ -108,9 +108,9 @@ sub find_method_calls {
 sub find_subroutine_calls {
     my ($class, $perl_code, %opts) = @_;
 
-    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode`')
+    Carp::confess('The perl code passed must be an instance of `HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode`')
         unless Scalar::Util::blessed( $perl_code )
-            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
+            && $perl_code->isa('HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 
     my $ignore_builtins = $opts{ignore_builtins};
 

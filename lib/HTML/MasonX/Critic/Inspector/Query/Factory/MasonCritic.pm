@@ -14,9 +14,9 @@ use Config::Tiny    ();
 sub critique_compiler_component {
     my ($class, $compiler, %opts) = @_;
 
-    Carp::confess('The compiler must be an instance of `HTML::MasonX::Critic::Inspector::Compiler`')
+    Carp::confess('The compiler must be an instance of `HTML::MasonX::Critic::Inspector::CompiledPath`')
         unless Scalar::Util::blessed($compiler)
-            && $compiler->isa('HTML::MasonX::Critic::Inspector::Compiler');
+            && $compiler->isa('HTML::MasonX::Critic::Inspector::CompiledPath');
 
     my @policies;
 
