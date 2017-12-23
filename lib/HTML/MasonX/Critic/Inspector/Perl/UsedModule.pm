@@ -70,8 +70,9 @@ sub does_not_call_import {
 
 	# we should have no imports
 	return 0 unless $self->number_of_imports == 0;
+
 	# and we should have args ...
-	my @args = $self->arguments;
+	my @args = $self->{ppi}->arguments;
 	return 0 unless @args;
 	# well, just one arg really ...
 	return 0 unless scalar @args == 1;
