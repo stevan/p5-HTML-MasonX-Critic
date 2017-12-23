@@ -11,6 +11,8 @@ sub source;
 sub line_number;
 sub column_number;
 
+sub highlight { return }
+
 1;
 
 __END__
