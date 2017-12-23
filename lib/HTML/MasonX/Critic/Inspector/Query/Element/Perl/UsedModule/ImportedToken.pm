@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Perl::UsedModule::ImportedToken;
+package HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::ImportedToken;
 # ABSTRACT: Query result objects representing the import token for used Perl modules
 
 use strict;
@@ -18,9 +18,9 @@ our %HAS; BEGIN {
 sub BUILD {
     my ($self, $params) = @_;
 
-    Carp::confess('The `include` node must be an instance of `HTML::MasonX::Critic::Inspector::Perl::UsedModule`, not '.ref($self->{include}))
+    Carp::confess('The `include` node must be an instance of `HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule`, not '.ref($self->{include}))
         unless Scalar::Util::blessed( $self->{include} )
-            && $self->{include}->isa('HTML::MasonX::Critic::Inspector::Perl::UsedModule');
+            && $self->{include}->isa('HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule');
 }
 
 sub token   { $_[0]->{token}                }

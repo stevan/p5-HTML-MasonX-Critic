@@ -10,7 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::MasonCritic');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic');
 }
 
 my $MASON_FILE_NAME = '051-mason-critic-policy-blocks.html';
@@ -35,7 +35,7 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
     my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
-    my @violations = HTML::MasonX::Critic::Inspector::Query::MasonCritic->critique_compiler_component(
+    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(
         $state,
         policy => $POLICY
     );
@@ -67,7 +67,7 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
     my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
-    my @violations = HTML::MasonX::Critic::Inspector::Query::MasonCritic->critique_compiler_component(
+    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(
         $state,
         policy => $POLICY
     );

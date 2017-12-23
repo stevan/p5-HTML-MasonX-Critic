@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Perl::ConstantDeclaration;
+package HTML::MasonX::Critic::Inspector::Query::Element::Perl::ConstantDeclaration;
 # ABSTRACT: Query result objects representing a Perl constant declaration
 
 use strict;

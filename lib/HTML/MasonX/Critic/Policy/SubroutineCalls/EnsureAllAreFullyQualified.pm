@@ -22,7 +22,7 @@ sub violates {
 
     foreach my $block ( @blocks ) {
 
-        my @sub_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_subroutine_calls( $block, ignore_builtins => 1 );
+        my @sub_calls = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_subroutine_calls( $block, ignore_builtins => 1 );
 
         foreach my $sub_call ( @sub_calls ) {
 

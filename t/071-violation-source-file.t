@@ -40,10 +40,10 @@ subtest '... simple violation test' => sub {
     my ($init) = @{ $blocks->init_blocks };
     isa_ok($init, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
-    my @subcalls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_subroutine_calls( $init, ignore_builtins => 1 );
+    my @subcalls = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_subroutine_calls( $init, ignore_builtins => 1 );
     is(scalar(@subcalls), 3, '... got the three calls');
 
-    isa_ok($_, 'HTML::MasonX::Critic::Inspector::Perl::SubroutineCall')
+    isa_ok($_, 'HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineCall')
         foreach @subcalls;
 
     my ($foo, $bar, $baz) = @subcalls;

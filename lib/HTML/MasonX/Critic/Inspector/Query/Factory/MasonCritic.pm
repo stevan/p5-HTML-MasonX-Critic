@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Query::MasonCritic;
+package HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic;
 # ABSTRACT: Run Mason critic on inspector objects
 
 use strict;

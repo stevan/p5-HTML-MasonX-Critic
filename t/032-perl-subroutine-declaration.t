@@ -10,7 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCode');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode');
 }
 
 my $MASON_FILE_NAME = '032-perl-subroutine-declaration.html';
@@ -53,14 +53,14 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
         my ($once) = @{ $blocks->once_blocks };
         isa_ok($once, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
-        my ($foo, $bar) = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_subroutine_declarations( $once );
+        my ($foo, $bar) = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_subroutine_declarations( $once );
 
-        isa_ok($foo, 'HTML::MasonX::Critic::Inspector::Perl::SubroutineDeclaration');
+        isa_ok($foo, 'HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineDeclaration');
         is($foo->symbol, 'foo', '... got the expected subroutine name');
         is($foo->line_number, 3, '... got the expected line number');
         is($foo->column_number, 1, '... got the expected column number');
 
-        isa_ok($bar, 'HTML::MasonX::Critic::Inspector::Perl::SubroutineDeclaration');
+        isa_ok($bar, 'HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineDeclaration');
         is($bar->symbol, 'bar', '... got the expected subroutine name');
         is($bar->line_number, 4, '... got the expected line number');
         is($bar->column_number, 1, '... got the expected column number');

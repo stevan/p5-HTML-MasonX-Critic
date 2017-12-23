@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Perl::UsedModule;
+package HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule;
 # ABSTRACT: Query result objects representing used Perl modules
 
 use strict;
@@ -9,7 +9,7 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
-use HTML::MasonX::Critic::Inspector::Perl::UsedModule::ImportedToken;
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::ImportedToken;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -96,7 +96,7 @@ sub number_of_imports { return scalar @{ $_[0]->{_imports} } }
 sub imports {
 	my ($self) = @_;
 
-	return map HTML::MasonX::Critic::Inspector::Perl::UsedModule::ImportedToken->new(
+	return map HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::ImportedToken->new(
         include => $self,
         token   => $_
     ), @{ $self->{_imports} }

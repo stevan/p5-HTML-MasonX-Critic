@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Query::PerlCritic;
+package HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic;
 # ABSTRACT: Run Perl::Critic on inspector objects
 
 use strict;

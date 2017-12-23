@@ -10,7 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCode');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode');
 }
 
 my $MASON_FILE_NAME = '031-perl-method-call.html';
@@ -53,7 +53,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
 
         subtest '... testing the method call without a name' => sub {
 
-            my @method_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_method_calls( $init );
+            my @method_calls = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_method_calls( $init );
             is(scalar(@method_calls), 5, '... got the 5 calls');
 
             is($method_calls[0]->name, 'comp', '... got the name we expected');
@@ -89,7 +89,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
 
         subtest '... testing the method call with a name' => sub {
 
-            my @method_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_method_calls(
+            my @method_calls = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_method_calls(
                 $init, ( method_name => 'comp' )
             );
             is(scalar(@method_calls), 1, '... got the one `comp` call');
@@ -103,7 +103,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
 
         subtest '... testing the method call with a name and invocant' => sub {
 
-            my @method_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_method_calls(
+            my @method_calls = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_method_calls(
                 $init, (
                     invocant_name => '$b',
                     method_name   => 'property',

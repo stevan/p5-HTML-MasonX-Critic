@@ -10,7 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCritic');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic');
 }
 
 my $MASON_FILE = '040-perl-critic-object-code.t';
@@ -46,7 +46,7 @@ subtest '... simple perl-cricit query test' => sub {
         my $obj_code = $i->get_object_code_inspector_for_path( $MASON_FILE );
         isa_ok($obj_code, 'HTML::MasonX::Critic::Inspector::ObjectCode');
 
-        my @violations = HTML::MasonX::Critic::Inspector::Query::PerlCritic->critique_object_code(
+        my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique_object_code(
             $obj_code,
             ( '-single-policy' => 'Variables::ProhibitUnusedVariables' )
         );
@@ -65,7 +65,7 @@ subtest '... simple perl-cricit query test' => sub {
         my $compiler = $i->get_compiler_inspector_for_path( $MASON_FILE );
         isa_ok($compiler, 'HTML::MasonX::Critic::Inspector::Compiler');
 
-        my @violations = HTML::MasonX::Critic::Inspector::Query::PerlCritic->critique_compiler_component(
+        my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique_compiler_component(
             $compiler,
             ( '-single-policy' => 'Variables::ProhibitUnusedVariables' )
         );

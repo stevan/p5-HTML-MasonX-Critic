@@ -14,9 +14,9 @@ use HTML::MasonX::Critic::Violation;
 
 use HTML::MasonX::Critic::Inspector;
 
-use HTML::MasonX::Critic::Inspector::Query::PerlCritic;
-use HTML::MasonX::Critic::Inspector::Query::MasonCritic;
-use HTML::MasonX::Critic::Inspector::Query::PerlCode;
+use HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic;
+use HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic;
+use HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -67,14 +67,14 @@ sub critique {
     my @violations;
 
     if ( keys %{ $self->{_perl_critic_config} } ) {
-        push @violations => HTML::MasonX::Critic::Inspector::Query::PerlCritic->critique_compiler_component(
+        push @violations => HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique_compiler_component(
             $compiler,
             %{ $self->{_perl_critic_config} }
         );
     }
 
     if ( keys %{ $self->{_mason_critic_config} } ) {
-        push @violations => HTML::MasonX::Critic::Inspector::Query::MasonCritic->critique_compiler_component(
+        push @violations => HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(
             $compiler,
             %{ $self->{_mason_critic_config} }
         );

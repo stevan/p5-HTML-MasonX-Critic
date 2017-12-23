@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Perl::MethodCall;
+package HTML::MasonX::Critic::Inspector::Query::Element::Perl::MethodCall;
 # ABSTRACT: Query result objects representing a Perl method call
 
 use strict;
@@ -9,7 +9,7 @@ our $VERSION = '0.01';
 use Carp         ();
 use Scalar::Util ();
 
-use HTML::MasonX::Critic::Inspector::Perl::MethodCall::Invocant;
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::MethodCall::Invocant;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
@@ -50,7 +50,7 @@ sub find_invocant {
             $invocant = $invocant->previous_sibling;
         }
 
-        $self->{_invocant} = HTML::MasonX::Critic::Inspector::Perl::MethodCall::Invocant->new( ppi => $invocant );
+        $self->{_invocant} = HTML::MasonX::Critic::Inspector::Query::Element::Perl::MethodCall::Invocant->new( ppi => $invocant );
     }
 
     return $self->{_invocant};

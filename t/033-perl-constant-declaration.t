@@ -10,7 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCode');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode');
 }
 
 my $MASON_FILE_NAME = '033-perl-constant-declaration.html';
@@ -51,9 +51,9 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
         my ($once) = @{ $blocks->once_blocks };
         isa_ok($once, 'HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 
-        my ($FOO, $BAR) = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_constant_declarations( $once );
+        my ($FOO, $BAR) = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_constant_declarations( $once );
 
-        isa_ok($FOO, 'HTML::MasonX::Critic::Inspector::Perl::ConstantDeclaration');
+        isa_ok($FOO, 'HTML::MasonX::Critic::Inspector::Query::Element::Perl::ConstantDeclaration');
         is($FOO->symbol, 'FOO', '... got the expected subroutine name');
         is($FOO->line_number, 3, '... got the expected line number');
         is($FOO->column_number, 1, '... got the expected column number');
@@ -63,7 +63,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             '... got the expected arguments'
         );
 
-        isa_ok($BAR, 'HTML::MasonX::Critic::Inspector::Perl::ConstantDeclaration');
+        isa_ok($BAR, 'HTML::MasonX::Critic::Inspector::Query::Element::Perl::ConstantDeclaration');
         is($BAR->symbol, 'BAR', '... got the expected subroutine name');
         is($BAR->line_number, 5, '... got the expected line number');
         is($BAR->column_number, 1, '... got the expected column number');

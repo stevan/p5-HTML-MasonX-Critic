@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Query::PerlCode;
+package HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode;
 # ABSTRACT: Query HTML::MasonX::Component::PerlCode objects with PPI
 
 use strict;
@@ -11,14 +11,14 @@ use Scalar::Util ();
 
 use Perl::Critic::Utils ();
 
-use HTML::MasonX::Critic::Inspector::Perl::UsedModule;
-use HTML::MasonX::Critic::Inspector::Perl::UsedModule::Conditional;
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule;
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::Conditional;
 
-use HTML::MasonX::Critic::Inspector::Perl::ConstantDeclaration;
-use HTML::MasonX::Critic::Inspector::Perl::SubroutineDeclaration;
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::ConstantDeclaration;
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineDeclaration;
 
-use HTML::MasonX::Critic::Inspector::Perl::MethodCall;
-use HTML::MasonX::Critic::Inspector::Perl::SubroutineCall;
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::MethodCall;
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineCall;
 
 sub find_includes {
     my ($class, $perl_code, %opts) = @_;
@@ -32,8 +32,8 @@ sub find_includes {
         filter    => sub { $_[0]->module ne 'constant' },
         transform => sub {
             $_[0]->module eq 'if'
-                ? HTML::MasonX::Critic::Inspector::Perl::UsedModule::Conditional->new( ppi => $_[0] )
-                : HTML::MasonX::Critic::Inspector::Perl::UsedModule->new( ppi => $_[0] )
+                ? HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::Conditional->new( ppi => $_[0] )
+                : HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule->new( ppi => $_[0] )
         }
     );
 }
@@ -48,7 +48,7 @@ sub find_subroutine_declarations {
     return $perl_code->find_with_ppi(
         node_type => 'PPI::Statement::Sub',
         transform => sub {
-            HTML::MasonX::Critic::Inspector::Perl::SubroutineDeclaration->new( ppi => $_[0] )
+            HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineDeclaration->new( ppi => $_[0] )
         }
     );
 }
@@ -64,7 +64,7 @@ sub find_constant_declarations {
         node_type => 'PPI::Statement::Include',
         filter    => sub { $_[0]->module eq 'constant' },
         transform => sub {
-            HTML::MasonX::Critic::Inspector::Perl::ConstantDeclaration->new( ppi => $_[0] )
+            HTML::MasonX::Critic::Inspector::Query::Element::Perl::ConstantDeclaration->new( ppi => $_[0] )
         }
     );
 }
@@ -87,7 +87,7 @@ sub find_method_calls {
             : sub { $_[0]->method_call }
         ),
         transform => sub {
-            HTML::MasonX::Critic::Inspector::Perl::MethodCall->new( ppi => $_[0] )
+            HTML::MasonX::Critic::Inspector::Query::Element::Perl::MethodCall->new( ppi => $_[0] )
         }
     );
 
@@ -136,7 +136,7 @@ sub find_subroutine_calls {
             return not(Perl::Critic::Utils::is_perl_builtin( $_[0] ));
         },
         transform => sub {
-            HTML::MasonX::Critic::Inspector::Perl::SubroutineCall->new( ppi => $_[0] )
+            HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineCall->new( ppi => $_[0] )
         }
     );
 

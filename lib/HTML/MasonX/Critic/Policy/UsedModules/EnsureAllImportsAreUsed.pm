@@ -6,7 +6,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Critic::Inspector::Query::PerlCode;
+use HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode;
 
 use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
@@ -32,7 +32,7 @@ sub violates {
     # Gather ....
     foreach my $block ( @blocks ) {
 
-        my @includes = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_includes( $block );
+        my @includes = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_includes( $block );
         foreach my $include ( @includes ) {
 
             next if $include->does_not_call_import;
@@ -53,7 +53,7 @@ sub violates {
     # Check ...
     foreach my $block ( @blocks ) {
 
-        my @sub_calls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_subroutine_calls( $block, ignore_builtins => 1 );
+        my @sub_calls = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_subroutine_calls( $block, ignore_builtins => 1 );
 
         foreach my $sub_call ( @sub_calls ) {
             # If this is a fully qualified call, then skip it

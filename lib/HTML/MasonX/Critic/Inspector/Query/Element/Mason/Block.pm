@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Mason::Block;
+package HTML::MasonX::Critic::Inspector::Query::Element::Mason::Block;
 # ABSTRACT: An object representing a Mason block
 
 use strict;

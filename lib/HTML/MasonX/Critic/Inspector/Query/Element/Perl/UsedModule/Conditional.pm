@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Perl::UsedModule::Conditional;
+package HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::Conditional;
 # ABSTRACT: Query result objects representing conditionally used Perl modules
 
 use strict;
@@ -10,11 +10,11 @@ use Carp            ();
 use List::Util      ();
 use Module::Runtime ();
 
-use HTML::MasonX::Critic::Inspector::Perl::UsedModule;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Inspector::Perl::UsedModule') }
+use HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule;
+our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule') }
 our %HAS; BEGIN {
     %HAS = (
-        %HTML::MasonX::Critic::Inspector::Perl::UsedModule::HAS,
+        %HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::HAS,
         # ... cache some data ...
         _module         => sub {},
         _module_version => sub {},
