@@ -31,6 +31,10 @@ sub BUILD {
 		unless Scalar::Util::blessed( $self->{ppi} )
 			&& $self->{ppi}->isa('PPI::Statement::Include');
 
+    # determine the list of imports
+    # but do not inflate them to
+    # objects now ...
+    $self->{_imports} = [ $self->_flatten_import_list_from_PPI( $self->{ppi}->arguments ) ];
 }
 
 sub ppi    { $_[0]->{ppi} }
@@ -87,20 +91,15 @@ sub does_not_call_import {
 
 ## Imports
 
-sub number_of_imports { return scalar $_[0]->imports }
+sub number_of_imports { return scalar @{ $_[0]->{_imports} } }
 
 sub imports {
 	my ($self) = @_;
 
-	my @args = $self->arguments;
-
-	$self->{_imports} = [
-		map HTML::MasonX::Critic::Inspector::Perl::UsedModule::ImportedToken->new(
-			token => $_
-		), $self->_flatten_import_list_from_PPI( @args )
-	] unless $self->{_imports};
-
-	return @{ $self->{_imports} }
+	return map HTML::MasonX::Critic::Inspector::Perl::UsedModule::ImportedToken->new(
+        include => $self,
+        token   => $_
+    ), @{ $self->{_imports} }
 }
 
 ## ...
