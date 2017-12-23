@@ -124,7 +124,7 @@ sub to_string {
             'e' => $self->explanation,
             's' => $self->severity,
             'P' => $self->policy,
-            'p' => ($self->policy =~ s/^.*\:\:Critic\:\:Policy\:\://r),
+            'p' => ($self->policy =~ s/^.*\:\:Critic\:\:Policy\:\://r), # /
             'd' => sub { $self->explanation },
             'r' => sub { $self->source },
         )

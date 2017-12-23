@@ -33,8 +33,6 @@ __END__
 
 =pod
 
-=head1 SYNOPSIS
-
 =head1 DESCRIPTION
 
 =cut
