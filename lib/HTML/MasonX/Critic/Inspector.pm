@@ -81,7 +81,7 @@ sub interpreter { $_[0]->{_interpreter} }
 
 ## do things ...
 
-sub get_compiler_inspector_for_path {
+sub compile_path {
     my ($self, $path) = @_;
 
     return HTML::MasonX::Critic::Inspector::Compiler->new(

@@ -32,7 +32,7 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
     my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
     isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
-    my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
+    my $state = $i->compile_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
     my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(
@@ -64,7 +64,7 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
     my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
     isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
-    my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
+    my $state = $i->compile_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
     my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique_compiler_component(

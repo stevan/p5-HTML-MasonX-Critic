@@ -19,7 +19,7 @@ sub critique_compiler_component {
 
     my $critic   = exists $opts{perl_critic} ? $opts{perl_critic} : Perl::Critic->new( -severity => 1, %opts );
     my $filename = $compiler->abs_path;
-    my $comp     = $compiler->get_main_component;
+    my $comp     = $compiler->root_component;
     my $blocks   = $comp->blocks;
 
     my @code;

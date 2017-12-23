@@ -35,7 +35,7 @@ sub critique_compiler_component {
         Carp::confess('You have niether a `policy` nor  a `profile`, nothing to critique');
     }
 
-    my $component  = $compiler->get_main_component;
+    my $component  = $compiler->root_component;
     my @violations = map $_->violates( $component ), @policies;
 
     return @violations;

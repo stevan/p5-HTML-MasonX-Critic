@@ -62,7 +62,7 @@ sub BUILD {
 sub critique {
     my ($self, $file) = @_;
 
-    my $compiler = $self->{_inspector}->get_compiler_inspector_for_path( $file );
+    my $compiler = $self->{_inspector}->compile_path( $file );
 
     my @violations;
 

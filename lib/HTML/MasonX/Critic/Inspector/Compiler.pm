@@ -97,7 +97,7 @@ sub default_escape_flags { @{ $_[0]->{_compiler}->default_escape_flags } }
 
 ## collect info ...
 
-sub get_main_component {
+sub root_component {
     my ($self) = @_;
 
     #use Data::Dumper;

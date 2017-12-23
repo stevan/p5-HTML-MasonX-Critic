@@ -35,10 +35,10 @@ subtest '... testing querying for subroutine calls' => sub {
     my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
     isa_ok($i, 'HTML::MasonX::Critic::Inspector');
 
-    my $state = $i->get_compiler_inspector_for_path( $MASON_FILE_NAME );
+    my $state = $i->compile_path( $MASON_FILE_NAME );
     isa_ok($state, 'HTML::MasonX::Critic::Inspector::Compiler');
 
-    my $comp = $state->get_main_component;
+    my $comp = $state->root_component;
     isa_ok($comp, 'HTML::MasonX::Critic::Inspector::Compiler::Component');
 
     is($comp->name, $MASON_FILE_NAME, '... got the expected name');
