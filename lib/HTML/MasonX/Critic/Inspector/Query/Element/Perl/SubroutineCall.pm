@@ -11,8 +11,10 @@ use Scalar::Util        ();
 use Perl::Critic::Utils ();
 
 use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
+use HTML::MasonX::Critic::Inspector::Query::Element;
+our @ISA;  BEGIN { @ISA = ('UNIVERSAL::Object') }
+our @DOES; BEGIN { @DOES = ('HTML::MasonX::Critic::Inspector::Query::Element') }
+our %HAS;  BEGIN {
     %HAS = (
         ppi       => sub { die 'A `ppi` node is required' },
         # private data
@@ -28,15 +30,18 @@ sub BUILD {
             && $self->{ppi}->isa('PPI::Token::Word');
 }
 
-sub ppi    { $_[0]->{ppi} }
-sub source { $_[0]->{ppi}->content }
+sub ppi { $_[0]->{ppi} }
 
-sub highlight     { $_[0]->literal }
-
-sub literal       { $_[0]->{ppi}->literal             }
+# Element API
+sub highlight     { $_[0]->literal                    }
+sub source        { $_[0]->{ppi}->content             }
 sub filename      { $_[0]->{ppi}->logical_filename    }
 sub line_number   { $_[0]->{ppi}->logical_line_number }
 sub column_number { $_[0]->{ppi}->column_number       }
+
+# ...
+
+sub literal { $_[0]->{ppi}->literal }
 
 sub is_built_in {
     Perl::Critic::Utils::is_perl_builtin( $_[0]->{ppi} )

@@ -10,8 +10,10 @@ use Carp         ();
 use Scalar::Util ();
 
 use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
+use HTML::MasonX::Critic::Inspector::Query::Element;
+our @ISA;  BEGIN { @ISA = ('UNIVERSAL::Object') }
+our @DOES; BEGIN { @DOES = ('HTML::MasonX::Critic::Inspector::Query::Element') }
+our %HAS;  BEGIN {
     %HAS = (
         ppi => sub { die 'A `ppi` node is required' },
         # private data
@@ -64,14 +66,18 @@ sub BUILD {
     $self->{_arguments} = [ map { "$_" } @args ];
 }
 
-sub ppi    { $_[0]->{ppi} }
-sub source { $_[0]->{ppi}->content }
+sub ppi { $_[0]->{ppi} }
 
-sub symbol        {    $_[0]->{_symbol}               }
-sub arguments     { @{ $_[0]->{_arguments} }          }
+# Element API
+sub source        { $_[0]->{ppi}->content             }
 sub filename      { $_[0]->{ppi}->logical_filename    }
 sub line_number   { $_[0]->{ppi}->logical_line_number }
 sub column_number { $_[0]->{ppi}->column_number       }
+
+# ...
+
+sub symbol    {    $_[0]->{_symbol}      }
+sub arguments { @{ $_[0]->{_arguments} } }
 
 1;
 

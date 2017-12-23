@@ -6,10 +6,11 @@ use warnings;
 
 our $VERSION = '0.01';
 
-
 use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
+use HTML::MasonX::Critic::Inspector::Query::Element;
+our @ISA;  BEGIN { @ISA = ('UNIVERSAL::Object') }
+our @DOES; BEGIN { @DOES = ('HTML::MasonX::Critic::Inspector::Query::Element') }
+our %HAS;  BEGIN {
     %HAS = (
         type => sub { die 'A `type` is required' },
         code => sub { die 'A `code` is required' },
@@ -23,6 +24,8 @@ sub BUILD {
         unless Scalar::Util::blessed( $self->{code} )
             && $self->{code}->isa('HTML::MasonX::Critic::Inspector::Compiler::Component::PerlCode');
 }
+
+# Element API
 
 sub source {
     my ($self) = @_;

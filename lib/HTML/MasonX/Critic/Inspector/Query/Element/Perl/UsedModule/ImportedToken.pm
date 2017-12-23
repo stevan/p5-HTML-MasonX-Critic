@@ -7,8 +7,10 @@ use warnings;
 our $VERSION = '0.01';
 
 use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
+use HTML::MasonX::Critic::Inspector::Query::Element;
+our @ISA;  BEGIN { @ISA = ('UNIVERSAL::Object') }
+our @DOES; BEGIN { @DOES = ('HTML::MasonX::Critic::Inspector::Query::Element') }
+our %HAS;  BEGIN {
     %HAS = (
         include => sub { die 'An `include` is required' },
         token   => sub { die 'A `token` is required'    },
@@ -27,8 +29,8 @@ sub token   { $_[0]->{token}                }
 sub is_tag  { $_[0]->token =~ /^\:/ ? 1 : 0 }
 sub is_name { $_[0]->is_tag ? 0 : 1         }
 
-sub highlight { $_[0]->token }
-
+# Element API
+sub highlight     { $_[0]->token                    }
 sub source        { $_[0]->{include}->source        }
 sub filename      { $_[0]->{include}->filename      }
 sub line_number   { $_[0]->{include}->line_number   }
