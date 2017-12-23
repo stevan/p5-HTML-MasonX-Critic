@@ -91,6 +91,8 @@ __END__
 
 =head1 SYNOPSIS
 
+    say('Under ¯\_(ツ)_/¯ Construction');
+
 =head1 DESCRIPTION
 
 =cut
