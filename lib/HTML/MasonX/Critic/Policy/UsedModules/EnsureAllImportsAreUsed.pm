@@ -8,8 +8,6 @@ our $VERSION = '0.01';
 
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
-use HTML::MasonX::Critic::Inspector::Mason::ModuleImport;
-
 use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
 our %HAS; BEGIN {
@@ -42,7 +40,7 @@ sub violates {
 
             foreach my $import ( $include->imports ) {
                 next if $import->is_tag;
-                $imported_subs{ $import->token } = [ $include, $import ];
+                $imported_subs{ $import->token } = $import;
             }
         }
     }
@@ -72,14 +70,10 @@ sub violates {
     # anything that remains is stuff
     # that didn't get called ...
     foreach my $sub_name ( keys %imported_subs ) {
-        my ($include, $import) = @{ $imported_subs{ $sub_name } };
         push @violations => $self->violation(
             DESC,
             (sprintf EXPL, $sub_name),
-            HTML::MasonX::Critic::Inspector::Mason::ModuleImport->new(
-                include => $include,
-                import  => $import,
-            )
+            $imported_subs{ $sub_name },
         );
     }
 
