@@ -10,20 +10,6 @@ use Carp         ();
 use Scalar::Util ();
 use Perl::Critic ();
 
-sub critique_object_code {
-    my ($class, $object_code, %opts) = @_;
-
-    Carp::confess('The object code must be an instance of `HTML::MasonX::Critic::Inspector::ObjectCode`')
-        unless Scalar::Util::blessed($object_code)
-            && $object_code->isa('HTML::MasonX::Critic::Inspector::ObjectCode');
-
-    my $critic     = exists $opts{perl_critic} ? $opts{perl_critic} : Perl::Critic->new( -severity => 1, %opts );
-    my $code       = $object_code->object_code;
-    my @violations = $critic->critique( $code );
-
-    return @violations;
-}
-
 sub critique_compiler_component {
     my ($class, $compiler, %opts) = @_;
 

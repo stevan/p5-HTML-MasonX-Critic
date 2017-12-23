@@ -43,25 +43,6 @@ subtest '... simple perl-cricit query test' => sub {
 
     subtest '... testing the object code' => sub {
 
-        my $obj_code = $i->get_object_code_inspector_for_path( $MASON_FILE );
-        isa_ok($obj_code, 'HTML::MasonX::Critic::Inspector::ObjectCode');
-
-        my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique_object_code(
-            $obj_code,
-            ( '-single-policy' => 'Variables::ProhibitUnusedVariables' )
-        );
-        is(scalar @violations, 1, '... got one violation');
-
-        my ($v) = @violations;
-        is($v->policy, 'Perl::Critic::Policy::Variables::ProhibitUnusedVariables', '... got the expected policy name');
-        is($v->logical_line_number, 9, '... got the expected line number');
-        is($v->column_number, 1, '... got the expected column number');
-        is($v->source, 'my $test;', '... got the expected source');
-    };
-
-
-    subtest '... testing the object code' => sub {
-
         my $compiler = $i->get_compiler_inspector_for_path( $MASON_FILE );
         isa_ok($compiler, 'HTML::MasonX::Critic::Inspector::Compiler');
 
