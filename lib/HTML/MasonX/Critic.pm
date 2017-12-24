@@ -95,4 +95,25 @@ __END__
 
 =head1 DESCRIPTION
 
+The three key components in this system are:
+
+=head2 Inspector
+
+First in the inspector, it is the means by which we introspect
+Mason compilation run and query the results. These queries
+then return objects that can be used to identify issues.
+
+=head2 Policy
+
+Policies are a way of describing a code pattern that you wish
+to identify and inspect. These modules will query and inspect
+a compilation run to determine if the code matches the pattern
+described in the policy.
+
+=head2 Violation
+
+Violations are the matches found by a policy. They contain
+information about code pattern that was matched including
+the file it is from and the exact location within that file.
+
 =cut
