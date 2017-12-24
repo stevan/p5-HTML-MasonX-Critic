@@ -10,7 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCode');
 }
 
 my $MASON_FILE_NAME = '030-perl-used-module.html';
@@ -65,7 +65,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
             $perl_version,
             $required_test_more,
             $conditional_file_basename
-        ) = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_includes( $once );
+        ) = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_includes( $once );
 
         subtest '... testing include `use Scalar::Util "blessed";`' => sub {
 

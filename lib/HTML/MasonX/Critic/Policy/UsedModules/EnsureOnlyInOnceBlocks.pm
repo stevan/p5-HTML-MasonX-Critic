@@ -6,7 +6,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode;
+use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
 use HTML::MasonX::Critic::Policy;
 our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
@@ -48,7 +48,7 @@ sub _check_blocks_for_includes {
     my @violations;
     foreach my $block ( @blocks ) {
 
-        my @includes = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_includes( $block );
+        my @includes = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_includes( $block );
 
         foreach my $include ( @includes ) {
             push @violations => $self->violation(

@@ -10,7 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCode');
 }
 
 my $MASON_FILE_NAME = '033-perl-constant-declaration.html';
@@ -51,7 +51,7 @@ subtest '... simple compiler test using perl blocks and queries' => sub {
         my ($once) = @{ $blocks->once_blocks };
         isa_ok($once, 'HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
 
-        my ($FOO, $BAR) = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_constant_declarations( $once );
+        my ($FOO, $BAR) = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_constant_declarations( $once );
 
         isa_ok($FOO, 'HTML::MasonX::Critic::Inspector::Query::Element::Perl::ConstantDeclaration');
         is($FOO->symbol, 'FOO', '... got the expected subroutine name');

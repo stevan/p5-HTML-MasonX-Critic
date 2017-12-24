@@ -1,4 +1,4 @@
-package HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode;
+package HTML::MasonX::Critic::Inspector::Query::PerlCode;
 # ABSTRACT: Query HTML::MasonX::Component::PerlCode objects with PPI
 
 use strict;

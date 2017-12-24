@@ -10,7 +10,7 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode');
+    use_ok('HTML::MasonX::Critic::Inspector::Query::PerlCode');
 }
 
 my $MASON_FILE_NAME = '050-mason-critic-policy.html';
@@ -59,7 +59,7 @@ subtest '... testing querying for subroutine calls' => sub {
 
         subtest '... testing the subroutine calls' => sub {
 
-            my @subcalls = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode->find_subroutine_calls( $init, ignore_builtins => 1 );
+            my @subcalls = HTML::MasonX::Critic::Inspector::Query::PerlCode->find_subroutine_calls( $init, ignore_builtins => 1 );
             is(scalar(@subcalls), 3, '... got the two calls');
 
             is($subcalls[0]->literal, 'Scalar::Util::looks_like_number', '... got the literal value we expected');
