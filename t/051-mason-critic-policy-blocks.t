@@ -10,7 +10,6 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic');
 }
 
 my $MASON_FILE_NAME = '051-mason-critic-policy-blocks.html';
@@ -29,16 +28,15 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
 
     my $POLICY = 'HTML::MasonX::Critic::Policy::Blocks::ProhibitSharedBlocks';
 
-    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
-
-    my $state = $i->compile_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
-
-    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
-        $state,
-        policy => $POLICY
+    my $critic = HTML::MasonX::Critic->new(
+        comp_root => $COMP_ROOT,
+        config    => {
+            mason_critic_policy => $POLICY
+        }
     );
+    isa_ok($critic, 'HTML::MasonX::Critic');
+
+    my @violations = $critic->critique( $MASON_FILE_NAME );
 
     is(scalar(@violations), 1, '... got two violations back');
     my ($shared) = @violations;
@@ -52,7 +50,7 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
         );
         is($shared->line_number, 2, '... got the expected line number');
         is($shared->column_number, 1, '... got the expected column number');
-        is($shared->filename, $state->abs_path, '... got the expected filename');
+        is($shared->filename, $COMP_ROOT->child( $MASON_FILE_NAME ), '... got the expected filename');
         is($shared->policy, $POLICY, '... got the expected policy');
     };
 };
@@ -61,16 +59,15 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
 
     my $POLICY = 'HTML::MasonX::Critic::Policy::Blocks::ProhibitFilterBlocks';
 
-    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
-
-    my $state = $i->compile_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
-
-    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
-        $state,
-        policy => $POLICY
+    my $critic = HTML::MasonX::Critic->new(
+        comp_root => $COMP_ROOT,
+        config    => {
+            mason_critic_policy => $POLICY
+        }
     );
+    isa_ok($critic, 'HTML::MasonX::Critic');
+
+    my @violations = $critic->critique( $MASON_FILE_NAME );
 
     is(scalar(@violations), 1, '... got two violations back');
     my ($filter) = @violations;
@@ -84,7 +81,7 @@ subtest '... testing Blocks::ProhibitSharedBlocks policy' => sub {
         );
         is($filter->line_number, 5, '... got the expected line number');
         is($filter->column_number, 1, '... got the expected column number');
-        is($filter->filename, $state->abs_path, '... got the expected filename');
+        is($filter->filename, $COMP_ROOT->child( $MASON_FILE_NAME ), '... got the expected filename');
         is($filter->policy, $POLICY, '... got the expected policy');
     };
 };

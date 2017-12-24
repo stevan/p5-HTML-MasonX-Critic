@@ -10,7 +10,6 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic');
 }
 
 my $MASON_FILE_NAME = '050-mason-critic-policy-used-modules.html';
@@ -31,16 +30,15 @@ subtest '... testing UsedModules::ProhibitImportingTags policy' => sub {
 
     my $POLICY = 'HTML::MasonX::Critic::Policy::UsedModules::ProhibitImportingTags';
 
-    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
-
-    my $state = $i->compile_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
-
-    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
-        $state,
-        policy => $POLICY
+    my $critic = HTML::MasonX::Critic->new(
+        comp_root => $COMP_ROOT,
+        config    => {
+            mason_critic_policy => $POLICY
+        }
     );
+    isa_ok($critic, 'HTML::MasonX::Critic');
+
+    my @violations = $critic->critique( $MASON_FILE_NAME );
 
     is(scalar(@violations), 2, '... got two violations back');
     my ($scalar_util, $list_util) = @violations;
@@ -49,7 +47,7 @@ subtest '... testing UsedModules::ProhibitImportingTags policy' => sub {
         is($scalar_util->source, q[use Scalar::Util 'blessed', qw[ :Test foo bar ];], '... got the expected source');
         is($scalar_util->line_number, 3, '... got the expected line number');
         is($scalar_util->column_number, 1, '... got the expected column number');
-        is($scalar_util->filename, $state->abs_path, '... got the expected filename');
+        is($scalar_util->filename, $COMP_ROOT->child( $MASON_FILE_NAME ), '... got the expected filename');
         is($scalar_util->policy, $POLICY, '... got the expected policy');
     };
 
@@ -57,7 +55,7 @@ subtest '... testing UsedModules::ProhibitImportingTags policy' => sub {
         is($list_util->source, q[use List::Util   qw[ :All ];], '... got the expected source');
         is($list_util->line_number, 4, '... got the expected line number');
         is($list_util->column_number, 1, '... got the expected column number');
-        is($list_util->filename, $state->abs_path, '... got the expected filename');
+        is($list_util->filename, $COMP_ROOT->child( $MASON_FILE_NAME ), '... got the expected filename');
         is($list_util->policy, $POLICY, '... got the expected policy');
     };
 
@@ -67,16 +65,15 @@ subtest '... testing UsedModules::EnsureDoNotCallImport policy' => sub {
 
     my $POLICY = 'HTML::MasonX::Critic::Policy::UsedModules::EnsureDoNotCallImport';
 
-    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
-
-    my $state = $i->compile_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
-
-    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
-        $state,
-        policy => $POLICY
+    my $critic = HTML::MasonX::Critic->new(
+        comp_root => $COMP_ROOT,
+        config    => {
+            mason_critic_policy => $POLICY
+        }
     );
+    isa_ok($critic, 'HTML::MasonX::Critic');
+
+    my @violations = $critic->critique( $MASON_FILE_NAME );
 
     is(scalar(@violations), 2, '... got two violations back');
     my ($scalar_util, $list_util) = @violations;
@@ -85,7 +82,7 @@ subtest '... testing UsedModules::EnsureDoNotCallImport policy' => sub {
         is($scalar_util->source, q[use Scalar::Util 'blessed', qw[ :Test foo bar ];], '... got the expected source');
         is($scalar_util->line_number, 3, '... got the expected line number');
         is($scalar_util->column_number, 1, '... got the expected column number');
-        is($scalar_util->filename, $state->abs_path, '... got the expected filename');
+        is($scalar_util->filename, $COMP_ROOT->child( $MASON_FILE_NAME ), '... got the expected filename');
         is($scalar_util->policy, $POLICY, '... got the expected policy');
     };
 
@@ -93,7 +90,7 @@ subtest '... testing UsedModules::EnsureDoNotCallImport policy' => sub {
         is($list_util->source, q[use List::Util   qw[ :All ];], '... got the expected source');
         is($list_util->line_number, 4, '... got the expected line number');
         is($list_util->column_number, 1, '... got the expected column number');
-        is($list_util->filename, $state->abs_path, '... got the expected filename');
+        is($list_util->filename, $COMP_ROOT->child( $MASON_FILE_NAME ), '... got the expected filename');
         is($list_util->policy, $POLICY, '... got the expected policy');
     };
 
@@ -103,16 +100,15 @@ subtest '... testing UsedModules::EnsureOnlyInOnceBlocks policy' => sub {
 
     my $POLICY = 'HTML::MasonX::Critic::Policy::UsedModules::EnsureOnlyInOnceBlocks';
 
-    my $i = HTML::MasonX::Critic::Inspector->new( comp_root => $COMP_ROOT );
-    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
-
-    my $state = $i->compile_path( $MASON_FILE_NAME );
-    isa_ok($state, 'HTML::MasonX::Critic::Inspector::CompiledPath');
-
-    my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic->critique(
-        $state,
-        policy => $POLICY
+    my $critic = HTML::MasonX::Critic->new(
+        comp_root => $COMP_ROOT,
+        config    => {
+            mason_critic_policy => $POLICY
+        }
     );
+    isa_ok($critic, 'HTML::MasonX::Critic');
+
+    my @violations = $critic->critique( $MASON_FILE_NAME );
 
     is(scalar(@violations), 1, '... got one violation back');
     my ($datetime) = @violations;
@@ -121,7 +117,7 @@ subtest '... testing UsedModules::EnsureOnlyInOnceBlocks policy' => sub {
         is($datetime->source, q[require DateTime;], '... got the expected source');
         is($datetime->line_number, 8, '... got the expected line number');
         is($datetime->column_number, 1, '... got the expected column number');
-        is($datetime->filename, $state->abs_path, '... got the expected filename');
+        is($datetime->filename, $COMP_ROOT->child( $MASON_FILE_NAME ), '... got the expected filename');
         is($datetime->policy, $POLICY, '... got the expected policy');
     };
 

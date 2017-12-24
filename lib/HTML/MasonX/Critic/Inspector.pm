@@ -12,10 +12,7 @@ use Scalar::Util ();
 use HTML::Mason::Interp;
 
 use HTML::MasonX::Critic::Inspector::CompiledPath;
-
-use HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic;
-use HTML::MasonX::Critic::Inspector::Query::Factory::MasonCritic;
-use HTML::MasonX::Critic::Inspector::Query::Factory::PerlCode;
+use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
 use UNIVERSAL::Object;
 our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }

@@ -10,7 +10,6 @@ use Test::Fatal;
 
 BEGIN {
     use_ok('HTML::MasonX::Critic');
-    use_ok('HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic');
 }
 
 my $MASON_FILE = '040-perl-critic-object-code.t';
@@ -35,30 +34,22 @@ $greeting = undef;
 
 subtest '... simple perl-cricit query test' => sub {
 
-    my $i = HTML::MasonX::Critic::Inspector->new(
-        comp_root     => $COMP_ROOT,
-        allow_globals => [ '$x' ]
+    my $critic = HTML::MasonX::Critic->new(
+        comp_root => $COMP_ROOT,
+        config    => {
+            perl_critic_policy => 'Variables::ProhibitUnusedVariables'
+        }
     );
-    isa_ok($i, 'HTML::MasonX::Critic::Inspector');
+    isa_ok($critic, 'HTML::MasonX::Critic');
 
-    subtest '... testing the object code' => sub {
+    my @violations = $critic->critique( $MASON_FILE );
+    is(scalar @violations, 1, '... got one violation');
 
-        my $compiler = $i->compile_path( $MASON_FILE );
-        isa_ok($compiler, 'HTML::MasonX::Critic::Inspector::CompiledPath');
-
-        my @violations = HTML::MasonX::Critic::Inspector::Query::Factory::PerlCritic->critique(
-            $compiler,
-            ( '-single-policy' => 'Variables::ProhibitUnusedVariables' )
-        );
-        is(scalar @violations, 1, '... got one violation');
-
-        my ($v) = @violations;
-        is($v->policy, 'Perl::Critic::Policy::Variables::ProhibitUnusedVariables', '... got the expected policy name');
-        is($v->logical_line_number, 9, '... got the expected line number');
-        is($v->column_number, 1, '... got the expected column number');
-        is($v->source, 'my $test;', '... got the expected source');
-    };
-
+    my ($v) = @violations;
+    is($v->policy, 'Perl::Critic::Policy::Variables::ProhibitUnusedVariables', '... got the expected policy name');
+    is($v->logical_line_number, 9, '... got the expected line number');
+    is($v->column_number, 1, '... got the expected column number');
+    is($v->source, 'my $test;', '... got the expected source');
 };
 
 done_testing;
