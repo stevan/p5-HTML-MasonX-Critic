@@ -19,7 +19,6 @@ our %HAS; BEGIN {
     )
 }
 
-
 sub BUILD {
     my ($self, $params) = @_;
 
@@ -80,7 +79,7 @@ sub get_lines_at {
     my $fh = $self->{_path}->openr;
 
     # skip to the start line ....
-    $fh->getline  while --$starting_line;
+    $fh->getline while --$starting_line;
 
     while ( not($fh->eof) && $lines_to_capture ) {
         push @lines => HTML::MasonX::Critic::Violation::SourceFile::Line->new(
