@@ -127,7 +127,7 @@ masoncritic [-dv] [long options...]
     --perl-critic-profile  set the Perl::Critic profile to use
     --perl-critic-policy   set the Perl::Critic policy to use
     --mason-critic-policy  set the HTML::MasonX::Critic policy to use
-    --mason_critic_profile set the HTML::MasonX::Critic profile to use
+    --mason-critic-profile set the HTML::MasonX::Critic profile to use
     --color                turn on/off color in the output
     --json                 output the violations as JSON
     --show-source          include the Mason source code in the output when in verbose mode
