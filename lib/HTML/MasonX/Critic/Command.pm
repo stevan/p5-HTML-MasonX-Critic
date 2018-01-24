@@ -143,7 +143,8 @@ sub run {
 
     my $root_dir    = $self->{dir};
     my $critic      = $self->{_mason_critic};
-    my $all_files   = $self->{_file_finder}->find_all_mason_files( relative => 1 );
+    my $all_files   = $self->{_file_finder}->find_all_mason_files
+                                           ->transform(sub { $_->relative( $root_dir ) });
 
     while ( my $file = $all_files->next ) {
 

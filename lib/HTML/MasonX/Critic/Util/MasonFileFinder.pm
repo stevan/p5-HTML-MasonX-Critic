@@ -33,11 +33,11 @@ our $FILES_MASON_WILL_SKIP                = join '|' => @FILES_MASON_WILL_SKIP;
 ## ...
 
 sub find_all_mason_files {
-    my ($self, %opts) = @_;
+    my ($self) = @_;
 
     my $dir = $self->{root_dir};
 
-    my $builder = Directory::Scanner->for( $dir )
+    my $stream = Directory::Scanner->for( $dir )
         ->ignore(sub {
             my $base = $_->basename;
             my $rel  = $_->relative( $dir )->stringify;
@@ -76,10 +76,7 @@ sub find_all_mason_files {
         })
     ;
 
-    $builder->transform(sub { $_->relative( $dir ) })
-        if $opts{relative};
-
-    return $builder->stream;
+    return $stream;
 }
 
 
