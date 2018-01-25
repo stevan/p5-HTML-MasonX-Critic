@@ -8,7 +8,6 @@ our $VERSION = '0.01';
 
 use Carp                ();
 use Scalar::Util        ();
-use Getopt::Long        ();
 use JSON::MaybeXS       ();
 use Term::ReadKey       ();
 use Path::Tiny          ();
