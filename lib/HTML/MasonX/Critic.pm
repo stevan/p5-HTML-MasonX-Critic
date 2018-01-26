@@ -4,8 +4,6 @@ package HTML::MasonX::Critic;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp            ();
 use Scalar::Util    ();
 use Module::Runtime ();
@@ -16,18 +14,17 @@ use HTML::MasonX::Critic::Policy;
 use HTML::MasonX::Critic::Violation;
 use HTML::MasonX::Critic::Inspector;
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        comp_root => sub { die 'A `comp_root` is required' },
-        config    => sub { +{} },
-        # ... private
-        _inspector           => sub {},
-        _mason_critic_config => sub { +{} },
-        _perl_critic_config  => sub { +{} },
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use slots (
+    comp_root => sub { die 'A `comp_root` is required' },
+    config    => sub { +{} },
+    # ... private
+    _inspector           => sub {},
+    _mason_critic_config => sub { +{} },
+    _perl_critic_config  => sub { +{} },
+);
 
 sub BUILD {
     my ($self, $params) = @_;

@@ -4,19 +4,15 @@ package HTML::MasonX::Critic::Util::MasonFileFinder;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Path::Tiny         ();
 use Directory::Scanner ();
 
-use UNIVERSAL::Object;
+our $VERSION = '0.01';
 
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        root_dir => sub { die 'A `root_dir` is required' },
-    )
-}
+use parent 'UNIVERSAL::Object';
+use slots (
+    root_dir => sub { die 'A `root_dir` is required' },
+);
 
 ## ...
 

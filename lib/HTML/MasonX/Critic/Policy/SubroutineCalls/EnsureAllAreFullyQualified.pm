@@ -6,9 +6,8 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Critic::Policy;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
-our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Policy';
 
 use constant DESC => q[All subroutine calls should be fully qualified.];
 use constant EXPL => q[The subroutine `%s` is not fully qualified.];

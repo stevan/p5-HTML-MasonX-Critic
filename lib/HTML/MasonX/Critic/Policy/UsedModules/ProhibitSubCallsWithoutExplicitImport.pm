@@ -4,18 +4,15 @@ package HTML::MasonX::Critic::Policy::UsedModules::ProhibitSubCallsWithoutExplic
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
-use HTML::MasonX::Critic::Policy;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
-our %HAS; BEGIN {
-    %HAS = (
-        %HTML::MasonX::Critic::Policy::HAS,
-        allow => sub { +[] }
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Policy';
+use slots (
+    allow => sub { +[] }
+);
 
 use constant DESC => q[Make sure that all called subroutines are explicitly imported];
 use constant EXPL => q[The subroutine '%s' is not explicitly imported, but is being called.];

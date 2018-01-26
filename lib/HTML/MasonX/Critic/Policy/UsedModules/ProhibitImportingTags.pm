@@ -4,13 +4,12 @@ package HTML::MasonX::Critic::Policy::UsedModules::ProhibitImportingTags;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
-use HTML::MasonX::Critic::Policy;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
-our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Policy';
 
 use constant DESC => q[Importing tags (sets of exported functions) is bad.];
 use constant EXPL => q[Importing tag '%s' into Mason is ill-advised because Mason includes all imports in the same HTML::Mason::Command namespace.];

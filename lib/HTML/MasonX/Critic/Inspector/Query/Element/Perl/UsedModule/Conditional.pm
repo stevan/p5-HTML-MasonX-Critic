@@ -4,23 +4,19 @@ package HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::Condi
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp            ();
 use List::Util      ();
 use Module::Runtime ();
 
-use HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule') }
-our %HAS; BEGIN {
-    %HAS = (
-        %HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule::HAS,
-        # ... cache some data ...
-        _module         => sub {},
-        _module_version => sub {},
-        _arguments      => sub {},
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'HTML::MasonX::Critic::Inspector::Query::Element::Perl::UsedModule';
+use slots (
+    # ... cache some data ...
+    _module         => sub {},
+    _module_version => sub {},
+    _arguments      => sub {},
+);
 
 our @ALLOWED_ROOT_NAMESPACE_MODULES = qw[
 	PadWalker Carp DEBUG Encode

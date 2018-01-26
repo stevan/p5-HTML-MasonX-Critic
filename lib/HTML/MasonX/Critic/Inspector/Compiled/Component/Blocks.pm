@@ -6,17 +6,14 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        once    => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
-        init    => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
-        filter  => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
-        cleanup => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
-        shared  => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
-    )
-}
+use parent 'UNIVERSAL::Object';
+use slots (
+    once    => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
+    init    => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
+    filter  => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
+    cleanup => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
+    shared  => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode ]
+);
 
 sub has_once_blocks    { !! scalar @{ $_[0]->{once}    } }
 sub has_init_blocks    { !! scalar @{ $_[0]->{init}    } }

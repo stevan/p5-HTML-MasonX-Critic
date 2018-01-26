@@ -6,16 +6,13 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        sigil         => sub { die 'A `sigil` is required' },
-        symbol        => sub { die 'A `symbol` is required' },
-        default_value => sub { die 'A `default_value` is required' },
-        line_number   => sub { die 'A `line_number` is required' },
-    )
-}
+use parent 'UNIVERSAL::Object';
+use slots (
+    sigil         => sub { die 'A `sigil` is required' },
+    symbol        => sub { die 'A `symbol` is required' },
+    default_value => sub { die 'A `default_value` is required' },
+    line_number   => sub { die 'A `line_number` is required' },
+);
 
 sub BUILD {
     my ($self, $params) = @_;

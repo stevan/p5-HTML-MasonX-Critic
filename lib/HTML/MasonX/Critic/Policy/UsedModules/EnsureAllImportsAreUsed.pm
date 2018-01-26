@@ -4,18 +4,15 @@ package HTML::MasonX::Critic::Policy::UsedModules::EnsureAllImportsAreUsed;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
-use HTML::MasonX::Critic::Policy;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
-our %HAS; BEGIN {
-    %HAS = (
-        %HTML::MasonX::Critic::Policy::HAS,
-        ignore => sub { +[] }
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Policy';
+use slots (
+    ignore => sub { +[] }
+);
 
 use constant DESC => q[Make sure that all explictly imported subroutines are used];
 use constant EXPL => q[The subroutine '%s' is explictly imported, but is never called.];

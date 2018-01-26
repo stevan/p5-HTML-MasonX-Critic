@@ -4,8 +4,6 @@ package HTML::MasonX::Critic::Inspector;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp         ();
 use Scalar::Util ();
 
@@ -14,15 +12,14 @@ use HTML::Mason::Interp;
 use HTML::MasonX::Critic::Inspector::CompiledPath;
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        # ... private
-        _mason_args  => sub { +[] },
-        _interpreter => sub {},
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use slots (
+    # ... private
+    _mason_args  => sub { +[] },
+    _interpreter => sub {},
+);
 
 sub BUILDARGS {
     my $class = shift;

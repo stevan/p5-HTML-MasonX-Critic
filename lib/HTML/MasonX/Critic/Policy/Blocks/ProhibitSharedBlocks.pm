@@ -4,13 +4,12 @@ package HTML::MasonX::Critic::Policy::Blocks::ProhibitSharedBlocks;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use HTML::MasonX::Critic::Inspector::Query::Element::Mason::Block;
 
-use HTML::MasonX::Critic::Policy;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
-our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Policy';
 
 use constant DESC => q[Mason's <%shared> blocks will expand the scope of a variable, which is bad.];
 use constant EXPL => q[Mason's <%shared> blocks allow you to share variables across multiple scopes (body, sub-components, etc.) which is generally a bad thing. Keep scopes tight.];

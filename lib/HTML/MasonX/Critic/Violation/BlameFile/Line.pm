@@ -6,17 +6,12 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use HTML::MasonX::Critic::Violation::SourceFile::Line;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Violation::SourceFile::Line') }
-our %HAS; BEGIN {
-    %HAS = (
-        %HTML::MasonX::Critic::Violation::SourceFile::Line::HAS,
-        sha    => sub {},
-        author => sub {},
-        date   => sub {},
-        # private data
-    )
-}
+use parent 'HTML::MasonX::Critic::Violation::SourceFile::Line';
+use slots (
+    sha    => sub {},
+    author => sub {},
+    date   => sub {},
+);
 
 sub metadata {
     my ($self) = @_;

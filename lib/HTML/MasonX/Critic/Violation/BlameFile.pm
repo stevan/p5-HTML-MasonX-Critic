@@ -4,22 +4,17 @@ package HTML::MasonX::Critic::Violation::BlameFile;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Git::Wrapper;
 
 use HTML::MasonX::Critic::Violation::BlameFile::Line;
 
-use HTML::MasonX::Critic::Violation::SourceFile;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Violation::SourceFile') }
-our %HAS; BEGIN {
-    %HAS = (
-        %HTML::MasonX::Critic::Violation::SourceFile::HAS,
-        # private data
-        _git          => sub {},
-    )
-}
+our $VERSION = '0.01';
 
+use parent 'HTML::MasonX::Critic::Violation::SourceFile';
+use slots (
+    # private data
+    _git => sub {},
+);
 
 sub BUILD {
     my ($self, $params) = @_;

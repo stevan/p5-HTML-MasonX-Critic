@@ -4,24 +4,20 @@ package HTML::MasonX::Critic::Inspector::Query::Element::Perl::MethodCall;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp         ();
 use Scalar::Util ();
 
 use HTML::MasonX::Critic::Inspector::Query::Element::Perl::MethodCall::Invocant;
 
-use UNIVERSAL::Object;
-use HTML::MasonX::Critic::Inspector::Query::Element;
-our @ISA;  BEGIN { @ISA = ('UNIVERSAL::Object') }
-our @DOES; BEGIN { @DOES = ('HTML::MasonX::Critic::Inspector::Query::Element') }
-our %HAS;  BEGIN {
-    %HAS = (
-        ppi       => sub { die 'A `ppi` node is required' },
-        # private data
-        _invocant => sub {},
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Inspector::Query::Element';
+use slots (
+    ppi       => sub { die 'A `ppi` node is required' },
+    # private data
+    _invocant => sub {},
+);
 
 sub BUILD {
     my ($self, $params) = @_;

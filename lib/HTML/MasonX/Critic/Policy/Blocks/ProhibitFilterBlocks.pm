@@ -4,13 +4,12 @@ package HTML::MasonX::Critic::Policy::Blocks::ProhibitFilterBlocks;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use HTML::MasonX::Critic::Inspector::Query::Element::Mason::Block;
 
-use HTML::MasonX::Critic::Policy;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
-our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Policy';
 
 use constant DESC => q[Mason <%filter> blocks are insane, don't use them.];
 use constant EXPL => q[Mason <%filter> blocks are just nuts, they let you run a regexp over the entire generated content.];

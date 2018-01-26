@@ -6,16 +6,12 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use UNIVERSAL::Object;
-use HTML::MasonX::Critic::Inspector::Query::Element;
-our @ISA;  BEGIN { @ISA = ('UNIVERSAL::Object') }
-our @DOES; BEGIN { @DOES = ('HTML::MasonX::Critic::Inspector::Query::Element') }
-our %HAS;  BEGIN {
-    %HAS = (
-        type => sub { die 'A `type` is required' },
-        code => sub { die 'A `code` is required' },
-    )
-}
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Inspector::Query::Element';
+use slots (
+    type => sub { die 'A `type` is required' },
+    code => sub { die 'A `code` is required' },
+);
 
 sub BUILD {
     my ($self, $params) = @_;

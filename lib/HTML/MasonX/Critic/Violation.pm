@@ -4,8 +4,6 @@ package HTML::MasonX::Critic::Violation;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp                ();
 use Scalar::Util        ();
 use String::Format      ();
@@ -15,24 +13,23 @@ use Perl::Critic::Utils ();
 use HTML::MasonX::Critic::Violation::SourceFile;
 use HTML::MasonX::Critic::Violation::BlameFile;
 
+our $VERSION = '0.01';
+
 use overload '""' => 'to_string';
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        description   => sub { die 'A `description` must be provided'  },
-        explanation   => sub { die 'An `explanation` must be provided' },
-        policy        => sub { die 'An `policy` must be provided'      },
-        element       => sub { die 'An `element` must be provided'     },
-        # private data
-        _filename      => sub {},
-        _source        => sub {},
-        _line_number   => sub {},
-        _column_number => sub {},
-        _highlight     => sub {},
-    )
-}
+use parent 'UNIVERSAL::Object';
+use slots (
+    description   => sub { die 'A `description` must be provided'  },
+    explanation   => sub { die 'An `explanation` must be provided' },
+    policy        => sub { die 'An `policy` must be provided'      },
+    element       => sub { die 'An `element` must be provided'     },
+    # private data
+    _filename      => sub {},
+    _source        => sub {},
+    _line_number   => sub {},
+    _column_number => sub {},
+    _highlight     => sub {},
+);
 
 sub BUILD {
     my ($self, $params) = @_;

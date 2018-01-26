@@ -4,25 +4,22 @@ package HTML::MasonX::Critic::Inspector::Compiled::Component;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp ();
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        name           => sub { die 'A `name` is required' },
-        type           => sub { die 'A `type` is required' },
-        args           => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::Arg ]
-        attributes     => sub { +{} }, # HashRef
-        flags          => sub { +{} }, # HashRef
-        methods        => sub { +{} }, # HashRef[ HTML::MasonX::Critic::Inspector::Compiled::Component ]
-        sub_components => sub { +{} }, # HashRef[ HTML::MasonX::Critic::Inspector::Compiled::Component ]
-        body           => sub {     }, # HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode
-        blocks         => sub { +{} }, # HTML::MasonX::Critic::Inspector::Compiled::Component::Blocks
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use slots (
+    name           => sub { die 'A `name` is required' },
+    type           => sub { die 'A `type` is required' },
+    args           => sub { +[] }, # ArrayRef[ HTML::MasonX::Critic::Inspector::Compiled::Component::Arg ]
+    attributes     => sub { +{} }, # HashRef
+    flags          => sub { +{} }, # HashRef
+    methods        => sub { +{} }, # HashRef[ HTML::MasonX::Critic::Inspector::Compiled::Component ]
+    sub_components => sub { +{} }, # HashRef[ HTML::MasonX::Critic::Inspector::Compiled::Component ]
+    body           => sub {     }, # HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode
+    blocks         => sub { +{} }, # HTML::MasonX::Critic::Inspector::Compiled::Component::Blocks
+);
 
 sub BUILD {
     my ($self, $params) = @_;

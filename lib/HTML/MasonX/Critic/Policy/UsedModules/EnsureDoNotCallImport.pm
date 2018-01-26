@@ -4,13 +4,12 @@ package HTML::MasonX::Critic::Policy::UsedModules::EnsureDoNotCallImport;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
-use HTML::MasonX::Critic::Policy;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
-our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Policy';
 
 use constant DESC => q[Used modules should not call the import function.];
 use constant EXPL => q[When using module '%s', you should pass an explicit empty list to prevent the module's &import method from being called.];

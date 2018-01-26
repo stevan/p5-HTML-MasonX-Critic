@@ -4,15 +4,9 @@ package HTML::MasonX::Critic::Policy;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
-use Scalar::Util ();
-
 use HTML::MasonX::Critic::Violation;
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN { %HAS = () }
+our $VERSION = '0.01';
 
 sub violates; # ( $component )
 

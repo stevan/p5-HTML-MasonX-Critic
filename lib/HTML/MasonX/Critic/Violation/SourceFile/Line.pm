@@ -6,16 +6,12 @@ use warnings;
 
 our $VERSION = '0.01';
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        line         => sub { die 'A `line` is required' },
-        line_num     => sub { die 'A `line_num` is required' },
-        in_violation => sub { 0 },
-        # private data
-    )
-}
+use parent 'UNIVERSAL::Object';
+use slots (
+    line         => sub { die 'A `line` is required' },
+    line_num     => sub { die 'A `line_num` is required' },
+    in_violation => sub { 0 },
+);
 
 sub metadata { sprintf '%04d', $_[0]->line_num }
 

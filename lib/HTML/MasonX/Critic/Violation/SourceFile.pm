@@ -4,20 +4,17 @@ package HTML::MasonX::Critic::Violation::SourceFile;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use HTML::MasonX::Critic::Violation::SourceFile::Line;
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        violation     => sub { die 'A `violation` is required' },
-        # private data
-        _path         => sub {},
-        _source_lines => sub {},
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use slots (
+    violation     => sub { die 'A `violation` is required' },
+    # private data
+    _path         => sub {},
+    _source_lines => sub {},
+);
 
 sub BUILD {
     my ($self, $params) = @_;

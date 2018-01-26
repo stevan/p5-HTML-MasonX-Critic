@@ -4,8 +4,6 @@ package HTML::MasonX::Critic::Inspector::Query::PerlCode;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp         ();
 use Scalar::Util ();
 
@@ -19,6 +17,8 @@ use HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineDeclaration
 
 use HTML::MasonX::Critic::Inspector::Query::Element::Perl::MethodCall;
 use HTML::MasonX::Critic::Inspector::Query::Element::Perl::SubroutineCall;
+
+our $VERSION = '0.01';
 
 sub find_includes {
     my ($class, $perl_code, %opts) = @_;

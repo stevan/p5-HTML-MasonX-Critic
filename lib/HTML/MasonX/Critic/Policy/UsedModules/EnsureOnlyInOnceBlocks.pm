@@ -4,13 +4,12 @@ package HTML::MasonX::Critic::Policy::UsedModules::EnsureOnlyInOnceBlocks;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use HTML::MasonX::Critic::Inspector::Query::PerlCode;
 
-use HTML::MasonX::Critic::Policy;
-our @ISA; BEGIN { @ISA = ('HTML::MasonX::Critic::Policy') }
-our %HAS; BEGIN { %HAS = %HTML::MasonX::Critic::Policy::HAS }
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use roles 'HTML::MasonX::Critic::Policy';
 
 use constant DESC => q[Only allow modules to be loaded within <%once> blocks.];
 use constant EXPL => q[Using the module '%s' in the '%s' block is bad, modules should only be used within <%%once> blocks.];

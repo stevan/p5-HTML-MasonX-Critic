@@ -4,8 +4,6 @@ package HTML::MasonX::Critic::Inspector::CompiledPath;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp         ();
 use Scalar::Util ();
 use Clone        ();
@@ -15,18 +13,17 @@ use HTML::MasonX::Critic::Inspector::Compiled::Component::Arg;
 use HTML::MasonX::Critic::Inspector::Compiled::Component::Blocks;
 use HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode;
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        interpreter => sub { die 'An `interpreter` is required' },
-        path        => sub { die 'A `path` is required' },
-        # ...
-        _compiler  => sub {},
-        _abs_path  => sub {},
-        _main_comp => sub {},
-    )
-}
+our $VERSION = '0.01';
+
+use parent 'UNIVERSAL::Object';
+use slots (
+    interpreter => sub { die 'An `interpreter` is required' },
+    path        => sub { die 'A `path` is required' },
+    # ...
+    _compiler  => sub {},
+    _abs_path  => sub {},
+    _main_comp => sub {},
+);
 
 sub BUILD {
     my ($self, $params) = @_;

@@ -4,23 +4,19 @@ package HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Digest::MD5 ();
 use PPI         ();
 
-use UNIVERSAL::Object;
+our $VERSION = '0.01';
 
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        source    => sub { die 'Some `source` is required' },
-        # ... internal fields
-        _ppi      => sub {},
-        _checksum => sub {},
-        _lines    => sub {},
-    )
-}
+use parent 'UNIVERSAL::Object';
+use slots (
+    source    => sub { die 'Some `source` is required' },
+    # ... internal fields
+    _ppi      => sub {},
+    _checksum => sub {},
+    _lines    => sub {},
+);
 
 sub BUILD {
     my ($self, $params) = @_;

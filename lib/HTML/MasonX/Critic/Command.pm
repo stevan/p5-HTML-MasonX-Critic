@@ -4,8 +4,6 @@ package HTML::MasonX::Critic::Command;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
-
 use Carp                ();
 use Scalar::Util        ();
 use JSON::MaybeXS       ();
@@ -18,30 +16,29 @@ use Term::ANSIColor     ':constants';
 use HTML::MasonX::Critic;
 use HTML::MasonX::Critic::Util::MasonFileFinder;
 
-use UNIVERSAL::Object;
-our @ISA; BEGIN { @ISA = ('UNIVERSAL::Object') }
-our %HAS; BEGIN {
-    %HAS = (
-        dir                  => sub {},
+our $VERSION = '0.01';
 
-        debug                => sub { $ENV{MASONCRITIC_DEBUG}            },
-        verbose              => sub { $ENV{MASONCRITIC_VERBOSE}          },
-        show_source          => sub { $ENV{MASONCRITIC_SHOW_SOURCE} // 0 },
-        show_blame           => sub { $ENV{MASONCRITIC_SHOW_BLAME}  // 0 },
-        use_color            => sub { $ENV{MASONCRITIC_USE_COLOR}   // 1 },
-        as_json              => sub { $ENV{MASONCRITIC_AS_JSON}     // 0 },
+use parent 'UNIVERSAL::Object';
+use slots (
+    dir                  => sub {},
 
-        mason_critic_policy  => sub {},
-        mason_critic_profile => sub {},
+    debug                => sub { $ENV{MASONCRITIC_DEBUG}            },
+    verbose              => sub { $ENV{MASONCRITIC_VERBOSE}          },
+    show_source          => sub { $ENV{MASONCRITIC_SHOW_SOURCE} // 0 },
+    show_blame           => sub { $ENV{MASONCRITIC_SHOW_BLAME}  // 0 },
+    use_color            => sub { $ENV{MASONCRITIC_USE_COLOR}   // 1 },
+    as_json              => sub { $ENV{MASONCRITIC_AS_JSON}     // 0 },
 
-        perl_critic_policy   => sub {},
-        perl_critic_profile  => sub {},
+    mason_critic_policy  => sub {},
+    mason_critic_profile => sub {},
 
-        ## private data
-        _mason_critic => sub {},
-        _file_finder  => sub {},
-    )
-}
+    perl_critic_policy   => sub {},
+    perl_critic_profile  => sub {},
+
+    ## private data
+    _mason_critic => sub {},
+    _file_finder  => sub {},
+);
 
 sub BUILD {
     my ($self) = @_;
