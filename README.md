@@ -2,7 +2,8 @@
 
 Tools for inspecting a HTML::Mason codebase
 
-[![CPAN version](https://badge.fury.io/pl/HTML-MasonX-Inspector.svg)](https://metacpan.org/pod/HTML-MasonX-Inspector)
+[![CPAN version](https://badge.fury.io/pl/HTML-MasonX-Critic.svg)](https://metacpan.org/pod/HTML-MasonX-Critic)
+[![Build Status](https://travis-ci.org/stevan/p5-HTML-MasonX-Critic.svg?branch=master)](https://travis-ci.org/stevan/p5-HTML-MasonX-Critic)
 
 ## Acknowledgement
 
@@ -12,7 +13,7 @@ for which the authors would like to express their gratitude.
 
 ## Copyright
 
-This software is copyright (c) 2017 by Stevan Little.
+This software is copyright (c) 2017, 2018 by Stevan Little.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
