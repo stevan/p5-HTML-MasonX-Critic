@@ -113,6 +113,10 @@ subtest '... simple inspector test' => sub {
         };
     };
 
+    subtest '... testing the body' => sub {
+        isa_ok($comp->body, 'HTML::MasonX::Critic::Inspector::Compiled::Component::PerlCode');
+    };
+
     subtest '... testing the flags' => sub {
         my %flags = %{ $comp->flags };
         is(1, scalar keys %flags, '... we have one flag');
