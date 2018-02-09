@@ -1,5 +1,5 @@
 package HTML::MasonX::Critic::Policy::UsedModules::ProhibitImportingTags;
-# ABSTRACT: Mason policy to not allow tags to be imported
+# ABSTRACT: Do not allow tags to be imported
 
 use strict;
 use warnings;

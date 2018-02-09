@@ -1,5 +1,5 @@
 package HTML::MasonX::Critic::Policy::UsedModules::EnsureDoNotCallImport;
-# ABSTRACT: Mason policy to ensure all modules pass an empty list
+# ABSTRACT: Ensure all modules pass an empty list
 
 use strict;
 use warnings;
