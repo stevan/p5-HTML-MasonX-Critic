@@ -1,3 +1,18 @@
 
+Tools:
+
+- tool to list all declared variables within a Mason file
+- tool to list all variables used within a Mason template
+- tool to list all conditional expressions within a Mason template
+- tool to list all loop expressions within a Mason template
+
+Policy:
+
+- policy to not allow variables to be defined in a Mason template
+- policy to not allow for method calls inside a Mason template
+- policy to not allow complex conditionals inside a Mason template
+- policy to not allow complex loops inside a Mason template
+
+Misc:
 
 Look into using Perl::Critic::Policy::Variables::ProhibitUnusedVarsStricter
